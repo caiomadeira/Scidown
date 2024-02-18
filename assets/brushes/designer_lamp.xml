@@ -1,0 +1,12 @@
+<prefab version="0.5.1">
+	<group open_="true" name="instance=LEVEL/prefab/designer_lamp.xml" pos="3.15 4.5 4.2" rot="-180.0 -180.0 0.0">
+		<vox open_="true" prop="true" file="MOD/main/vox/furniture/livingroom_modern.vox" object="lamp_1">
+			<light tags="night" pos="0.05 0.35 0.05" scale="2" unshadowed="0.75"/>
+			<rope open_="true" pos="0.05 -0.0 -0.05002">
+				<location/>
+				<location pos="-0.0 -0.55 -0.0"/>
+			</rope>
+		</vox>
+	</group>
+</prefab>
+

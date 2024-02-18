@@ -1,0 +1,17 @@
+<prefab version="0.6.0">
+	<group name="instance=MOD/assets/props/container-red.xml" pos="11.4 0.3 5.1" rot="0.0 -98.0 0.0">
+		<body name="container red" pos="0.0 -0.1 -0.1" dynamic="true">
+			<vox pos="-0.1 0.1 0.1" file="MOD/assets/props/container_red.vox" object="body"/>
+			<vox pos="2.9 0.1 0.1" file="MOD/assets/props/container_red.vox" object="frame"/>
+			<vox pos="3.0 0.2 0.7" prop="true" file="MOD/assets/props/container_red.vox" object="door_left">
+				<joint pos="0.0 2.1 0.5"/>
+				<joint pos="0.0 0.3 0.5"/>
+			</vox>
+			<vox pos="3.0 0.2 -0.4" prop="true" file="MOD/assets/props/container_red.vox" object="door_right">
+				<joint pos="0.0 0.3 -0.6"/>
+				<joint pos="0.0 2.1 -0.6"/>
+			</vox>
+		</body>
+	</group>
+</prefab>
+

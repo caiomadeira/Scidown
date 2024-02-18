@@ -1,0 +1,12 @@
+<prefab version="0.6.0">
+	<group name="instance=MOD/assets/props/trashcan-big.xml" pos="6.5 0.4 9.0" rot="0.0 92.0 0.0">
+		<body open_="true" name="big trashcan" dynamic="true">
+			<vox file="MOD/assets/props/trashcan-big.vox" object="bottom"/>
+			<vox pos="0.0 1.2 0.1" prop="true" file="MOD/assets/props/trashcan-big.vox" object="top">
+				<joint pos="0.5 0.1 -0.6" collide="true"/>
+				<joint pos="-0.4 0.1 -0.6" collide="true"/>
+			</vox>
+		</body>
+	</group>
+</prefab>
+
