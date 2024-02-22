@@ -1,5 +1,5 @@
 <scene version="1.5.3" shadowVolume="400 100 400">
-	<environment name="environment" template="night" skyboxtint="1.0 0.52 0.0" rain="1" nightlight="false"/>
+	<environment name="environment" template="sunset" skybox="MOD/assets/skybox/space.dds" skyboxtint="0.54 0.53 0.53" fogColor="1.0 1.0 1.0" sunColorTint="0.55 0.3 0.3" rain="0" nightlight="false"/>
 	<script file="main.lua" param0="disabletools=false"/>
 	<script pos="0.0 1.9 0.0" file="sandbox.lua"/>
 	<group name="safehouse" pos="179.2 12.8 3.9">
@@ -23,7 +23,7 @@
 				<light tags="testlight" pos="0.1 2.4 0.1" scale="8" unshadowed="0.3"/>
 			</voxbox>
 		</script>
-		<spawnpoint name="player_spawn" pos="1.1 0.4 -4.4" rot="0.0 -180.0 0.0"/>
+		<spawnpoint name="player_spawn" pos="-7.2 0.4 -4.4" rot="0.0 -180.0 0.0"/>
 	</group>
 </scene>
 
