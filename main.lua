@@ -4,31 +4,18 @@
 
 frame = 0
 
-canJump = false
-
 function init()
     DebugPrint("init main.lua")
     loadCustomEnvironment(1, true)
+    SpawnPlayer('safehouse')
 end
 
 function tick()
-    if InputPressed("jump") then
-        DebugPrint("[+] Jump Pressed")
-        canJump = true
-    elseif InputReleased("jump") then
-        DebugPrint("[+] Jump Released")
-        canJump = false
-    end
+    PlayerTick()
 end
 
 function update(dt)
-    debugPlayerTransform()
-
-    if canJump then
-        playerJumpGravity(dt, 10)
-    else
-        playerJumpGravity(dt, 0)
-    end
+    PlayerUpdate(dt)
 end
 
 --[[
