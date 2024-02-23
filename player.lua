@@ -1,3 +1,5 @@
+#include "utils.lua"
+
 Player = {
     canJump = false,
     jumpMaxVelocity= 10,
@@ -44,17 +46,6 @@ function PlayerJumpGravity(dt, jumpVelocityMultiplier)
         SetPlayerVelocity(VecAdd(pVelocity,  Vec(0, 0, 0)))
     else
         SetPlayerVelocity(sumVec)
-    end
-end
-
-function DebugPlayer()
-    local playerTransformPos = GetPlayerTransform().pos
-    DebugPrint("player transform: " .. TransformStr(playerTransform))
-    local pVelocity = GetPlayerVelocity()
-	DebugPrint("player velocity: "..VecStr(pVelocity))
-
-    for k, v in pairs(playerTransformPos) do
-        DebugPrint("pos: " .. tostring(v))
     end
 end
 

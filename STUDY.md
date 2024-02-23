@@ -1,5 +1,11 @@
 # STUDY GUIDE
 
+https://teardowngame.com/modding/
+https://teardowngame.com/modding/api.html
+https://www.teardowngame.com/modding/voxscript.html
+https://teardowngame.com/modding/api.html
+https://github.com/Autumnagnificent/Teardown-Totally-Documented/blob/main/Community%20Resource%20Bundles/Shape%20Utils/shape_utils.lua
+
 ### SKYBOX
 
 ```

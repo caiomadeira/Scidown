@@ -3,25 +3,8 @@
 	<script pos="0.0 1.9 0.0" file="sandbox.lua"/>
 	<group name="safehouse" tags="safehouse" pos="0.0 0.0 0.0">
 		<group name="structure" pos="0.0 0.0 -6.9">
-			<voxbox name="rooftop3" pos="-5.0 8.8 -3.9" rot="90.0 0.0 0.0" size="100 80 2" brush="MOD/assets/brushes/container_blue.vox" material="heavymetal" color="0.1 0.34 0.21"/>
-			<voxbox name="rooftop2" pos="-5.0 5.0 -7.0" rot="40.0 0.0 0.0" size="100 50 2" brush="MOD/assets/brushes/container_blue.vox" material="heavymetal" color="0.1 0.34 0.21"/>
-			<voxbox name="wall1" pos="-5.0 0.0 6.8" size="100 50 2" material="heavymetal" color="0.35 0.35 0.35"/>
-			<voxbox name="rooftop1" pos="-5.0 5.0 6.9" rot="-40.0 0.0 0.0" size="100 50 2" brush="MOD/assets/brushes/container_blue.vox" material="heavymetal" color="0.1 0.34 0.21"/>
-			<voxbox name="wall2" pos="-5.0 0.0 -7.0" size="100 50 2" material="heavymetal" color="0.35 0.35 0.35"/>
-			<voxbox name="wall3" pos="4.9 0.0 7.0" rot="0 90 0" size="140 50 2" material="heavymetal" color="0.35 0.35 0.35"/>
-			<voxbox name="ground" pos="-10.9 -1.0 -7.0" rot="0.0 0.0 0.0" size="160 10 140" brush="MOD/assets" offset="-22.0 -10.0 0.0" material="metal" color="0.5 0.5 0.5"/>
+			<voxbox name="ground" pos="-10.9 -1.0 -7.0" rot="0.0 0.0 0.0" size="200 10 200" brush="MOD/assets" offset="-22.0 -10.0 0.0" material="metal" color="0.5 0.5 0.5"/>
 		</group>
-		<group name="props" pos="-13.3 -0.1 -4.7">
-			<vox pos="16.5 3.2 4.2" rot="0.0 -90.0 -20.0" prop="true" file="tool/leafblower.vox" scale="0.5" color="0.96 0.97 0.05"/>
-			<voxbox name="refrigerator1" pos="18.1 3.1 4.6" rot="90 180 0" size="20 12 30" brush="MOD/assets/brushes/refrigerators.vox" material="heavymetal" color="0.25 0.43 0.49"/>
-			<voxbox name="refrigerator2" pos="16.0 3.1 4.6" rot="90 180 0" size="20 12 30" brush="MOD/assets/brushes/refrigerators.vox" material="heavymetal" color="0.25 0.43 0.49"/>
-			<voxbox name="machine" pos="17.2 0.0 -6.9" rot="0.0 90.0 0.0" size="20 41 10" brush="MOD/assets/brushes/perk_machine.vox"/>
-		</group>
-		<script pos="-6.8 0.0 -3.9" rot="0.0 0.0 0.0" file="MOD/blink.lua" param0="interval=interval=20">
-			<voxbox name="light" pos="9.3 0.0 -0.8" rot="0.0 0.0 0.0" prop="true" size="2 35 2" material="plastic" pbr="0 0 0 8">
-				<light tags="testlight" pos="0.1 2.4 0.1" scale="8" unshadowed="0.3"/>
-			</voxbox>
-		</script>
 	</group>
 </scene>
 

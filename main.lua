@@ -1,13 +1,17 @@
 #include "enviroment.lua"
 #include "player.lua"
 #include "utils.lua"
+#include "world.lua"
 
 frame = 0
 
 function init()
     DebugPrint("init main.lua")
-    loadCustomEnvironment(1, true)
+    loadCustomEnvironment(1, false)
     SpawnPlayer('safehouse')
+    -- CreateDynamicPlanet()
+    -- CreateXMLPrefab(Prefabs.moon2)
+    SpawnPrefab(Prefabs.moon2)
 end
 
 function tick()
