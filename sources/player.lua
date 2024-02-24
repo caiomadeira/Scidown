@@ -5,7 +5,7 @@ Player = {
     jumpMaxVelocity= 10,
     jumpMinVelocity = 0,
     maxJumpHeight = 4,
-
+    isInVehicle = false,
     SpawnPoints = {
         zero = {0.0, 0.0, 0.0},
         safehouse = { 8.0, 0.0, -14.0},
@@ -20,7 +20,7 @@ Player = {
 -- Standard configuration for player
 function PlayerInit()
     PlayerInventory()
-    SetPlayerSpawnTool("gun")
+    --SetPlayerSpawnTool("gun")
     SetPlayerRegenerationState(false) -- disable regeneration for player
     -- Spawn Player in some point of World
     SpawnPlayer('safehouse')
@@ -101,7 +101,7 @@ function SpawnPlayer(where)
         t = Transform(Vec(Player.SpawnPoints.safehouse[1],
                             Player.SpawnPoints.safehouse[2],
                             Player.SpawnPoints.safehouse[3]), 
-                            QuatEuler(0, 0, 0))
+                            QuatEuler(180, 0, 0))
         SetPlayerSpawnTransform(t)
 
     elseif where == 'testLocation' then
@@ -123,3 +123,25 @@ function DebugPlayer()
     DebugPrint("[>] Player Velocity: ".. VecStr(pVelocity))
     DebugPrint(":::::::: END PLAYER DEBUG :::::::::")
   end
+
+  function IsPlayerInVehicle()
+    --[[ 
+    local vehicleBody = FindVehicle(vehicle.name, true) -- The true means to search in entire scene
+    -- local interactBody = GetPlayerInteractBody()
+    local currentVehicle = GetPlayerVehicle()
+    if (currentVehicle == vehicleBody) then -- is in vehicle
+       -- DebugPrint(">>>>>>>>> VEHICLE EXISTS: " .. tostring(vehicleBody))
+       -- DebugPrint(">>>>>>>>> INTERACTED BODY: " .. tostring(interactBody))
+        --DebugPrint(">>>>>>>>> VEHICLE BODY: " .. tostring(vehicleBody))
+        Player.isInVehicle = true
+    else
+        Player.isInVehicle = false
+    end
+     ]]--
+     local currentVehicle = GetPlayerVehicle()
+     if currentVehicle ~= 0 then
+        Player.isInVehicle = true
+     else
+        Player.isInVehicle = false
+     end
+end

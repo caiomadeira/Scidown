@@ -11,7 +11,7 @@ World = {
 
 -- Spawn object according to the player's position
 
-function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset)
+function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlFile)
     DebugPrint(":::::::: SpawnObjectAccordingPlayerPos :::::::::")
     local pPos = GetPlayerTransform().pos
     local newPosX, newPosY, newPosZ
@@ -36,11 +36,14 @@ function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset)
     else -- minor than zero
         newPosZ = pPos[3] + zOffset
     end
-
-    object.pos = tostring(newPosX) .. " " .. tostring(newPosY) .. " " .. tostring(newPosZ) .. " " 
-    DebugPrint(">> SPAWNED PREFAB " .. Prefabs.moon2.name .. " POS: " .. Prefabs.moon2.pos)
-    SpawnPrefab(object)
-
+    
+    if isXmlFile then
+        Spawn(object, Transform(Vec(newPosX, newPosY , newPosZ)), true, true)
+    else
+        object.pos = tostring(newPosX) .. " " .. tostring(newPosY) .. " " .. tostring(newPosZ) .. " " 
+        DebugPrint(">> SPAWNED PREFAB " .. object.name .. " POS: " ..  object.pos)
+        SpawnPrefab(object)
+    end
 
     DebugPrint("::::::::::::::::::::::::::")
 end
