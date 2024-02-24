@@ -19,9 +19,9 @@ Player = {
 
 -- Standard configuration for player
 function PlayerInit()
+    PlayerInventory()
     SetPlayerSpawnTool("gun")
     SetPlayerRegenerationState(false) -- disable regeneration for player
-
     -- Spawn Player in some point of World
     SpawnPlayer('safehouse')
 end
@@ -34,6 +34,14 @@ function PlayerTick()
         --DebugPrint("[+] Jump Released")
         Player.canJump = false
     end
+
+     -- Walking speed
+    if InputDown("shift") then
+		SetPlayerWalkingSpeed(8.0)
+	else
+		SetPlayerWalkingSpeed(4.0)
+    end
+    -- DebugPrint(GetPlayerWalkingSpeed())
 end
 
 function PlayerUpdate(dt)
@@ -47,6 +55,23 @@ end
 -- ::::::::::::::::::::::::::::::::::::::
 --  PLAYER MODULE FUNCTIONS
 -- ::::::::::::::::::::::::::::::::::::::
+
+function PlayerInventory()
+    DebugPrint(":::::::: PLAYER INVENTORY :::::::::")
+	local list = ListKeys("game.tool")
+	for i=1, #list do
+        if (list[i] ~= 'gun' or list[i] ~= 'rifle') then
+            local query = "game.tool." .. tostring(list[i])
+            --logFile(ListKeys, '')
+            DebugPrint("query: " .. query)
+            ClearKey("game.tool." .. list[i]) -- remove ui register
+            SetBool("game.tool."..list[i]..".enabled", false)
+        end
+	end
+    DebugPrint("::::::::::::::::::::::::::::::::::")
+
+end
+
 
 function PlayerJumpGravity(dt, jumpVelocityMultiplier)
     local playerY = GetPlayerTransform().pos[2]

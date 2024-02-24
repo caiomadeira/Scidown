@@ -14,8 +14,10 @@ function init()
     -- SpawnPrefab(Prefabs.moon2)
     -- SpawnPrefab(Prefabs.moon3Voxbox)
     -- SpawnSafeHouse()
-    SpawnObjectAccordingPlayerPos(Prefabs.moon2, 50, 50, 50)
-    SpawnObjectAccordingPlayerPos(Prefabs.moon3Voxbox, 70, 20, 20)
+
+
+    -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 50, 50, 50)
+    -- SpawnObjectAccordingPlayerPos(Prefabs.moon3Voxbox, 70, 20, 20)
 
 end
 
