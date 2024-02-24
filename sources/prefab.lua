@@ -10,6 +10,19 @@ Prefabs = {
         color="0.84 0.23 0.23"/>
     ]=],
 
+    Safehouse = {
+        -- <voxbox name="ground" pos="-15.8 -44.1 -10.9" rot="0.0 0.0 0.0" size="250 10 250" brush="MOD/assets" offset="-22.0 -10.0 0.0" material="metal" color="0.5 0.5 0.5"/>
+        ground = {
+            type = 'vox',
+            name = "safehouse-ground",
+            tags = "safehouse-ground" ,
+            pos = "-158.0 -10.0 -109.0" ,
+            size = "250 10 250",
+            material = "metal",
+            color = "0.5 0.5 0.5"
+        },
+    },
+
     moon2 = {
         type = 'vox',
         name = 'moon2',
@@ -28,16 +41,16 @@ Prefabs = {
         pos = '0.0 0.0 0.9',
         rot = "0 0 0",
         desc ="desc",
-        texture = "20",
+        texture = "30",
         blendtexture = "10",
-        density = "10",
+        density = "100",
         strength = "100",
         collide = "true",
-        prop = "false",
+        prop = "true",
         size = "40 39 40",
         brush ="MOD/assets/models/moon.vox",
         material = "rock",
-        color = '0.92 0.91 0.61'
+        color = '0.72 0.12 0.32'
     }
 }
 
@@ -87,10 +100,6 @@ function CreateXMLPrefab(properties, debug)
         DebugPrint("XML created.")
         DebugPrint(":::::::::::::::::::::\n")
     end
-
-    --for k, v in pairs(xmlTable) do
-        --DebugPrint(tostring(k) .. ": " ..  tostring(v))
-    --end    
     return xmlTable -- Return the table
 end
 
@@ -98,15 +107,7 @@ function SpawnPrefab(properties, debug)
     local xmlProperties = CreateXMLPrefab(properties)
     local xmlCombined = table.concat(xmlProperties, "") -- Convert into a string
 
-    -- Get Spawn Coordinates from prefab table
-    local prefabCoord = {  }
-    for k, v in pairs(properties) do
-        if k == 'pos' then
-            for num in v:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
-                table.insert(prefabCoord, num)
-            end
-        end
-    end
+    local prefabCoord = GetPrefabCoordinatesSpawn(properties)
     Spawn(xmlCombined, Transform(Vec(prefabCoord[1], prefabCoord[2] , prefabCoord[3])), true, true)
 	 --Spawn(xmlCombined, Transform(Vec(-9.4, 0.0 , -9.4)))
     if debug then
@@ -117,4 +118,17 @@ function SpawnPrefab(properties, debug)
         DebugPrint("XML full string: " .. xmlCombined)
         DebugPrint("Prefab [" .. string.upper(properties.name)  .. "] spawned.")
     end
+end
+
+-- Get Spawn Coordinates from prefab table
+function GetPrefabCoordinatesSpawn(properties)
+    local prefabCoord = {  }
+    for k, v in pairs(properties) do
+        if k == 'pos' then
+            for num in v:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
+                table.insert(prefabCoord, num)
+            end
+        end
+    end
+    return prefabCoord
 end

@@ -5,24 +5,38 @@ Player = {
     jumpMaxVelocity= 10,
     jumpMinVelocity = 0,
     maxJumpHeight = 4,
+
+    SpawnPoints = {
+        zero = {0.0, 0.0, 0.0},
+        safehouse = { 8.0, 0.0, -14.0},
+        testLocation = { 50.0, 25.0, 23.0 }
+    }
 }
 
 -- ::::::::::::::::::::::::::::::::::::::
 --  LIFE CYCLE FUNCTIONS
 -- ::::::::::::::::::::::::::::::::::::::
 
+-- Standard configuration for player
+function PlayerInit()
+    SetPlayerSpawnTool("gun")
+    SetPlayerRegenerationState(false) -- disable regeneration for player
+
+    -- Spawn Player in some point of World
+    SpawnPlayer('safehouse')
+end
+
 function PlayerTick()
     if InputPressed("jump") then
-        DebugPrint("[+] Jump Pressed")
+        --DebugPrint("[+] Jump Pressed")
         Player.canJump = true
     elseif InputReleased("jump") then
-        DebugPrint("[+] Jump Released")
+        --DebugPrint("[+] Jump Released")
         Player.canJump = false
     end
 end
 
 function PlayerUpdate(dt)
-    -- DebugPlayer()
     if Player.canJump then
         PlayerJumpGravity(dt, Player.jumpMaxVelocity)
     else
@@ -50,15 +64,37 @@ function PlayerJumpGravity(dt, jumpVelocityMultiplier)
 end
 
 function SpawnPlayer(where)
+    local t
     if where == 'zero' then
-        local t = Transform(Vec(0.0, 0.0, 0.0), QuatEuler(0, 0, 0))
+        t = Transform(Vec(Player.SpawnPoints.zero[1],
+                            Player.SpawnPoints.zero[2],
+                            Player.SpawnPoints.zero[3]), 
+                            QuatEuler(0, 0, 0))
         SetPlayerSpawnTransform(t)
 
     elseif where == 'safehouse' then
-        local t = Transform(Vec(0.0, 0.0, -1.0), QuatEuler(0, 90, 0))
+        t = Transform(Vec(Player.SpawnPoints.safehouse[1],
+                            Player.SpawnPoints.safehouse[2],
+                            Player.SpawnPoints.safehouse[3]), 
+                            QuatEuler(0, 0, 0))
+        SetPlayerSpawnTransform(t)
+
+    elseif where == 'testLocation' then
+        t = Transform(Vec(Player.SpawnPoints.testLocation[1],
+                            Player.SpawnPoints.testLocation[2],
+                            Player.SpawnPoints.testLocation[3]), 
+                            QuatEuler(0, 0, 0))
         SetPlayerSpawnTransform(t)
     else
         DebugPrint("Error: 'where' param passed is not allowed.")
     end
 end
 
+function DebugPlayer()
+    DebugPrint(":::::::: PLAYER DEBUG :::::::::")
+    local playerTransform = GetPlayerTransform()
+    local pVelocity = GetPlayerVelocity()
+    DebugPrint("[>] Player Transform: " .. TransformStr(playerTransform))
+    DebugPrint("[>] Player Velocity: ".. VecStr(pVelocity))
+    DebugPrint(":::::::: END PLAYER DEBUG :::::::::")
+  end

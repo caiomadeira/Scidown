@@ -4,18 +4,18 @@
 #include "sources/world.lua"
 #include "sources/prefab.lua"
 
-frame = 0
-
 function init()
     DebugPrint("init main.lua")
     loadCustomEnvironment(1, false)
-    SpawnPlayer('safehouse')
+    PlayerInit()
     -- CreateDynamicPlanet()
-    --CreateXMLPrefab(Prefabs.moon2, true)
-    --CreateXMLPrefab(Prefabs.moon3Voxbox, true)
-    SpawnPrefab(Prefabs.moon2)
-    SpawnPrefab(Prefabs.moon3Voxbox)
-    GetWorldSize()
+    -- CreateXMLPrefab(Prefabs.moon2, true)
+    -- CreateXMLPrefab(Prefabs.moon3Voxbox, true)
+    -- SpawnPrefab(Prefabs.moon2)
+    -- SpawnPrefab(Prefabs.moon3Voxbox)
+    -- SpawnSafeHouse()
+    SpawnObjectAccordingPlayerPos(Prefabs.moon2, 50, 50, 50)
+
 end
 
 function tick()
@@ -23,14 +23,6 @@ function tick()
 end
 
 function update(dt)
+    -- DebugPlayer()
     PlayerUpdate(dt)
 end
-
---[[
--- Calls it in update(dt)
--- Maybe should i use this like a blackhole proximity effect?
--- To make a crazy effect i need to increment frame = frame + 1 and call to tick()
-function crazyGravityEffect(frame)
-    SetPlayerVelocity(VecAdd(GetPlayerVelocity(), Vec(0, 10*frame, 0)))
-end
-]]--

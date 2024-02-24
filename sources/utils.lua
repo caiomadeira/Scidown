@@ -9,17 +9,6 @@ function logFile(content1, content2)
   end
 end
 
-function DebugPlayer()
-  local playerTransformPos = GetPlayerTransform().pos
-  DebugPrint("player transform: " .. TransformStr(playerTransform))
-  local pVelocity = GetPlayerVelocity()
-DebugPrint("player velocity: "..VecStr(pVelocity))
-
-  for k, v in pairs(playerTransformPos) do
-      DebugPrint("pos: " .. tostring(v))
-  end
-end
-
 --[[
 
 DUMP FULL TABLE
