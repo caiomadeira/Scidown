@@ -29,8 +29,8 @@ Prefabs = {
         tags = 'moon2',
         pos = '-9.4 0.0 -9.4',
         file = 'MOD/assets/models/moon.vox',
-        scale = '4',
-        color = '0.84 0.23 0.23'
+        scale = '17',
+        color = '0.32 0.23 0.23'
     },
     
     -- 	<voxbox name="testvoxbox" tags="testvoxbox" pos="-6.5 2.9 0.0" rot="0 0 0" desc="desc" texture="20" blendtexture="10" density="10" strength="100" collide="true" prop="false" size="40 39 40" brush="MOD/assets/models/moon.vox" material="rock" color="0.92 0.91 0.61"/>
@@ -46,7 +46,7 @@ Prefabs = {
         density = "100",
         strength = "100",
         collide = "true",
-        prop = "true",
+        prop = "false",
         size = "40 39 40",
         brush ="MOD/assets/models/moon.vox",
         material = "rock",
