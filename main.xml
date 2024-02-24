@@ -3,5 +3,7 @@
 	<script pos="0.0 1.9 0.0" file="sandbox.lua"/>
 	<voxbox name="safehouse-base" pos="0.0 0.0 -24.3" rot="0.0 0.0 0.0" size="250 10 250" material="metal" color="0.5 0.5 0.5"/>
 	<instance pos="20.0 0.7 -3.4" file="MOD/assets/models/prefabs/old_sedan.xml"/>
+	<instance pos="3.2 1.0 -4.8" file="MOD/assets/models/suv/suv1.xml"/>
+	<instance pos="15.9 3.2 -5.1" file="MOD/assets/models/ships/spaceship_small1.xml"/>
 </scene>
 
