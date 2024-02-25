@@ -51,16 +51,44 @@ function tick()
 
     if Player.isInVehicle then
         DebugPrint("> Player is in vehicle")
+
+        local multiplier = 50
+        local currentVehicle = FindShape("spaceship_small1", true)
+        local currentPos = GetShapeLocalTransform(currentVehicle).pos
+
+        --Shape transform in body local space
+        local vehicleShapeTransform = GetShapeLocalTransform(currentVehicle)
+        -- Body transaform in world space
+        local vehicleBodyTransform = GetBodyTransform(GetShapeBody(currentVehicle))
+        --Shape transform in world space
+	    local vehicleShapeWorldTranform = TransformToParentTransform(vehicleBodyTransform, vehicleShapeTransform)
+
+
+        local pos = Vec(currentPos[1] + frame, currentPos[2], currentPos[3])
+        --local pos = Vec(currentPos[1] + frame, currentPos[2] + frame, currentPos[3])
+        --local impulse = Vec(1, 1, 1)
+        -- local pos = Vec(0.0, 0.0, 0)
+        DebugPrint("Position body : " .. VecStr(pos))
         -- SPACESHIP CONTROLS
-        if InputDown("up") then
-            frame = frame + 1 * 50
-            local currentVehicle = FindBody("spaceship_small1", true)
-            local pos = GetBodyTransform(currentVehicle)
-            local impulse = Vec(frame, 0, 0)
-            DebugPrint("Impulse Applied: " .. VecStr(impulse))
+        if InputDown("space") then
+            frame = frame + 1
+            local transform = Transform(Vec(0, frame, 0), QuatEuler(0, 90, 0))
+            --local pos = GetBodyTransform(currentVehicle)
+            -- local pos = Vec(0, frame, 0)
+            --local impulse = Vec(1, 1, 1)
+            -- DebugPrint("Position body : " .. VecStr(pos))
+            --DebugPrint("Impulse Applied: " .. VecStr(impulse))
+            --SetBodyTransform(currentVehicle, pos)
 
-            ApplyBodyImpulse(currentVehicle, pos, impulse)
+            SetShapeLocalTransform(currentVehicle, transform)
 
+            --if impulse[1] < 15000 then
+                --DebugPrint("minor than 1000")
+                --ApplyBodyImpulse(currentVehicle, pos, impulse)
+                -- SetBodyTransform(currentVehicle, pos)
+            --else 
+                --frame = 0
+            --end
         else
             frame = 0
             DebugPrint("frame is decresing: " .. tostring(frame))
