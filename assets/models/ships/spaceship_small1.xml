@@ -1,7 +1,7 @@
 <prefab version="0.6.0">
 	<group id_="1247029632" open_="true" name="instance=MOD/assets/models/ships/spaceship_small1.xml" pos="13.9 0.1 -3.4" rot="0.0 0.0 0.0">
 		<vehicle id_="1021309824" tags="spaceship_small1" open_="true" rot="0.0 0.0 0.0" driven="false" sound="suv3 0.9" spring="0.8" damping="2" topspeed="90" acceleration="4" strength="4" antispin="1" antiroll="0.1" steerassist="0.6">
-			<body id_="1493918720" open_="true" pos="-0.05 0.5 -0.35" rot="0.0 0.0 0.0" dynamic="true">
+			<body id_="1493918720" tags="spaceship_small1" open_="true" pos="-0.05 0.5 -0.35" rot="0.0 0.0 0.0" dynamic="true">
 				<vox id_="1914423424" open_="true" pos="0.05 -0.3 0.35" rot="0 180 0" strength="2" file="MOD/assets/models/ships/spaceship_small1.vox" object="body">
 					<light id_="333664128" pos="0.8 0.85 -2.3" rot="180.0 0.0 180.0" type="area" color="1 .1 .1" size="0.2 0.1" unshadowed="0.3" glare="0.2"/>
 					<light id_="109517344" pos="0.75 0.75 -2.3" rot="180.0 0.0 180.0" type="area" size="0.1 0.1" unshadowed="0.3"/>

@@ -124,7 +124,7 @@ function DebugPlayer()
     DebugPrint(":::::::: END PLAYER DEBUG :::::::::")
   end
 
-  function IsPlayerInVehicle()
+  function IsPlayerInVehicle(frame)
     --[[ 
     local vehicleBody = FindVehicle(vehicle.name, true) -- The true means to search in entire scene
     -- local interactBody = GetPlayerInteractBody()
@@ -139,6 +139,7 @@ function DebugPlayer()
     end
      ]]--
      local currentVehicle = GetPlayerVehicle()
+     --DebugPrint("IsPlayerInVehicle currentVehicle: " .. tostring(currentVehicle))
      if currentVehicle ~= 0 then
         Player.isInVehicle = true
      else

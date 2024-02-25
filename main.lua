@@ -23,42 +23,75 @@ function init()
 
     -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 50, 50, 50)
     -- SpawnObjectAccordingPlayerPos(Prefabs.moon3Voxbox, 70, 20, 20)
-    SpawnSpaceShip(Vehicles.suv1)
+    SpawnSpaceShip(Vehicles.SpaceshipSmall1)
 end
 
 function tick()
     PlayerTick()
 
+    if InputDown('space') then
+        --frame = frame + 1
+        --DebugPrint(frame)
+    end
+    --[[ 
+    if InputDown('shift') then
+        frame = frame + 1
+        local currentVehicle = FindBody("spaceship_small1", true)
+        DebugPrint("currentVehicle HANDLE>>> " .. tostring(currentVehicle))
+
+        local pos = Vec(3 * frame,1,0)
+        local imp = Vec(0,0,10)
+        ApplyBodyImpulse(currentVehicle, pos, imp)
+        DebugPrint("currentVehicle transform> " .. TransformStr(GetBodyTransform(currentVehicle)))
+    end
+    ]]--
+
     -- PART OF SPACESHIP CONTROLS LOGIC
-    IsPlayerInVehicle()
+    IsPlayerInVehicle(frame)
 
     if Player.isInVehicle then
-        --local vehicle = GetPlayerVehicle()
-        --local vehicleTransform = GetBodyTransform(vehicle)
-       --DebugPrint("> Player is in vehicle")
-       -- DebugPrint("VEHICLE HANDLE: " .. vehicle)
-       -- DebugPrint("VEHICLE INITIAL TRANSFORM: " .. TransformStr(vehicleTransform))
-
+        DebugPrint("> Player is in vehicle")
         -- SPACESHIP CONTROLS
         if InputDown("up") then
-            DebugPrint("FORWARD PRESSED")
-            local t = Transform(Vec(50, 50, 50), QuatEuler(0, 90, 0))
-            SetPlayerTransform(t)
-        end
+            frame = frame + 1 * 50
+            local currentVehicle = FindBody("spaceship_small1", true)
+            local pos = GetBodyTransform(currentVehicle)
+            local impulse = Vec(frame, 0, 0)
+            DebugPrint("Impulse Applied: " .. VecStr(impulse))
 
-        if InputDown('space') then
-            --vehicleTransform.pos = VecAdd(vehicleTransform.pos, Vec(100, 10, 100))
-            --SetBodyTransform(vehicle, vehicleTransform)
-            --DebugPrint("VEHICLE NEW TRANSFORM: " .. TransformStr(vehicleTransform))
-            DebugPrint("SPACE PRESSED")
-        end
+            ApplyBodyImpulse(currentVehicle, pos, impulse)
 
+        else
+            frame = 0
+            DebugPrint("frame is decresing: " .. tostring(frame))
+        end
     else
-        --DebugPrint("x Player is NOT in vehicle")
+        DebugPrint("x Player is NOT in vehicle")
     end
+
 end
 
 function update(dt)
     -- DebugPlayer()
     PlayerUpdate(dt)
+
+--[[ 
+    if Player.isInVehicle then
+        DebugPrint("> Player is in vehicle")
+        -- SPACESHIP CONTROLS
+        if InputDown("up") then
+            local vehicle = GetPlayerVehicle()
+            --DebugPrint("> GetPlayerVehicle handle: " .. tostring(vehicle))
+            --DebugPrint("> GetPlayerVehicle handle: " .. tostring(vehicle))
+            --DebugPrint("> FindBody(spaceship_small1): " .. tostring(FindBody(Vehicles.SpaceshipSmall1.name, true)))
+            shape = FindBody("spaceship_small1")
+            DebugPrint(">> shape: " .. tostring(shape))
+            local transform = Transform(Vec(20, 29, 20), QuatEuler(0, 90, 0))
+            SetShapeLocalTransform(shape, transform)
+            DebugPrint("FORWARD PRESSED")
+        end
+    else
+        DebugPrint("x Player is NOT in vehicle")
+    end
+     ]]--
 end
