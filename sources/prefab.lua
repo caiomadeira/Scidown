@@ -132,3 +132,4 @@ function GetPrefabCoordinatesSpawn(properties)
     end
     return prefabCoord
 end
+
