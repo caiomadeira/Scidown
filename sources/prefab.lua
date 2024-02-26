@@ -201,3 +201,18 @@ function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlF
 
     DebugPrint("::::::::::::::::::::::::::")
 end
+
+function RandomPrefabProperty(name)
+    local num, max;
+    local min = 0;
+    if (name == 'blendtexture') then -- Range of 0-15
+        DebugPrint('BLENDTEXTURE')
+        max = 15
+    elseif (name == 'texture') then -- Range of 0-31
+        DebugPrint('TEXTURE')
+        max = 31
+    end
+    num = math.random(min, max); 
+    DebugPrint("Random " .. tostring(name) .. ": " .. tostring(num))
+    return tostring(num);
+end
