@@ -67,6 +67,8 @@ function SpaceShipInput(multiplier, velocityImpulseLimit, currentVehicle)
     -- INCREASE Y/ FLY UP
     if InputDown("space") then
         frame = frame + 1 * multiplier
+        -- The impulse apply impulse based in world coordinates 
+        -- so, this works with Y 
         impulse = Vec(0, 1 + frame, 0) -- Default 1.0 for y + frame count
         -- DebugPrint("Impulse Applied in Y : " .. VecStr(impulse))
 
@@ -79,6 +81,7 @@ function SpaceShipInput(multiplier, velocityImpulseLimit, currentVehicle)
         end
 
     -- DECREASE Z/ FLY FOWARD
+    -- THIS IS DONT WORK THE IMPULSES MAKES THE DIRECTION BASED IN WORLD AND NOT VEHICLE POS
     elseif InputDown('up') then
        -- DebugPrint("GO FOWARD!!!!!!")
         frame = frame + 1 * multiplier

@@ -3,8 +3,8 @@
 
 World = {
     size = {
-        width = 250,
-        height = 10,
-        depth = 250
+        width = 300,
+        height = 100,
+        depth = 300
     }
 }
