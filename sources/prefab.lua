@@ -7,7 +7,6 @@
 ]]--
 
 Prefabs = {
-
     moon2 = {
         type = 'vox',
         name = 'moon2',
@@ -35,6 +34,25 @@ Prefabs = {
         brush ="MOD/assets/models/planet.vox",
         material = "rock",
         color = '0.72 0.12 0.32'
+    },
+
+    star = {
+        name = 'star',
+        tags = 'star',
+        pos = '1.0 0.0 1.4',
+        rot = "0 0 0",
+        desc ="A beautiful star",
+        texture = "20",
+        blendtexture = "15",
+        density = "100",
+        strength = "100",
+        collide = "false",
+        prop = "false", -- allows to create a dynamic body
+        size = "40 39 40",
+        brush ="MOD/assets/models/star.vox",
+        material = "rock",
+        pbr= "0 0 0 32",
+        color = '0.72 0.12 0.32',
     }
 }
 

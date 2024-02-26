@@ -20,31 +20,10 @@ function init()
     -- SpawnSafeHouse()
 
 
-    SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
-    SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
+    --SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
+    --SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
     SpawnSpaceShip(Vehicles.SpaceshipSmall1)
-    -- CreateCustomCelestialBody(CelestialBodyConfig.STAR)
-
-    star = {
-        name = 'moon1',
-        tags = 'moon1',
-        pos = '0.0 0.0 0.9',
-        rot = "0 0 0",
-        desc ="A beatiful moon",
-        texture = "30",
-        blendtexture = "10",
-        density = "100",
-        strength = "100",
-        collide = "true",
-        prop = "true", -- allows to create a dynamic body
-        size = "40 39 40",
-        brush ="MOD/assets/models/star.vox",
-        material = "rock",
-        color = '0.72 0.12 0.32',
-    }
-
-    CreateStar(star)
-
+    CreateCustomCelestialBody(CelestialBodies.STAR)
 end
 
 function tick()
