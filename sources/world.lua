@@ -46,6 +46,7 @@ CelestialBodies = {
         gravitStrength = 30,
         allowRotation = false, -- After spawn / For Animation
         spawnChance = 70,  -- Calls before Spawn
+        hasParticles = true,
         prefab = Prefabs.star
     },
 
@@ -76,15 +77,18 @@ CelestialBodies = {
         allowRotation = true,
         allowMovement = true, -- allow translation movement
         spawnChance = 100,
+        prefab = Prefabs.planet
     },
 
     ASTEROID = {
-        name = 'ASTEROIRD',
+        name = 'ASTEROID',
         type = 'ASTEROID_DEFAULT',
         allowRotation = true,
         allowMovement = true,
+        hasParticles = true,
         velocity = 50,
         spawnChance = 100,
+        prefab = Prefabs.asteroid
     },
 
     NATURAL_SATELLITE = {
@@ -92,8 +96,9 @@ CelestialBodies = {
         type = 'NATURAL_SATELLITE_DEFAULT',
         gravitStrength = 30,
         allowRotation = true,
-        allowMovement = true,
+        spawnChance = 100,
         velocity = 50,
+        prefab = Prefabs.naturalSatellite
     },
 
         --[[
@@ -107,6 +112,7 @@ CelestialBodies = {
         type = 'MASSIVE',
         gravitStrength = 100,
         allowRotation = true,
+        spawnChance = 5,
     }
 }
 
@@ -118,29 +124,17 @@ Create a custom celestial body with Random Properties
 
 
 function SetupCustomCelestialBody(object, debug)
-
     -- Check type of param entered
-    assert(type(object)=="table", DebugPrint("[>] Nice: Param is a table."))
+    assert(type(object)=="table", DebugPrint("[>] SetupCustomCelestialBody: Param is a table."))
 
-    if (object.name == 'STAR') then
-        DebugPrint('STAR')
-        
+    if (object ~= nil) then
+        DebugPrint('Object is not nil')
+        for k, v in pairs(object) do
+            DebugPrint(">" .. tostring(k) .. "=" .. tostring(v))
+        end
         CreateCelestialBody(object, debug)
-        
-    elseif (object == 'PLANET') then
-        DebugPrint('PLANET')
-
-    elseif (object == 'ASTEROID') then
-        DebugPrint('ASTEROID')
-
-    elseif (object == 'NATURAL_SATELLITE') then
-        DebugPrint('NATURAL_SATELLITE')
-
-    elseif (object == 'BLACK_HOLE') then
-        DebugPrint('BLACK_HOLE')
-
     else
-        DebugPrint("[x] Error in CreateCustomCelestialBody(type)")
+        DebugPrint("[x] CreateCustomCelestialBody: OBJECT IS NIL)")
     end
 end
 
@@ -148,6 +142,8 @@ function CreateCelestialBody(properties, debug)
     -- Table values
     -- This values are special beacause they need to be converted to a table
     local prefabProperties = properties.prefab; -- Separete prefab properties
+    DebugPrint("[+] CreateCelestialBody: " ..dump(prefabProperties))
+
     local pos, rot; 
     -- local color, size;
     local posValues, rotValues;
@@ -174,7 +170,7 @@ function CreateCelestialBody(properties, debug)
             prefabProperties = _StarConfiguration(prefabProperties, properties)
         end
         if (properties.type == 'ASTEROID_DEFAULT') then
-            
+            _AsteroidConfiguration(prefabProperties, properties)
         end
     end
     local base = "<voxbox name=" .. "'".. prefabProperties.name .. "'" .. " " ..
@@ -246,7 +242,7 @@ function _StarConfiguration(prefabProperties, properties)
     -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
     -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        prefabProperties.desc = "A Glorious Red Giant. 222"
+        prefabProperties.desc = "A Glorious Red Giant."
         prefabProperties.tags = "star_red_giant" -- Tag must by one only and not have spaces to work properly
         prefabProperties.brush = "MOD/assets/models/star_redgiant.vox"
         prefabProperties.size = "160 160 156"
@@ -263,5 +259,41 @@ function _StarConfiguration(prefabProperties, properties)
             prefabProperties.pbr = "1 1 1 0"
         end
         prefabProperties.color = PREFAB_COLORS.RED
+        if (properties.hasParticles) then
+            DebugPrint("Has particles effect!!")
+        end
         return prefabProperties
+end
+
+function _AsteroidConfiguration(prefabProperties, properties)
+    -- Configure object properties if a type is given (objects properties are optionals)
+    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
+    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        prefabProperties.desc = "A normal and boring asteroid."
+        prefabProperties.tags = "asteroid_default" -- Tag must by one only and not have spaces to work properly
+        prefabProperties.size = "20 24 24"
+        prefabProperties.texture = RandomPrefabProperty('texture')
+        prefabProperties.blendtexture = RandomPrefabProperty('blendtexture')
+        prefabProperties.color = PREFAB_COLORS.RED
+        if (properties.hasParticles) then
+            DebugPrint("Has particles effect!!")
+        end
+        return prefabProperties
+end
+
+function RandomPrefabProperty(name)
+    local num;
+    local max;
+    local min = 0;
+    if (name == 'blendtexture') then -- Range of 0-15
+        DebugPrint('BLENDTEXTURE')
+        max = 15
+    elseif (name == 'texture') then -- Range of 0-31
+        DebugPrint('TEXTURE')
+        max = 31
+    end
+    num = math.random(min, max); 
+    DebugPrint("Random " .. tostring(name) .. ": " .. tostring(num))
+    return tostring(num);
 end

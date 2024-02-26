@@ -7,23 +7,30 @@
 ]]--
 
 Prefabs = {
-    moon2 = {
-        type = 'vox',
-        name = 'moon2',
-        tags = 'moon2',
-        pos = '-9.4 0.0 -9.4',
-        file = 'MOD/assets/models/moon.vox',
-        scale = '17',
-        color = '0.32 0.23 0.23'
-    },
-    
-    planet1 = {
-        type = 'voxbox',
-        name = 'planet1_voxbox',
-        tags = 'planet1_voxbox',
+    naturalSatellite = {
+        name = 'natural_satellite',
+        tags = 'natural_satellite',
         pos = '0.0 0.0 0.9',
         rot = "0 0 0",
-        desc ="A planet",
+        desc ="A magnific natural satellite.",
+        texture = "30",
+        blendtexture = "10",
+        density = "100",
+        strength = "100",
+        collide = "true",
+        prop = "false",
+        size = "40 39 40",
+        brush ="MOD/assets/models/moon.vox",
+        material = "rock",
+        color = '0.72 0.12 0.32'
+    },
+    
+    planet = {
+        name = 'planet',
+        tags = 'planet',
+        pos = '0.0 0.0 0.9',
+        rot = "0 0 0",
+        desc ="A strange planet.",
         texture = "30",
         blendtexture = "10",
         density = "100",
@@ -41,7 +48,7 @@ Prefabs = {
         tags = 'star',
         pos = '-9.4 10.0 -9.4',
         rot = "0 0 0",
-        desc ="A beautiful star",
+        desc ="A beautiful star.",
         texture = "20",
         blendtexture = "15",
         density = "100",
@@ -53,7 +60,27 @@ Prefabs = {
         material = "rock",
         pbr= "0 0 0 32",
         color = '0.5 0.5 0.5',
+    },
+
+    asteroid = {
+        name = 'asteroid',
+        tags = 'asteroid',
+        pos = '0.0 1.0 1.0',
+        rot = "0 0 0",
+        desc ="A fast asteroid.",
+        texture = "5",
+        blendtexture = "6",
+        density = "10",
+        strength = "10",
+        collide = "true",
+        prop = "true", -- allows to create a dynamic body
+        size = "40 39 40",
+        brush ="MOD/assets/models/asteroid.vox",
+        material = "rock",
+        pbr= "0 0 0 0",
+        color = '0.5 0.5 0.5',
     }
+
 }
 
 -- TODO: Refactor this trash
@@ -125,6 +152,7 @@ end
 -- Get Spawn Coordinates from prefab table
 function GetTableValuesFromProperties(properties, key)
     local values = {  }
+    DebugPrint("[+] GetTableValuesFromProperties: " ..dump(properties))
     for k, v in pairs(properties) do
         if k == key then
             for num in v:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
@@ -173,4 +201,3 @@ function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlF
 
     DebugPrint("::::::::::::::::::::::::::")
 end
-
