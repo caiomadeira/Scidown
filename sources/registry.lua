@@ -5,14 +5,28 @@ communication between scripts and as a way to save persistent data.
 
 ]]--
 
-function SetupRegistry()
-    DisablePlayerDefaultTools()
-
+function DisablePlayerDefaultTools()
+    DebugPrint(":::::::: PLAYER TOOLS :::::::::")
+	local list = ListKeys("game.tool")
+	for i=1, #list do
+		DebugPrint(">> keys: " ..tostring(list[i]))
+		SetBool("game.tool."..list[i]..".enabled", false)
+	end
+	SetString("game.player.tool", "gun") -- Set initial tool to gun
+    DebugPrint("::::::::::::::::::::::::::::::::::")
 end
 
-function DisablePlayerDefaultTools()
-	local list = ListKeys("game.input")
-	for i=1, #list do
-		DebugPrint("Registry keys for game: " .. tostring(list[i]))
+-- TODO: THIS FUNCTION MAY BE USEFUL IN FUTURE BECAUSE I GET THE CURRENT PLAYER TOOL
+-- I NEED TO CALL THIS IN TICK() OR UPDATE() TO GET THE REAL TIME TOOL
+function PrintRegistryKeys(registryNode)
+    DebugPrint(":::::::: LISTING KEYS FOR " .. registryNode .. " NODE :::::::::")
+	local list = ListKeys(registryNode)
+	for i=1, #list do 
+		DebugPrint(">> keys: " ..tostring(list[i]))
+		if registryNode == "game.player.tool" then
+			DebugPrint("Tool>: " .. GetString(registryNode))
+		end
+		DebugPrint()
 	end
+    DebugPrint("::::::::::::::::::::::::::::::::::")
 end

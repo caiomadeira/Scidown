@@ -1,4 +1,5 @@
 #include "utils.lua"
+#include "registry.lua"
 
 Player = {
     canJump = false,
@@ -57,19 +58,7 @@ end
 -- ::::::::::::::::::::::::::::::::::::::
 
 function PlayerInventory()
-    DebugPrint(":::::::: PLAYER INVENTORY :::::::::")
-	local list = ListKeys("game.tool")
-	for i=1, #list do
-        if (list[i] ~= 'gun' or list[i] ~= 'rifle') then
-            local query = "game.tool." .. tostring(list[i])
-            --logFile(ListKeys, '')
-            DebugPrint("query: " .. query)
-            ClearKey("game.tool." .. list[i]) -- remove ui register
-            SetBool("game.tool."..list[i]..".enabled", false)
-        end
-	end
-    DebugPrint("::::::::::::::::::::::::::::::::::")
-
+    --DisablePlayerDefaultTools()
 end
 
 
