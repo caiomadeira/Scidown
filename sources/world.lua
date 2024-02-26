@@ -41,11 +41,11 @@ CelestialBodies = {
 
     STAR = { -- DEFAULT CONFIGURATION
         name = 'STAR',
-        type = 'RED_GIANT';
-        emitsLight = false, 
+        type = 'RED_GIANT'; 
+        emitsLight = true, 
         gravitStrength = 30,
-        allowRotation = false,
-        spawnChance = 70,
+        allowRotation = false, -- After spawn / For Animation
+        spawnChance = 70,  -- Calls before Spawn
         prefab = Prefabs.star
     },
 
@@ -80,6 +80,7 @@ CelestialBodies = {
 
     ASTEROID = {
         name = 'ASTEROIRD',
+        type = 'ASTEROID_DEFAULT',
         allowRotation = true,
         allowMovement = true,
         velocity = 50,
@@ -88,6 +89,7 @@ CelestialBodies = {
 
     NATURAL_SATELLITE = {
         name = 'NATURAL_SATELLITE',
+        type = 'NATURAL_SATELLITE_DEFAULT',
         gravitStrength = 30,
         allowRotation = true,
         allowMovement = true,
@@ -102,6 +104,7 @@ CelestialBodies = {
 
     BLACK_HOLE = {
         name = 'BLACK_HOLE',
+        type = 'MASSIVE',
         gravitStrength = 100,
         allowRotation = true,
     }
@@ -114,15 +117,15 @@ Create a custom celestial body with Random Properties
 ]]--
 
 
-function CreateCustomCelestialBody(object)
+function SetupCustomCelestialBody(object, debug)
 
     -- Check type of param entered
     assert(type(object)=="table", DebugPrint("[>] Nice: Param is a table."))
 
     if (object.name == 'STAR') then
         DebugPrint('STAR')
-        -- Insert into a table aditional properties
-        CreateStar(object)
+        
+        CreateCelestialBody(object, debug)
         
     elseif (object == 'PLANET') then
         DebugPrint('PLANET')
@@ -141,59 +144,39 @@ function CreateCustomCelestialBody(object)
     end
 end
 
-function CreateStar(properties) 
+function CreateCelestialBody(properties, debug) 
     -- Table values
     -- This values are special beacause they need to be converted to a table
     local prefabProperties = properties.prefab; -- Separete prefab properties
-    local pos, rot, color, size;
-    local posValues, rotValues, colorValues, sizeValues;
+    local pos, rot; 
+    -- local color, size;
+    local posValues, rotValues;
+    -- local colorValues, sizeValues;
 
-    -- local tableValues = GetTableValuesFromProperties(properties, 'pos')
-    -- DebugPrint("table size: " .. tostring(#tableValues))
-    
     -- Its important to have disponible this values as vector or integer
     -- because we gone use later in this function
     posValues = GetTableValuesFromProperties(prefabProperties, 'pos')
     rotValues = GetTableValuesFromProperties(prefabProperties, 'rot')
-    colorValues = GetTableValuesFromProperties(prefabProperties, 'color')
-    sizeValues = GetTableValuesFromProperties(prefabProperties, 'size')
+    -- colorValues = GetTableValuesFromProperties(prefabProperties, 'color')
+    -- sizeValues = GetTableValuesFromProperties(prefabProperties, 'size')
 
     pos = CreateTableStringForXML(posValues)
     rot = CreateTableStringForXML(rotValues)
-    color = CreateTableStringForXML(colorValues)
-    size = CreateTableStringForXML(sizeValues)
-
-    DebugPrint("::::: POS STRING > " .. pos)
-    DebugPrint("::::: ROT STRING > " .. rot)
-    DebugPrint("::::: COLOR STRING > " .. color)
-    DebugPrint("::::: SIZE STRING > " .. size)
-    
-    DebugPrint("External Properties: " .. dump(properties))
-
-    DebugPrint("prefabProperties.name: " .. prefabProperties.name)
-    DebugPrint("objectProperties.type: " .. properties.type)
+    -- color = CreateTableStringForXML(colorValues)  -- not used yet
+    -- size = CreateTableStringForXML(sizeValues) -- not used yet
 
     -- Configure object properties if a type is given (objects properties are optionals)
-    if (prefabProperties.name == string.lower(properties.name)) then
-        if (properties.type == 'RED_GIANT') then
-            prefabProperties.desc = "A Glorious Red Giant."
-            prefabProperties.tags = "star_red_giant"
-            if (properties.gravitStrength > 50) then
-                prefabProperties.density = "100"
-                prefabProperties.strength = "100"
-            else
-                prefabProperties.density = "10"
-                prefabProperties.strength = "10"
-            end
-            if (properties.emitsLight) then
-                prefabProperties.pbr = "0 0 0 32"
-            else
-                prefabProperties.pbr = "1 1 1 0"
-            end
-            prefabProperties.color = PREFAB_COLORS.RED
+    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
+    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    if (prefabProperties.name == string.lower(properties.name)) then 
+        if (properties.type == 'RED_GIANT') then --
+            prefabProperties = _StarConfiguration(prefabProperties, properties)
+        end
+        if (properties.type == 'ASTEROID_DEFAULT') then
+            
         end
     end
-
     local base = "<voxbox name=" .. "'".. prefabProperties.name .. "'" .. " " ..
             "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
             "pos=" .. "'".. pos .. "'" .. " " ..
@@ -217,24 +200,28 @@ function CreateStar(properties)
     -- Sets an default spawn position maybe its a good idea make a method for that
     local t
     if pos == '' then
-        t = Transform(Vec(10, 10, 0))
+        t = Transform(Vec(10, 10, 0)) -- Default position spawn (make later some logic)
     else
-        Transform(Vec(0, 0, 0))
+        t = Transform(Vec(pos[1], pos[2], pos[3]))
     end
-	Spawn(base, Transform(Vec(10, 10, 0)))
+	Spawn(base, Transform(t))
     
-    -- Check if the object has CREATED (shape and body)
-    local handleShape = FindShape(prefabProperties.tags, true)
-    local handleBody = FindBody(prefabProperties.tags, true)
-    DebugPrint("Handled body: " .. tostring(handleBody))
-    DebugPrint("Handled shape: " .. tostring(handleShape))
-
-    if handleShape ~= 0 then
-        DebugPrint(":::: [" .. string.upper(prefabProperties.name)  .. "] CREATED ::::")
-        DebugPrint(base)
-        DebugPrint(":::::::::::::::::::::::::::::::::::::::::::::")
-    else
-        DebugPrint("XXXXXXXXXXXXX OBJECT NOT CREATED XXXXXXXXXXXXX")
+    -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
+    if debug then
+        local handleShape = FindShape(prefabProperties.tags, true)
+        local handleBody = FindBody(prefabProperties.tags, true)
+        
+        DebugPrint("Handled body: " .. tostring(handleBody))
+        DebugPrint("Handled shape: " .. tostring(handleShape))
+    
+        if handleShape ~= 0 then
+            DebugPrint(":::: [" .. string.upper(prefabProperties.name)  .. "] CREATED ::::")
+            DebugPrint("[+] OBJECT TRANSFORM: " .. prefabProperties.pos)
+            DebugPrint(base)
+            DebugPrint(":::::::::::::::::::::::::::::::::::::::::::::")
+        else
+            DebugPrint("XXXXXXXXXXXXX OBJECT [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
+        end
     end
 end
 
@@ -251,4 +238,30 @@ function CreateTableStringForXML(table)
     else
         return ''
     end
+end
+
+-- Pseudo private method to configure prefab properties and more options
+function _StarConfiguration(prefabProperties, properties)
+    -- Configure object properties if a type is given (objects properties are optionals)
+    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
+    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        prefabProperties.desc = "A Glorious Red Giant. 222"
+        prefabProperties.tags = "star_red_giant" -- Tag must by one only and not have spaces to work properly
+        prefabProperties.brush = "MOD/assets/models/star_redgiant.vox"
+        prefabProperties.size = "160 160 156"
+        if (properties.gravitStrength > 50) then
+            prefabProperties.density = "100"
+            prefabProperties.strength = "100"
+        else
+            prefabProperties.density = "10"
+            prefabProperties.strength = "10"
+        end
+        if (properties.emitsLight) then
+            prefabProperties.pbr = "0 0 0 20"
+        else
+            prefabProperties.pbr = "1 1 1 0"
+        end
+        prefabProperties.color = PREFAB_COLORS.RED
+        return prefabProperties
 end

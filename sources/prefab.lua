@@ -39,7 +39,7 @@ Prefabs = {
     star = {
         name = 'star',
         tags = 'star',
-        pos = '1.0 0.0 1.4',
+        pos = '-9.4 10.0 -9.4',
         rot = "0 0 0",
         desc ="A beautiful star",
         texture = "20",
@@ -52,7 +52,7 @@ Prefabs = {
         brush ="MOD/assets/models/star.vox",
         material = "rock",
         pbr= "0 0 0 32",
-        color = '0.72 0.12 0.32',
+        color = '0.5 0.5 0.5',
     }
 }
 
