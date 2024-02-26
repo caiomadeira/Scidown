@@ -202,15 +202,22 @@ function CreateCelestialBody(properties, debug)
     end
 	Spawn(base, Transform(t))
     
+
+    local handleShape = FindShape(prefabProperties.tags, true)
+    local handleBody = FindBody(prefabProperties.tags, true)
+
+    -- Do finals configurations like:
+    --  > INCREASE EMISSION LIGHT;
+    --  > ADD PARTICLES EFFECT;
+
+    IncreaseEmissiveScale(prefabProperties.tags, properties.emitsLight)
+        
     -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
     if debug then
-        local handleShape = FindShape(prefabProperties.tags, true)
-        local handleBody = FindBody(prefabProperties.tags, true)
-        
-        DebugPrint("Handled body: " .. tostring(handleBody))
         DebugPrint("Handled shape: " .. tostring(handleShape))
-    
+        
         if handleShape ~= 0 then
+            DebugPrint("Handled body: " .. tostring(handleBody))
             DebugPrint(":::: [" .. string.upper(prefabProperties.name)  .. "] CREATED ::::")
             DebugPrint("[+] OBJECT TRANSFORM: " .. prefabProperties.pos)
             DebugPrint(base)
@@ -280,4 +287,20 @@ function _AsteroidConfiguration(prefabProperties, properties)
             DebugPrint("Has particles effect!!")
         end
         return prefabProperties
+end
+
+-- Need to be call after spawn
+function IncreaseEmissiveScale(tag, emitsLight)
+    local shape = FindShape(tag)
+    if (shape ~= 0) then
+        if (emitsLight) then
+            local scale = math.sin(GetTime()) * 1.0 + 1.0
+            SetShapeEmissiveScale(shape, scale)
+        else
+            DebugPrint("The shape doesn't emits light.")
+        end
+    
+    else 
+        DebugPrint("The shape doesn't exists.")
+    end
 end
