@@ -152,7 +152,7 @@ end
 -- Get Spawn Coordinates from prefab table
 function GetTableValuesFromProperties(properties, key)
     local values = {  }
-    DebugPrint("[+] GetTableValuesFromProperties: " ..dump(properties))
+    -- DebugPrint("[+] GetTableValuesFromProperties: " ..dump(properties))
     for k, v in pairs(properties) do
         if k == key then
             for num in v:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers

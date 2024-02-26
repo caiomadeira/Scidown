@@ -5,6 +5,11 @@
 #include "sources/prefab.lua"
 #include "sources/vehicle.lua"
 #include "sources/registry.lua"
+#include "sources/particles.lua"
+
+-- Include Tests Cases
+#include "TestSuites/UnitTests.lua"
+#include "TestSuites/UITests.lua"
 
 frame = 0
 
@@ -33,6 +38,7 @@ function tick()
     VehicleTick()
     -- PrintRegistryKeys("game.player.tool")
     DisablePlayerDefaultTools()
+    AddParticleEffect() 
     --SpaceShipCameraMovement()
 end
 
