@@ -265,6 +265,10 @@ function CreateTableStringForXML(table)
     end
 end
 
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+-- :::::::::::::::::::     CELESTIAL BODIES     :::::::::::::::::
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 -- Pseudo private method to configure prefab properties and more options
 function _StarConfiguration(prefabProperties, properties)
     -- Configure object properties if a type is given (objects properties are optionals)
