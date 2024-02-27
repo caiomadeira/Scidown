@@ -44,3 +44,9 @@ with the option of randomize the configuration.
         material = "rock",
         color = '0.0 0.0 0.0'
     },
+
+
+----------------
+
+Substitue all DebugPrint() with Print() but you need to 
+have the enviroment setup with tdconsole .dll
