@@ -1,4 +1,4 @@
-#include 'sources/commons/constants.lua'
+#include "sources/commons/constants.lua"
 
 Prefabs = {
     naturalSatellite = {

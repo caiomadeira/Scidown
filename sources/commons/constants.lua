@@ -12,12 +12,11 @@ by Caio Madeira
 ]]--
 
 PATH = {
-    MOD = 'MOD/',
-    PREFAB = PATH.MOD .. 'assets/models/prefabs/',
-    PALLETE = PATH.MOD .. 'assets/palletes/',
-    SKYBOX = PATH.MOD .. 'assets/skybox/',
-    SPRITE = PATH.MOD .. 'assets/sprites/',
-    VOX = PATH.MOD .. 'assets/vox/',
+    PREFAB = 'MOD/assets/models/prefabs/',
+    PALLETE = 'MOD/assets/palletes/',
+    SKYBOX = 'MOD/assets/skybox/',
+    SPRITE = 'MOD/assets/sprites/',
+    VOX = 'MOD/assets/vox/',
 }
 
 PREFAB = {

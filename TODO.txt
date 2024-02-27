@@ -48,5 +48,7 @@ with the option of randomize the configuration.
 
 ----------------
 
-Substitue all DebugPrint() with Print() but you need to 
+Refactor DebugPrints:
+
+Substitute all DebugPrint() with Print() but you need to 
 have the enviroment setup with tdconsole .dll
