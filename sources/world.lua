@@ -1,6 +1,7 @@
 #include "sources/prefab.lua"
 #include "sources/utils.lua"
 #include "sources/commons/colors.lua"
+#include "sources/commons/constants.lua"
 
 World = {
     size = {
@@ -11,30 +12,6 @@ World = {
 }
 
 CelestialBodies = {
-
-    --[[
-    STAR HAS MANY TYPES:
-    RED_GIANT:
-        - BIG SIZE;
-        - COLOR: RED;
-        - HIGH GRAVITY EFFECT;
-        - HAS PARTICLE EFFECT;
-
-    BLUE_SUPER_GIANT: 
-        - VERY BIG SIZE; 
-        - COLOR: BLUE;
-        - HIGH GRAVITY EFFECT;
-        - HAS PARTICLE EFFECT;
-
-    BROWN_DWARF:
-        - SMALL SIZE; 
-        - COLOR: WHITE;
-        - VERY HIGH GRAVITY EFFECT;
-        - NO_LIGHT.
-        - NO PARTICLE EFFECT;
-    ]]--
-
-
     STAR = { -- DEFAULT CONFIGURATION
         name = 'STAR',
         type = 'RED_GIANT'; 
@@ -45,25 +22,6 @@ CelestialBodies = {
         hasParticles = true,
         prefab = Prefabs.star
     },
-
-    --[[
-    GASEOUS PLANETS:
-        - particles effects; 
-        - can be toxic; 
-        - not solid at all;
-        - low density;
-        - big scale;
-        - HIGH moon count;
-
-    ROCKY PLANETS: 
-        - are solid; 
-        - not have particles effects;
-        - lower moon count;
-
-    OCEAN PLANETS:
-        - just water in a sphere;
-
-    ]]--
 
     PLANET = {
         name = 'PLANET',
@@ -97,12 +55,6 @@ CelestialBodies = {
         prefab = Prefabs.naturalSatellite
     },
 
-        --[[
-    BLACK HOLES:
-        - INFINITE (HIGH) density;
-        - Absorves bodies (and the player) and delete it
-    ]]--
-
     BLACK_HOLE = {
         name = 'BLACK_HOLE',
         type = 'MASSIVE',
@@ -113,14 +65,14 @@ CelestialBodies = {
 
     NEBULOSA = {
         name = 'NEBULOSA',
-        type = 'PARTICLE_BODY',
+        type = 'NEBULOSA_DEFAULT',
         spawnChance = 10,
         prefab = Prefabs.Particles.nebulosa
     },
 
     GIANT_STAR = {
         name = 'GIANT_STAR',
-        type = 'PARTICLE_BODY',
+        type = 'GIANT_STAR_DEFAULT',
         spawnChance = 10,
         prefab = Prefabs.Particles.giantStar
     }
@@ -250,7 +202,6 @@ function CreateCelestialBody(properties, debug)
     end
 end
 
-
 function CreateTableStringForXML(table)
     local strAux;
 
@@ -266,7 +217,9 @@ function CreateTableStringForXML(table)
 end
 
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- :::::::::::::::::::     CELESTIAL BODIES     :::::::::::::::::
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 -- Pseudo private method to configure prefab properties and more options
