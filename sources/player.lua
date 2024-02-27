@@ -20,6 +20,7 @@ Player = {
 
 -- Standard configuration for player
 function PlayerInit()
+    DisablePlayerDefaultTools()
     PlayerInventory()
     --SetPlayerSpawnTool("gun")
     SetPlayerRegenerationState(false) -- disable regeneration for player

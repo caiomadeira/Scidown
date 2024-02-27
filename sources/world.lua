@@ -68,12 +68,12 @@ CelestialBodies = {
     PLANET = {
         name = 'PLANET',
         moonCount = 0,
-        type = 'GASEOUS', -- GASEOUS, ROCKY OR OCEAN
+        type = 'GASEOUS_PLANET', -- GASEOUS_PLANET, ROCKY OR OCEAN
         gravitStrength = 30,
         allowRotation = true,
         allowMovement = true, -- allow translation movement
         spawnChance = 100,
-        prefab = Prefabs.planet
+        prefab = Prefabs.planet -- can be a solid prefab or particle
     },
 
     ASTEROID = {
@@ -109,6 +109,20 @@ CelestialBodies = {
         gravitStrength = 100,
         allowRotation = true,
         spawnChance = 5,
+    },
+
+    NEBULOSA = {
+        name = 'NEBULOSA',
+        type = 'PARTICLE_BODY',
+        spawnChance = 10,
+        prefab = Prefabs.Particles.nebulosa
+    },
+
+    GIANT_STAR = {
+        name = 'GIANT_STAR',
+        type = 'PARTICLE_BODY',
+        spawnChance = 10,
+        prefab = Prefabs.Particles.giantStar
     }
 }
 
@@ -158,15 +172,28 @@ function CreateCelestialBody(properties, debug)
     -- size = CreateTableStringForXML(sizeValues) -- not used yet
 
     -- Configure object properties if a type is given (objects properties are optionals)
-    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
-    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    -- Check if the prefab name matches with property name
     if (prefabProperties.name == string.lower(properties.name)) then 
-        if (properties.type == 'RED_GIANT') then --
-            prefabProperties = _StarConfiguration(prefabProperties, properties)
-        end
-        if (properties.type == 'ASTEROID_DEFAULT') then
+        if (prefabProperties.name == string.lower('STAR')) then --
+            _StarConfiguration(prefabProperties, properties)
+
+        elseif (prefabProperties.name == string.lower('ASTEROID')) then
             _AsteroidConfiguration(prefabProperties, properties)
+
+        elseif (prefabProperties.name == string.lower('NATURAL_SATELLITE')) then
+            _NaturalSatelliteConfiguration(prefabProperties, properties)
+            
+        elseif (prefabProperties.name == string.lower('PLANET')) then
+            _PlanetConfiguration(prefabProperties, properties)
+
+        elseif (prefabProperties.name == string.lower('BLACK_HOLE')) then
+            _BlackHoleConfiguration(prefabProperties, properties)
+
+        elseif (prefabProperties.name == string.lower('NEBULOSA')) then
+            _NebulosaConfiguration(prefabProperties, properties)
+            
+        elseif (prefabProperties.name == string.lower('GIANT_STAR')) then
+            _NebulosaConfiguration(prefabProperties, properties)
         end
     end
     local base = "<voxbox name=" .. "'".. prefabProperties.name .. "'" .. " " ..
@@ -197,7 +224,6 @@ function CreateCelestialBody(properties, debug)
         t = Transform(Vec(pos[1], pos[2], pos[3]))
     end
 	Spawn(base, Transform(t))
-    
 
     local handleShape = FindShape(prefabProperties.tags, true)
     local handleBody = FindBody(prefabProperties.tags, true)
@@ -271,7 +297,7 @@ end
 function _AsteroidConfiguration(prefabProperties, properties)
     -- Configure object properties if a type is given (objects properties are optionals)
     -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
+    -- :::::::::::::::::::     ASTEROID     :::::::::::::::::::::::::
     -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         prefabProperties.desc = "A normal and boring asteroid."
         prefabProperties.tags = "asteroid_default" -- Tag must by one only and not have spaces to work properly

@@ -7,10 +7,6 @@
 #include "sources/registry.lua"
 #include "sources/particles.lua"
 
--- Include Tests Cases
-#include "TestSuites/UnitTests.lua"
-#include "TestSuites/UITests.lua"
-
 frame = 0
 
 function init()
@@ -29,7 +25,7 @@ function init()
     --SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
     -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
     SetupCustomCelestialBody(CelestialBodies.STAR, true)
-     -- SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
+    SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
 
 end
 
@@ -37,8 +33,7 @@ function tick()
     PlayerTick()
     VehicleTick()
     -- PrintRegistryKeys("game.player.tool")
-    DisablePlayerDefaultTools()
-    AddParticleEffect() 
+    --AddParticleEffect() 
     --SpaceShipCameraMovement()
 end
 

@@ -68,3 +68,8 @@ function serializeTable(val, name, skipnewlines, depth)
 
   return tmp
 end
+
+function random()
+
+
+end

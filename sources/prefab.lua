@@ -10,7 +10,7 @@ Prefabs = {
     naturalSatellite = {
         name = 'natural_satellite',
         tags = 'natural_satellite',
-        pos = '0.0 0.0 0.9',
+        pos = '5.0 15.0 5.9',
         rot = "0 0 0",
         desc ="A magnific natural satellite.",
         texture = "30",
@@ -28,7 +28,7 @@ Prefabs = {
     planet = {
         name = 'planet',
         tags = 'planet',
-        pos = '0.0 0.0 0.9',
+        pos = '3.0 19.0 0.9',
         rot = "0 0 0",
         desc ="A strange planet.",
         texture = "30",
@@ -46,7 +46,7 @@ Prefabs = {
     star = {
         name = 'star',
         tags = 'star',
-        pos = '-9.4 10.0 -9.4',
+        pos = '9.4 10.0 -6.4',
         rot = "0 0 0",
         desc ="A beautiful star.",
         texture = "20",
@@ -79,8 +79,37 @@ Prefabs = {
         material = "rock",
         pbr= "0 0 0 0",
         color = '0.5 0.5 0.5',
-    }
+    }, 
 
+    Particles = {
+        nebulosa = {
+            name = 'nebulosa',
+            pos = {0, 1, 0},
+            velocity = {1, 5, -1},
+            duration = 1.0, 
+            collide = 1, -- 0 or 1
+            emissive = 10,
+            alpha = {0.2, 0.2},
+            rotation = 4,
+            color1 = {1, 1, 0},
+            color2 = {1, 0, 0},
+            tile = 5 -- 5 fire or 0 smoke
+        },
+
+        giantStar = {
+            name = 'giantStar',
+            pos = {0, 1, 0},
+            velocity = {1, 5, -1},
+            duration = 1.0, 
+            collide = 1, -- 0 or 1
+            emissive = 10,
+            alpha = {0.2, 0.2},
+            rotation = 4,
+            color1 = {1, 1, 0},
+            color2 = {1, 0, 0},
+            tile = 5 -- 5 fire or 0 smoke
+        }
+    }
 }
 
 -- TODO: Refactor this trash
