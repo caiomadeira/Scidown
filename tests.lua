@@ -9,10 +9,42 @@ by Caio Madeira
 ---------------------------------------------
 ]]--
 
-ENABLE_TESTS = true
+--[[
+******************************************************************
+NOTE: I have a problem. I want to get name functions, but 
+dosent have an bult-in solution for this. So, i leave it here to
+elaborate futhermore.
+*****************************************************************
 
-if ENABLE_TESTS then
+UnitTestsRegistry = { 
+    RandomPrefabPropertyTests = {
+        functable1_ShouldReturnStrType = { 
+            name = "test_RandomPrefabProperty_ShouldReturnStrType" 
+        },
+
+        metatable1_ShouldReturnStrType = { },
+    }
+ }
+
+ UnitTestsRegistry.RandomPrefabPropertyTests.metatable1_ShouldReturnStrType.__call = function ()
+    print "test" 
+end
+
+setmetatable(
+    UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldReturnStrType,
+    UnitTestsRegistry.RandomPrefabPropertyTests.metatable1_ShouldReturnStrType
+)
+
+UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldReturnStrType()
+print(">>>" .. UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldReturnStrType.name)
+]] -- 
+
+require('settings')
+
+if APP_TESTS then
     require('sources.prefab')
+    require('sources.commons.constants')
+    require('sources.utils')
     luaunit = require('lib.luaunit')
 
 -- Set local function simulating a private function
@@ -30,11 +62,73 @@ local function testVecAdd(a, b)
     print(":::::::::::::::::::::::::::::::::::::::")
 end
 
-function testRandomPrefabPropertyType()
-    luaunit.assertEquals(type(RandomPrefabProperty('texture')), 'string', 'Type match.')
+function test_RandomPrefabProperty_ShouldReturnStrType()
+    local dummyProperty = 'texture'
+    local resultExpected = 'string'
+    local onFailureMsg = "Type doesn't match."
+    local f = RandomPrefabProperty(dummyProperty)
+    luaunit.assertEquals(type(f), resultExpected, onFailureMsg)
+    dummyProperty = 'blendtexture'
+    luaunit.assertEquals(type(f), resultExpected, onFailureMsg)
 end
 
+--[[
+**********************************************
+CalculateAxisAccordingWorldAndObject()
+**********************************************
+]]--
+
+-- Check: Return Type
+function test_CalcSpawnPosOffset_ShouldReturnTableType()
+    local time = os.time()
+    local dummyobjectPos = { 3.0, 10.0, 34.0 }
+    local dummyWordLength = { 
+        CONSTANTS.WORLD.SIZE.WIDTH - 100,
+        CONSTANTS.WORLD.SIZE.HEIGHT - 40,
+        CONSTANTS.WORLD.SIZE.DEPTH - 100
+    }
+    print("\n")
+    print("Init Function output:")
+    print("> test_CalcSpawnPosWithOffset_ShouldReturnTableType")
+    print("-----------------------")
+    local f = CalcSpawnPosWithOffset(dummyobjectPos, dummyWordLength, time)
+    print("-----------------------")
+    print("End Function output:")
+    print("\n")
+
+    local resultExpected = 'table'
+    local onFailureMsg = "Type doesn't match."
+
+    luaunit.assertEquals(type(f),resultExpected, onFailureMsg)
+end
+
+function test_CalcSpawnPosWithOffset_WhenSomeValueIsNegative_ShouldReturnTable()
+    local time = os.time()
+    -- if you setup some table value with negative, it always be 
+    -- a negative in result of function
+    local dummyobjectPos = { 201.0, -10.0, 35.0 }
+    local dummyWordLength = { 
+        CONSTANTS.WORLD.SIZE.WIDTH - 100,
+        CONSTANTS.WORLD.SIZE.HEIGHT - 40,
+        CONSTANTS.WORLD.SIZE.DEPTH - 100
+    }
+
+    print("\n")
+    print("Init Function output:")
+    print("> test_CalcSpawnPosWithOffset_WhenSomeValueIsNegative_ShouldReturnTable")
+    print("-----------------------")
+    local f = CalcSpawnPosWithOffset(dummyobjectPos, dummyWordLength, time)
+    print("-----------------------")
+    print("End Function output:")
+    print("\n")
+    local resultExpected = 'table'
+    local onFailureMsg = "The value is not negative."
+
+    luaunit.assertEquals(type(f), resultExpected, onFailureMsg)
+end
 
 os.exit(luaunit.LuaUnit.run())
-else os.execute("echo [x] ENABLE_TESTS=" .. tostring(ENABLE_TESTS))
+else 
+    os.execute("echo ::::::::: TESTS ENV DISABLED ::::::::::")
+    os.execute("echo You need to set APP_TESTS=true in 'config.lua' file.")
 end

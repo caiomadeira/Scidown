@@ -85,3 +85,9 @@ function ConvertStrValues(t)
         print("[x] Error: table lenght is not 3.")
     end
 end
+
+-- The function that limits a number in a certain range usually called Clamp.
+-- https://stackoverflow.com/questions/64878491/how-do-you-make-a-range-in-lua
+function math.Clamp(val, min, max)
+    return math.min(math.max(val, min), max)
+end

@@ -3,13 +3,6 @@
 #include "sources/commons/colors.lua"
 #include "sources/commons/constants.lua"
 
-World = {
-    size = {
-        width = 300,
-        height = 100,
-        depth = 300
-    }
-}
 
 CelestialBodies = {
     STAR = { -- DEFAULT CONFIGURATION
