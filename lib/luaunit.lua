@@ -2713,10 +2713,17 @@ end
     M.NodeStatus = NodeStatus
 
     -- values of status
-    NodeStatus.SUCCESS  = 'SUCCESS'
-    NodeStatus.SKIP     = 'SKIP'
-    NodeStatus.FAIL     = 'FAIL'
-    NodeStatus.ERROR    = 'ERROR'
+    if _VERSION == "Lua 5.3" or _VERSION == "Lua 5.4" then
+        NodeStatus.SUCCESS  = 'SUCCESS'
+        NodeStatus.SKIP     = '\27[103;93m [!] SKIP[0m'
+        NodeStatus.FAIL = '\27[101;93m [X] FAIL \27[0m'
+        NodeStatus.ERROR    = '\27[101;93m [!] ERROR \27[0m'
+    else
+        NodeStatus.SUCCESS  = 'SUCCESS'
+        NodeStatus.SKIP     = 'SKIP'
+        NodeStatus.FAIL = 'FAIL'
+        NodeStatus.ERROR    = 'ERROR'
+    end
 
     function NodeStatus.new( number, testName, className )
         -- default constructor, test are PASS by default
