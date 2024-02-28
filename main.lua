@@ -8,9 +8,6 @@
 #include "sources/particles.lua"
 --#include "tests.lua"
 
-
-frame = 0
-
 function init()
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
@@ -34,13 +31,22 @@ function init()
     -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
     SetupCustomCelestialBody(CelestialBodies.STAR, true)
     SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
-    local n = math.random(0, 34)
+    local n = math.random(-34, 34)
     print("random number: " .. tostring(n))
-    local pos = "3.0 134.0 0.9"
-    RandomSpawnPosition(pos)
+    local objectPos = { 200.0, 134.0, 0.9 }
+    local dummyWordLength = { 
+        CONSTANTS.WORLD.SIZE.WIDTH - 100,
+        CONSTANTS.WORLD.SIZE.HEIGHT - 40,
+        CONSTANTS.WORLD.SIZE.DEPTH - 100
+    }
+    local time = GetTime() -- Time for API
+    CalcSpawnPosWithOffset(objectPos, dummyWordLength, time)
+    print("Finish init main.lua")
 end
 
 function tick()
+    --local pos = "3.0 134.0 0.9"
+    --RandomSpawnPosition(pos)
     --playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
     --print("Player pos 1: " .. VecStr(playerPos))
 
