@@ -2460,7 +2460,11 @@ TextOutput.__class__ = 'TextOutput'
         self:displayFailedTests()
         print( M.LuaUnit.statusLine( self.result ) )
         if self.result.notSuccessCount == 0 then
-            print('OK')
+            local resultOk = 'Ok'
+            if _VERSION == "Lua 5.3" or _VERSION == "Lua 5.4" then
+                resultOk = '[+] Finish Suite: \27[0;32m Ok \27[0m'
+            end
+            print(resultOk)
         end
     end
 
@@ -2716,7 +2720,7 @@ end
     if _VERSION == "Lua 5.3" or _VERSION == "Lua 5.4" then
         NodeStatus.SUCCESS  = 'SUCCESS'
         NodeStatus.SKIP     = '\27[103;93m [!] SKIP[0m'
-        NodeStatus.FAIL = '\27[101;93m [X] FAIL \27[0m'
+        NodeStatus.FAIL = '\n\27[101;93m [X] FAIL \27[0m'
         NodeStatus.ERROR    = '\27[101;93m [!] ERROR \27[0m'
     else
         NodeStatus.SUCCESS  = 'SUCCESS'
