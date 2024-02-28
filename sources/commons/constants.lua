@@ -20,6 +20,14 @@ PATH = {
 }
 
 CONSTANTS = {
+
+    WORLD = {
+        SIZE = {
+            WIDTH = 300, -- X
+            HEIGHT = 150, -- Y 
+            DEPTH = 300 -- Z
+        }
+    },
     
     PREFAB = {
         SPACESHIP_SMALL1 = PATH.PREFAB .. 'vehicles/spaceship_small1.xml',
