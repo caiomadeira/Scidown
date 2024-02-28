@@ -38,8 +38,9 @@ luac.out
 *.x86_64
 *.hex
 
-# Project Specific files
+# Project Specific files and folders
 TODO.txt
+/docs/api/
 
 # C compiler files
 *.obj 
