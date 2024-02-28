@@ -2,10 +2,6 @@
 #include "sources/commons/colors.lua"
 
 
-function rnd(mi, ma) 
-    return math.random(0, 1000) / 1000*(ma-mi)+mi
-end
-
 function AddParticleEffect() 
     local pos = Vec(0, 1, 0)
     local velocity = Vec(1, 5, -1)
@@ -26,6 +22,12 @@ function AddParticleEffect()
     -- SpawnParticle(pos, velocity, duration)
 
     for i=1, 100 do
-    	SpawnParticle(pos, Vec(rnd(-1, 1)), duration)
+    	SpawnParticle(pos, Vec(rndParticle(-1, 1)), duration)
     end
+end
+
+
+-- for particles
+function rndParticle(mi, ma) 
+    return math.random(0, 1000) / 1000*(ma-mi)+mi
 end

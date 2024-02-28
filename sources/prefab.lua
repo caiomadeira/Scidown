@@ -16,6 +16,7 @@ Prefabs = {
         size = "40 39 40",
         brush ="MOD/assets/models/moon.vox",
         material = "rock",
+        pbr= "0 0 0 0",
         color = '0.72 0.12 0.32'
     },
     
@@ -34,6 +35,7 @@ Prefabs = {
         size = "40 39 40",
         brush ="MOD/assets/models/planet.vox",
         material = "rock",
+        pbr= "0 0 0 0",
         color = '0.72 0.12 0.32'
     },
 
@@ -225,17 +227,34 @@ function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlF
     DebugPrint("::::::::::::::::::::::::::")
 end
 
-function RandomPrefabProperty(name)
+function RandomPrefabProperty(property)
     local num, max;
     local min = 0;
-    if (name == 'blendtexture') then -- Range of 0-15
-        DebugPrint('BLENDTEXTURE')
+    if (property == 'blendtexture') then -- Range of 0-15
         max = 15
-    elseif (name == 'texture') then -- Range of 0-31
-        DebugPrint('TEXTURE')
+    elseif (property == 'texture') then -- Range of 0-31
         max = 31
     end
     num = math.random(min, max); 
-    DebugPrint("Random " .. tostring(name) .. ": " .. tostring(num))
     return tostring(num);
+end
+
+function RandomSpawnPosition(pos)
+    -- The table contains values to multiply with the spawn position to guarantee an safe zone to spawn
+    local safezoneOffset = { x = math.random(10, 15), -- x
+                             y = math.random(5, 15), 
+                            z = math.random(10, 15)} -- y
+    print("SafezoneOffset: " .. dump(safezoneOffset))
+    pos = ConvertStrValues(pos)
+    local x, y, z;
+    x = math.random(0, 10) -- change min and max later
+    y = math.random(0, 5)
+    z = math.random(0, 10)
+
+    -- Get player pos - Sum of Pos + Qeuler Y = 1 to point to center of player
+    playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
+    print("Player transform: " .. VecStr(playerPos))
+
+    spawnPos = VecAdd()
+
 end

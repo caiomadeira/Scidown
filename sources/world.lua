@@ -36,7 +36,7 @@ CelestialBodies = {
 
     ASTEROID = {
         name = 'ASTEROID',
-        type = 'ASTEROID_DEFAULT',
+        type = 'RANDOM',
         allowRotation = true,
         allowMovement = true,
         hasParticles = true,
@@ -80,23 +80,19 @@ CelestialBodies = {
 
 --[[
 
-Create a custom celestial body with Random Properties
+Create a custom celestial body with Random (or not) Properties
 
 ]]--
 
 
 function SetupCustomCelestialBody(object, debug)
     -- Check type of param entered
-    assert(type(object)=="table", DebugPrint("[>] SetupCustomCelestialBody: Param is a table."))
+    --assert(type(object)=="table", print("[>] SetupCustomCelestialBody: Param is a table."))
 
     if (object ~= nil) then
-        DebugPrint('Object is not nil')
-        for k, v in pairs(object) do
-            DebugPrint(">" .. tostring(k) .. "=" .. tostring(v))
-        end
         CreateCelestialBody(object, debug)
     else
-        DebugPrint("[x] CreateCustomCelestialBody: OBJECT IS NIL)")
+        print("[x] CreateCustomCelestialBody: OBJECT IS NIL")
     end
 end
 
@@ -104,7 +100,6 @@ function CreateCelestialBody(properties, debug)
     -- Table values
     -- This values are special beacause they need to be converted to a table
     local prefabProperties = properties.prefab; -- Separete prefab properties
-    DebugPrint("[+] CreateCelestialBody: " ..dump(prefabProperties))
 
     local pos, rot; 
     -- local color, size;
@@ -131,21 +126,13 @@ function CreateCelestialBody(properties, debug)
 
         elseif (prefabProperties.name == string.lower('ASTEROID')) then
             _AsteroidConfiguration(prefabProperties, properties)
-
-        elseif (prefabProperties.name == string.lower('NATURAL_SATELLITE')) then
-            _NaturalSatelliteConfiguration(prefabProperties, properties)
             
         elseif (prefabProperties.name == string.lower('PLANET')) then
             _PlanetConfiguration(prefabProperties, properties)
-
-        elseif (prefabProperties.name == string.lower('BLACK_HOLE')) then
-            _BlackHoleConfiguration(prefabProperties, properties)
-
-        elseif (prefabProperties.name == string.lower('NEBULOSA')) then
-            _NebulosaConfiguration(prefabProperties, properties)
-            
-        elseif (prefabProperties.name == string.lower('GIANT_STAR')) then
-            _NebulosaConfiguration(prefabProperties, properties)
+            -- TODO: Need to check the moonCount to spawn in planets orbits
+            --if (properties.moonCount > 0) then
+                --_NaturalSatelliteConfiguration(prefabProperties, properties)
+            --end
         end
     end
     local base = "<voxbox name=" .. "'".. prefabProperties.name .. "'" .. " " ..
@@ -178,7 +165,7 @@ function CreateCelestialBody(properties, debug)
 	Spawn(base, Transform(t))
 
     local handleShape = FindShape(prefabProperties.tags, true)
-    local handleBody = FindBody(prefabProperties.tags, true)
+    -- local handleBody = FindBody(prefabProperties.tags, true) -- For some reason, the body is not created
 
     -- Do finals configurations like:
     --  > INCREASE EMISSION LIGHT;
@@ -188,34 +175,15 @@ function CreateCelestialBody(properties, debug)
         
     -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
     if debug then
-        DebugPrint("Handled shape: " .. tostring(handleShape))
-        
         if handleShape ~= 0 then
-            DebugPrint("Handled body: " .. tostring(handleBody))
-            DebugPrint(":::: [" .. string.upper(prefabProperties.name)  .. "] CREATED ::::")
-            DebugPrint("[+] OBJECT TRANSFORM: " .. prefabProperties.pos)
-            DebugPrint(base)
-            DebugPrint(":::::::::::::::::::::::::::::::::::::::::::::")
+            print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
+            print(base)
+            print(":::::::::::::::::::::::::::::::::::::::::::::::::")
         else
-            DebugPrint("XXXXXXXXXXXXX OBJECT [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
+            print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
         end
     end
 end
-
-function CreateTableStringForXML(table)
-    local strAux;
-
-    if #table == 3 then -- Check if table size == 3 beacause the Vec() is a function that only accepts 3 values
-        strAux = table[1] .. " " .. 
-                table[2] .. " " ..
-                table[3]
-        --DebugPrint("POS STRING: " .. strAux)
-        return strAux
-    else
-        return ''
-    end
-end
-
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- :::::::::::::::::::     CELESTIAL BODIES     :::::::::::::::::
@@ -225,12 +193,10 @@ end
 -- Pseudo private method to configure prefab properties and more options
 function _StarConfiguration(prefabProperties, properties)
     -- Configure object properties if a type is given (objects properties are optionals)
-    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    -- :::::::::::::::::::     STAR     :::::::::::::::::::::::::::::
-    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.STAR.RED_GIANT) then
         prefabProperties.desc = "A Glorious Red Giant."
         prefabProperties.tags = "star_red_giant" -- Tag must by one only and not have spaces to work properly
-        prefabProperties.brush = "MOD/assets/models/star_redgiant.vox"
+        prefabProperties.brush = CONSTANTS.VOX.WORLD.STARS.STAR_REDGIANT
         prefabProperties.size = "160 160 156"
         if (properties.gravitStrength > 50) then
             prefabProperties.density = "100"
@@ -245,28 +211,55 @@ function _StarConfiguration(prefabProperties, properties)
             prefabProperties.pbr = "1 1 1 0"
         end
         prefabProperties.color = PREFAB_COLORS.RED
-        if (properties.hasParticles) then
-            DebugPrint("Has particles effect!!")
-        end
+    end
         return prefabProperties
 end
 
+--
 function _AsteroidConfiguration(prefabProperties, properties)
     -- Configure object properties if a type is given (objects properties are optionals)
-    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    -- :::::::::::::::::::     ASTEROID     :::::::::::::::::::::::::
-    -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.ASTEROID.RANDOM) then
         prefabProperties.desc = "A normal and boring asteroid."
         prefabProperties.tags = "asteroid_default" -- Tag must by one only and not have spaces to work properly
+        prefabProperties.brush = CONSTANTS.VOX.WORLD.ASTEROIDS.ASTEROID1
         prefabProperties.size = "20 24 24"
         prefabProperties.texture = RandomPrefabProperty('texture')
         prefabProperties.blendtexture = RandomPrefabProperty('blendtexture')
         prefabProperties.color = PREFAB_COLORS.RED
-        if (properties.hasParticles) then
-            DebugPrint("Has particles effect!!")
-        end
+    end
         return prefabProperties
 end
+
+function _PlanetConfiguration(prefabProperties, properties)
+    -- Configure object properties if a type is given (objects properties are optionals)
+    if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.GASEOUS) then
+        prefabProperties.desc = "A Gaseous Planet."
+        prefabProperties.tags = "gaseous_planet"
+    
+    elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.ROCKY) then
+        prefabProperties.desc = "A Rocky Planet."
+        prefabProperties.tags = "rocky_planet"
+
+    elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.OCEAN) then
+        prefabProperties.desc = "A Ocean Planet."
+        prefabProperties.tags = "ocean_planet"
+    
+    elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.RANDOM) then
+        local rot = GetTableValuesFromProperties(prefabProperties, 'rot')
+        prefabProperties.tags = "random_planet"
+        prefabProperties.desc = "A Random Planet."
+        prefabProperties.rot = ''
+        
+    end
+        return prefabProperties
+end
+
+
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+-- ::::::::::::::   COMPLEMENTARY FUNCTIONS     :::::::::::::::::
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 -- Need to be call after spawn
 function IncreaseEmissiveScale(tag, emitsLight)
@@ -275,11 +268,21 @@ function IncreaseEmissiveScale(tag, emitsLight)
         if (emitsLight) then
             local scale = math.sin(GetTime()) * 1.0 + 1.0
             SetShapeEmissiveScale(shape, scale)
-        else
-            DebugPrint("The shape doesn't emits light.")
         end
-    
     else 
-        DebugPrint("The shape doesn't exists.")
+        print("[X] Error: The shape doesn't exists.")
+    end
+end
+
+
+function CreateTableStringForXML(table)
+    local strAux;
+    if #table == 3 then -- Check if table size == 3 beacause the Vec() is a function that only accepts 3 values
+        strAux = table[1] .. " " .. 
+                table[2] .. " " ..
+                table[3]
+        return strAux
+    else
+        return ''
     end
 end

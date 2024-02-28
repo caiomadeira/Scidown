@@ -69,7 +69,19 @@ function serializeTable(val, name, skipnewlines, depth)
   return tmp
 end
 
-function random()
 
-
+-- Get Spawn Coordinates from prefab table
+function ConvertStrValues(t)
+    print("table " .. dump(t))
+    local values = {  }
+    for num in t:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
+        print(type(num))
+        table.insert(values, num)
+    end
+    if (#values == 3) then
+        print("table length is 3")
+        return values
+    else
+        print("[x] Error: table lenght is not 3.")
+    end
 end

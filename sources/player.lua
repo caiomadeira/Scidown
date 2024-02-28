@@ -20,7 +20,6 @@ Player = {
 
 -- Standard configuration for player
 function PlayerInit()
-    DisablePlayerDefaultTools()
     PlayerInventory()
     --SetPlayerSpawnTool("gun")
     SetPlayerRegenerationState(false) -- disable regeneration for player
@@ -47,6 +46,8 @@ function PlayerTick()
 end
 
 function PlayerUpdate(dt)
+    DisablePlayerDefaultTools() -- Need to be called in tick or update
+
     if Player.canJump then
         PlayerJumpGravity(dt, Player.jumpMaxVelocity)
     else

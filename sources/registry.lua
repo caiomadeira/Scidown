@@ -5,7 +5,10 @@ communication between scripts and as a way to save persistent data.
 
 ]]--
 
+
+-- This function needs to be called in update() or tick()
 function DisablePlayerDefaultTools()
+	-- This function needs to be called in  update()
     --DebugPrint(":::::::: PLAYER TOOLS :::::::::")
 	local list = ListKeys("game.tool")
 	for i=1, #list do
