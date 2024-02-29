@@ -14,7 +14,6 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
-
     --setUpTest()
     loadCustomEnvironment(1, false)
     PlayerInit()
@@ -30,18 +29,7 @@ function init()
     --SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
     -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
     SetupCustomCelestialBody(CelestialBodies.STAR, true)
-    SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
-    local n = math.random(-34, 34)
-    print("random number: " .. tostring(n))
-    local objectPos = { 200.0, 134.0, 0.9 }
-    local dummyWordLength = { 
-        CONSTANTS.WORLD.SIZE.WIDTH - 100,
-        CONSTANTS.WORLD.SIZE.HEIGHT - 40,
-        CONSTANTS.WORLD.SIZE.DEPTH - 100
-    }
-    local time = GetTime() -- Time for API
-    CalcSpawnPosWithOffset(objectPos, dummyWordLength, time)
-    print("Finish init main.lua")
+    --SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
 end
 
 function tick()
@@ -58,6 +46,6 @@ function tick()
 end
 
 function update(dt)
-    -- DebugPlayer()
+    --DebugPlayer()
     PlayerUpdate(dt)
 end

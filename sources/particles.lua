@@ -28,6 +28,6 @@ end
 
 
 -- for particles
-function rndParticle(mi, ma) 
+function rnd(mi, ma) 
     return math.random(0, 1000) / 1000*(ma-mi)+mi
 end

@@ -1,14 +1,3 @@
-function logFile(content1, content2)
-  local file, err = io.open("logFile.txt", 'w')
-  if file then
-      file:write(tostring(content1))
-      file:write(tostring(content2))
-      file:close()
-  else
-      DebugPrint("error: ", err)
-  end
-end
-
 --[[
 
 DUMP FULL TABLE
@@ -18,12 +7,12 @@ https://stackoverflow.com/questions/9168058/how-to-dump-a-table-to-console
 
 function dump(o)
   if type(o) == 'table' then
-     local s = '{ '
+     local s = '\n\n { \n'
      for k,v in pairs(o) do
         if type(k) ~= 'number' then k = '"'..k..'"' end
-        s = s .. '['..k..'] = ' .. dump(v) .. '\n'
+        s = s .. '   ['..k..'] = ' .. dump(v) .. '\n'
      end
-     return s .. '} '
+     return s .. ' } \n\n'
   else
      return tostring(o)
   end
@@ -35,7 +24,7 @@ function GetSizeOfTable(table)
   for k, v in pairs(table) do
       size = size + 1
   end
-  DebugPrint("Array length: " .. tostring(size))
+  print("Array length: " .. tostring(size))
   return size
 end
 
@@ -69,25 +58,96 @@ function serializeTable(val, name, skipnewlines, depth)
   return tmp
 end
 
+--[[
 
--- Get Spawn Coordinates from prefab table
-function ConvertStrValues(t)
-    print("table " .. dump(t))
+ConvertStrToTable
+
+ param t: str
+ Convert a table(t)/(with the lenght of 3 only (Vec)) to a string
+
+]]--
+-- Used to get Spawn Coordinates from prefab str and return as a table
+function ConvertStrToTable(str)
     local values = {  }
-    for num in t:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
-        print(type(num))
-        table.insert(values, num)
+    for num in str:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
+        num = tonumber(num)
+        --print("ConvertStrToTable [var: " .. num .."] type: ".. type(num))
+        -- Need to convert all table values to float to avoid 
+        -- an table with string values
+        table.insert(values, tonumber(num))
     end
     if (#values == 3) then
-        print("table length is 3")
+        --print("ConvertStrToTable: table length is 3")
+        --print("Final ConvertStrToTable TABLE: " .. dump(values))
         return values
     else
-        print("[x] Error: table lenght is not 3.")
+        print("[x] ConvertStrToTable: table length is not 3.")
     end
 end
+
+--[[
+ConvertTableToStr
+
+param t: table
+Make the opposite thing that ConvertStrToTable(t) do.
+
+]]--
+
+function ConvertTableToStr(t)
+    local strAux;
+    --print("> ConvertTableToStr: " .. type(t) .. " :", dump(t))
+    if #t == 3 then -- Check if table size == 3 beacause the Vec() is a function that only accepts 3 values
+        strAux = t[1] .. " " .. t[2] .. " " .. t[3]
+        --print("> ConvertTableToStr: strAux: " .. strAux, type(strAux))
+        return strAux
+    else
+        return ''
+    end
+end
+
 
 -- The function that limits a number in a certain range usually called Clamp.
 -- https://stackoverflow.com/questions/64878491/how-do-you-make-a-range-in-lua
 function math.Clamp(val, min, max)
     return math.min(math.max(val, min), max)
+end
+
+--[[
+
+CalculateCubeTotalArea(edge) 
+
+Calculate total area of a cube.
+It's used to calculate the World (Scene) area;
+
+]]--
+
+function CalculateCubeTotalArea(edge) 
+    return 6*(edge^2);
+end
+
+
+--[[
+
+CalculateCubeLateralArea
+
+Calculate lateral area of a cube.
+It's used to calculate the World (Scene) area;
+
+]]--
+
+function CalculateCubeLateralArea(s) 
+    return 4*(s^2);
+end
+
+--[[
+    
+CalculateCubeBaseArea
+
+Calculate base area of a cube.
+It's used to calculate the World (Scene) area;
+
+]]--
+
+function CalculateCubeBaseArea(b) 
+    return b^2;
 end

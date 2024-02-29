@@ -78,60 +78,81 @@ Create a custom celestial body with Random (or not) Properties
 ]]--
 
 
-function SetupCustomCelestialBody(object, debug)
+function SetupCustomCelestialBody(properties, allowRandomSpawn)
     -- Check type of param entered
     --assert(type(object)=="table", print("[>] SetupCustomCelestialBody: Param is a table."))
 
-    if (object ~= nil) then
-        CreateCelestialBody(object, debug)
+    if (properties ~= nil) then
+        CreateCelestialBody(properties, allowRandomSpawn)
     else
         print("[x] CreateCustomCelestialBody: OBJECT IS NIL")
     end
 end
 
-function CreateCelestialBody(properties, debug) 
+function CreateCelestialBody(properties, allowRandomSpawn) 
     -- Table values
     -- This values are special beacause they need to be converted to a table
     local prefabProperties = properties.prefab; -- Separete prefab properties
+    local randomSpawnPos;
+    -- The object (prefab) position, rotiation, color and size as STRING
+    local prefabPositionStr, prefabRotationStr;
+    -- local  prefabColorStr, prefabSizeStr; 
+    local prefabPositionTable, prefabRotationTable;
+    -- local prefabColorTable, prefabSizeTable;
+    print("prefab.properfties pos: ", prefabProperties.pos)
 
-    local pos, rot; 
-    -- local color, size;
-    local posValues, rotValues;
-    -- local colorValues, sizeValues;
+    if allowRandomSpawn == true then
+        randomSpawnPos = ConvertTableToStr(RandomizeObjectPosition(prefabProperties.pos))
+        print("[+] function() CreateCelestialBody() | prebProperties.pos: " .. dump(randomSpawnPos))
+    else 
+        print("[+] function() CreateCelestialBody() | Prefab Default spawn - Not randomized prefabProperties.pos.")
+        -- Its important to have disponible this values as vector or integer
+        -- because we gone use later in this function to pass in Spawn
+        -- prefabPositionTable = ConvertStrToTable(prefabProperties.pos)
+        -- prefabRotationTable = ConvertStrToTable(prefabProperties.rot)
+        -- prefabColorTable = GetTableValuesFromProperties(prefabProperties, 'color')
+        -- prefabSizeTable = GetTableValuesFromProperties(prefabProperties, 'size')
+    end
 
-    -- Its important to have disponible this values as vector or integer
-    -- because we gone use later in this function
-    posValues = GetTableValuesFromProperties(prefabProperties, 'pos')
-    rotValues = GetTableValuesFromProperties(prefabProperties, 'rot')
-    -- colorValues = GetTableValuesFromProperties(prefabProperties, 'color')
-    -- sizeValues = GetTableValuesFromProperties(prefabProperties, 'size')
+        -- We dont need to convert str to str its unnecessary
+        --prefabPositionStr = ConvertTableToStr(prefabPositionTable)
+        --print("pos str: ", prefabPositionStr)
 
-    pos = CreateTableStringForXML(posValues)
-    rot = CreateTableStringForXML(rotValues)
-    -- color = CreateTableStringForXML(colorValues)  -- not used yet
-    -- size = CreateTableStringForXML(sizeValues) -- not used yet
+        --prefabRotationStr = ConvertTableToStr(prefabRotationTable)
+        --print("pos rot: ", prefabRotationStr)
+        --print("pass pos rot")
+
+    -- prefabColorStr = ConvertTableToStr(colorValues)  -- not used yet
+    -- prefabSizeStr = ConvertTableToStr(sizeValues) -- not used yet
 
     -- Configure object properties if a type is given (objects properties are optionals)
     -- Check if the prefab name matches with property name
     if (prefabProperties.name == string.lower(properties.name)) then 
         if (prefabProperties.name == string.lower('STAR')) then --
+            --print("Star config")
             _StarConfiguration(prefabProperties, properties)
 
         elseif (prefabProperties.name == string.lower('ASTEROID')) then
+            --print("asteroid config")
             _AsteroidConfiguration(prefabProperties, properties)
             
         elseif (prefabProperties.name == string.lower('PLANET')) then
-            _PlanetConfiguration(prefabProperties, properties)
+            --print("planet config")
+            -- _PlanetConfiguration(prefabProperties, properties)
             -- TODO: Need to check the moonCount to spawn in planets orbits
             --if (properties.moonCount > 0) then
                 --_NaturalSatelliteConfiguration(prefabProperties, properties)
             --end
         end
     end
+
+    ------- OBJECT XML SCENE CREATION -----------------------
+    -- TODO: Move to a function
+    -- For now its only voxbox
     local base = "<voxbox name=" .. "'".. prefabProperties.name .. "'" .. " " ..
             "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
-            "pos=" .. "'".. pos .. "'" .. " " ..
-            "rot=" .. "'".. rot .. "'" .. " " ..
+            "pos=" .. "'".. randomSpawnPos .. "'" .. " " ..
+            "rot=" .. "'".. prefabProperties.rot .. "'" .. " " ..
             "desc=" .. "'".. prefabProperties.desc .. "'" .. " " ..
             "texture=" .. "'".. prefabProperties.texture .. "'" .. " " ..
             "blendtexture=" .. "'".. prefabProperties.blendtexture .. "'" .. " " ..
@@ -143,38 +164,45 @@ function CreateCelestialBody(properties, debug)
             "brush=" .. "'".. prefabProperties.brush .. "'" .. " " ..
             "material=" .. "'".. prefabProperties.material .. "'" .. " " ..
             "pbr=" .. "'".. prefabProperties.pbr .. "'" .. " " ..
-            "color=" .. "'" .. prefabProperties.color .. "'" .. " " ..
+            "color=" .. "'" .. prefabProperties.color .. "'" ..
             "/>"
-    -- local xml = "<voxbox size='10 10 10' prop='false' material='wood'/>"
-    -- if the object dont have the 'pos' property
+    ------------------------------------------------------
 
-    -- Sets an default spawn position maybe its a good idea make a method for that
-    local t
-    if pos == '' then
-        t = Transform(Vec(10, 10, 0)) -- Default position spawn (make later some logic)
+
+    --------- SPAWN RULES -----------------------
+    -- THE SPAWN TRANSFORM IS ANOTHER PARAM AND I DON'T KNOW WHY I NEED THIS beacause
+    -- THE PREFAB ALREADY HAS.
+    --local spawnTransform = Transform(Vec(pos[1], pos[2], pos[3]))
+    local spawnTransform;
+    if allowRandomSpawn == true then
+        -- true = table setted based RANDOMIZED spawn
+        print("random spawn")
+        spawnTransform = Transform(randomSpawnPos)
     else
-        t = Transform(Vec(pos[1], pos[2], pos[3]))
+        -- false = prefab table setted spawn - DEFAULT
+        print("default spawn")
+        spawnTransform = Transform(ConvertStrToTable(prefabProperties.pos))
     end
-	Spawn(base, Transform(t))
+    Spawn(base, spawnTransform)
+    ---------------------------------------------
 
     local handleShape = FindShape(prefabProperties.tags, true)
     -- local handleBody = FindBody(prefabProperties.tags, true) -- For some reason, the body is not created
 
-    -- Do finals configurations like:
+    -- Do finals configurations (POS SPAWN) like:
     --  > INCREASE EMISSION LIGHT;
-    --  > ADD PARTICLES EFFECT;
+    --  > ADD PARTICLES EFFECT ATTACHED TO THE ENTITY;
+    --  > ANIMATIONS LIKE ROTATIONS AND MOVEMENT;
 
     IncreaseEmissiveScale(prefabProperties.tags, properties.emitsLight)
         
     -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
-    if debug then
-        if handleShape ~= 0 then
-            print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
-            print(base)
-            print(":::::::::::::::::::::::::::::::::::::::::::::::::")
-        else
-            print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
-        end
+    if handleShape ~= 0 then
+        print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
+        print(base)
+        print(":::::::::::::::::::::::::::::::::::::::::::::::::")
+    else
+        print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
     end
 end
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -247,7 +275,6 @@ function _PlanetConfiguration(prefabProperties, properties)
         return prefabProperties
 end
 
-
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- ::::::::::::::   COMPLEMENTARY FUNCTIONS     :::::::::::::::::
@@ -264,18 +291,5 @@ function IncreaseEmissiveScale(tag, emitsLight)
         end
     else 
         print("[X] Error: The shape doesn't exists.")
-    end
-end
-
-
-function CreateTableStringForXML(table)
-    local strAux;
-    if #table == 3 then -- Check if table size == 3 beacause the Vec() is a function that only accepts 3 values
-        strAux = table[1] .. " " .. 
-                table[2] .. " " ..
-                table[3]
-        return strAux
-    else
-        return ''
     end
 end

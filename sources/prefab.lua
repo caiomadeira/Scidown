@@ -43,7 +43,7 @@ Prefabs = {
         name = 'star',
         tags = 'star',
         pos = '9.4 10.0 -6.4',
-        rot = "0 0 0",
+        rot = "0.3 0.3 0.4",
         desc ="A beautiful star.",
         texture = "20",
         blendtexture = "15",
@@ -174,7 +174,8 @@ function SpawnPrefab(properties, debug)
     end
 end
 
--- Get Spawn Coordinates from prefab table
+--[[ 
+-- Get Spawn Coordinates from prefab table (DEPRECATED)
 function GetTableValuesFromProperties(properties, key)
     local values = {  }
     -- DebugPrint("[+] GetTableValuesFromProperties: " ..dump(properties))
@@ -187,8 +188,9 @@ function GetTableValuesFromProperties(properties, key)
     end
     return values
 end
+]]--
 
--- Spawn object according to the player's position
+-- Spawn object according to the player's position (DEPRECATED) SEE CalcSpawnPosWithOffset
 -- TODO: Refactor this trash
 function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlFile)
     DebugPrint(":::::::: SpawnObjectAccordingPlayerPos :::::::::")
@@ -239,40 +241,45 @@ function RandomPrefabProperty(property)
     return tostring(num);
 end
 
-function RandomSpawnPosition(objectPos)
-    local worldWidth = CONSTANTS.WORLD.SIZE.WIDTH - 200; -- This magic numbers are safe offsets to spawn
+function RandomizeObjectPosition(objectPos)
+    local worldWidth = CONSTANTS.WORLD.SIZE.WIDTH - 100; -- This magic numbers are safe offsets to spawn
     local worldHeight = CONSTANTS.WORLD.SIZE.HEIGHT - 40;
     local worldDepth = CONSTANTS.WORLD.SIZE.DEPTH - 100;
-    local playerPos, offset;
-    local posRelativeToPlayer = { }
-    objectPos = ConvertStrValues(objectPos) -- Return pos as integers
-    print("Entered object pos (original): " .. VecStr(objectPos))
+    local playerPos;
+    local randomObjectPos;
 
-    -- The table contains values to multiply with the spawn position to guarantee an safe zone to spawn
-    -- Create worldLength table to pass to function
-    local wordLength = { worldWidth, worldHeight, worldDepth }
-    newObjectPos = CalcSpawnPosOffset(objectPos, wordLength)
+    -- If the objectPos passed as param is a string prefab we need to convert them.
+    if type(objectPos) == 'string' then
+        print("\n[+] function() RandomizeObjectPosition() | ObjectPos is a 'string': " .. objectPos)
+        objectPos = ConvertStrToTable(objectPos) -- Return pos as integers
+        print("\n[+] function() RandomizeObjectPosition() | ObjectPos Converted to Table: " .. dump(objectPos))
+    elseif type(objectPos) == 'table' then
+        print("\nobjectPos is a table. No convertion needed.")
+    else
+        --print("RandomizeObjectPosition Error: the object pos is not an string or table.")
+    end
+    --print("NEW RandomizeObjectPosition OBJECTPOS: " .. dump(objectPos))
 
-    print("Aux: " .. dump(aux))
+    randomObjectPos = CalcSpawnPosWithOffset(objectPos, { worldWidth, worldHeight, worldDepth })
+    print("\n[+] function() RandomizeObjectPosition() | randomObjectPos = CalcSpawnPosWithOffset: " .. dump(randomObjectPos))
+
     -- Get player pos - Sum of Pos + Qeuler Y = 1 to point to center of player
     playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
-    posRelativeToPlayer = VecAdd(playerPos, VecAdd(objectPos, offset))
 
-    print("Entered object pos (offset change): " .. VecStr(objectPos))
-    print("Current player position: " .. VecStr(playerPos))
-    print("offset to multiplier: " .. dump(offset))
-    print("newPosRelativeToPlayer: " .. VecStr(posRelativeToPlayer))
+    -- return the sun of two vectors = vector/table with 3 of size
+    print("\n[+] function() RandomizeObjectPosition() | Return value " .. dump(VecAdd(playerPos, randomObjectPos)))
+    return VecAdd(playerPos, randomObjectPos);
 end
 
 --[[
-CalcSpawnPosOffset
+CalcSpawnPosWithOffset
 
 This function may be have some problems:
 
+    objectPos = table
     - The X axis has a strange behavior. Like range numbers above
     the normal (world width). It's can be the random seed, the time or
     the logic. I don't know
-
 
 ]]--
 
@@ -281,30 +288,51 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
     local axisOffset; -- random multipliers
     local axes = {  }; -- Axes table contains X,Y,Z axis
     local newObjectSpawnPos = {  }
+    --print("CalcSpawnPosWithOffset objectPos param type: " .. type(objectPos))
 
     for i=1, #objectPos do
+        --print(">>> objectPos[i] type: " .. type(objectPos[i]), objectPos[i])
         -- if the axis value is in world range (width, height or depth)
         if (objectPos[i] >= (math.abs(wordLength[i])*-1) and objectPos[i] <= wordLength[i]) then
-            print(objectPos[i]  .. " is in world axis range.")
+            print("CalcSpawnPosWithOffset() :" .. objectPos[i]  .. " is IN world axis range.")
             -- If the value is in world range, then, you need to
             -- calculate the multiplier
-            math.randomseed(time)
-            axisOffset = math.random(1, 2) -- multiply by rnd number between 1 and 2
-            print("axisOffset: " .. axisOffset)
+            print("CalcSpawnPosWithOffset() | WorldLength[i]: ", wordLength[i])
+
+            math.randomseed(math.random(1, wordLength[i]))
+            --print(math.random())
+            --print(math.random())
+            --print(math.random())
+
+            -- Set custom behaviors for world measures (width, height, depth)
+            local worldArea;
+            local divider = 1;
+            if i == 1 then -- calculate base area
+                -- NOTE: YOU NEED TO DIVIDE BY 2 BEACOUSE DE (0, 0 ,0) STARS IN THE MIDDLE.
+                -- SEE DOCS FOLDER TO MORE INFO
+                worldArea = CalculateCubeBaseArea(wordLength[i]) / divider
+            elseif i == 2 then -- calculate side(edge) area
+                worldArea = CalculateCubeLateralArea(wordLength[i]) / divider
+            else -- calculate base area (?)
+                worldArea = CalculateCubeBaseArea(wordLength[i]) / divider
+            end
+            print("CalcSpawnPosWithOffset() | World Area: ", worldArea)
+            axisOffset = math.random(1, worldArea) -- o y deve ser o resultado da area da cena
+            print("CalcSpawnPosWithOffset() | axisOffset: " .. axisOffset)
             table.insert(axes, axisOffset)
         else
-            print(objectPos[i]  ..  " is out of world range")
+            print("CalcSpawnPosWithOffset() :" ..objectPos[i]  ..  " is out of world range")
             -- If the value is out of range, then you must be recalculate this. May i be use recursion?
             local newAxisValue = math.random(math.abs(wordLength[i])*-1, wordLength[i])
-            print("newAxisValue: " ..newAxisValue)
+            --print("newAxisValue: " ..newAxisValue)
             objectPos[i] = newAxisValue
-            print("so the value is positive too: " .. objectPos[i])
+            --print("so the value is positive too: " .. objectPos[i])
             -- Now i need to check if the newAxisValue is negative or positive
             -- to apply the multiplier
 
             -- If the number is negative, i only use math.random negative numbers
             if (objectPos[i] < 0) then -- Check if is negative
-                print("Yes, its is negative.")
+                --print("Yes, its is negative.")
                 -- For now, i wnat to make the multiplier hardcoded without an smart logic
                 
                 -- Since the TEARDOWN API doen'st allow to use 'os' you 
@@ -313,15 +341,15 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
 
                 --math.randomseed(time)
                 axisOffset = math.random(-2, -1)-- Can't use 0
-                print("axisOffset: " .. axisOffset)
+                --print("axisOffset: " .. axisOffset)
                 table.insert(axes, axisOffset)
             else
-                print("No, its is positive.")
+                --print("No, its is positive.")
                 -- Or, if the newAxisValue is positive, than just make the same 
                 -- but with positive numbers
                 math.randomseed(time)
                 axisOffset = math.random(1, 2) -- Reverse 
-                print("axisOffset: " .. axisOffset)
+                --print("axisOffset: " .. axisOffset)
                 table.insert(axes, axisOffset)
             end
         end
@@ -333,7 +361,7 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
         objectPos[i] = objectPos[i] * axes[i]
         table.insert(newObjectSpawnPos, objectPos[i])
     end
-    print("New Spawn Position for Object (with offset multiplied): " .. dump(newObjectSpawnPos))
+    --print("New Spawn Position for Object (with offset applied): " .. dump(newObjectSpawnPos))
     -- Need to return Vec(x, y, z)/{ x, y, z } (a table with 3 values)
     return axes;
 end
