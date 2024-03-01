@@ -6,7 +6,16 @@
 #include "sources/vehicle.lua"
 #include "sources/registry.lua"
 #include "sources/particles.lua"
---#include "tests.lua"
+#include "sources/debug.lua"
+#include "settings.lua"
+
+local dp;
+
+if MOD.DEBUG then
+    dp = Debug:new(nil)
+else
+    print("Debug is disabled. local dp is nil.")
+end
 
 function init()
     print("::::::::::::::::::::::::::::::::::::::::")
@@ -14,6 +23,7 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
+
     --setUpTest()
     loadCustomEnvironment(1, false)
     PlayerInit()
@@ -46,6 +56,17 @@ function tick()
 end
 
 function update(dt)
-    --DebugPlayer()
+   if dp ~= nil then
+        dp:flyMode()
+   end
+
+
+    --PlayerDebugInfo()
     PlayerUpdate(dt)
+end
+
+function draw(dt)
+    if dp ~= nil then
+        dp:UIDebug()
+    end
 end

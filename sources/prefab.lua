@@ -306,7 +306,7 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
 
             -- Set custom behaviors for world measures (width, height, depth)
             local worldArea;
-            local divider = 1;
+            local divider = 1.5;
             if i == 1 then -- calculate base area
                 -- NOTE: YOU NEED TO DIVIDE BY 2 BEACOUSE DE (0, 0 ,0) STARS IN THE MIDDLE.
                 -- SEE DOCS FOLDER TO MORE INFO

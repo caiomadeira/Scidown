@@ -105,12 +105,13 @@ function ConvertTableToStr(t)
     end
 end
 
-
+--[[
 -- The function that limits a number in a certain range usually called Clamp.
 -- https://stackoverflow.com/questions/64878491/how-do-you-make-a-range-in-lua
 function math.Clamp(val, min, max)
     return math.min(math.max(val, min), max)
 end
+]]--
 
 --[[
 
@@ -150,4 +151,21 @@ It's used to calculate the World (Scene) area;
 
 function CalculateCubeBaseArea(b) 
     return b^2;
+end
+
+
+-- Clamp
+function math.clamp(num, min, max)
+	if num < min then
+		num = min
+	elseif num > max then
+		num = max    
+	end
+	
+	return num
+end
+
+-- Lerp
+function math.lerp(from, to, t)
+	return from + (to - from) * math.clamp(t, 0, 1)
 end

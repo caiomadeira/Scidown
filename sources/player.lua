@@ -28,6 +28,7 @@ function PlayerInit()
 end
 
 function PlayerTick()
+    -- SetPlayerZoom(5, 0.2)-- makes a strange sound
     if InputPressed("jump") then
         --DebugPrint("[+] Jump Pressed")
         Player.canJump = true
@@ -106,7 +107,7 @@ function SpawnPlayer(where)
     end
 end
 
-function DebugPlayer()
+function PlayerDebugInfo()
     DebugPrint(":::::::: PLAYER DEBUG :::::::::")
     local playerTransform = GetPlayerTransform()
     local pVelocity = GetPlayerVelocity()
