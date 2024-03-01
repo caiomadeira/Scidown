@@ -1,5 +1,6 @@
 #include "sources/utils.lua"
 #include "../settings.lua"
+
  -- Meta Class
 
 Debug = { 
@@ -35,14 +36,15 @@ function Debug:flyMode()
     local customSpeed = 1
     local lastScroll = -1
 
-    if self.enableDebug == true then
-        print("Fly Mode Enabled.")
+    if InputPressed("f") then
+        self.enableFlyMode = not self.enableFlyMode
+    end
 
+    if self.enableFlyMode == true then
         -- This is can be use in vehicle control
         direction = Vec(0, 0, 0)
 
         if(InputDown("up")) then
-            print("up pressed")
             direction[3] = -1
         end
 
@@ -84,14 +86,10 @@ function Debug:flyMode()
         if(VecLength(direction) > 0) then
             direction = VecNormalize(direction)
         end
-        
+
         velocity = VecScale(direction, speed)
         velocity[2] = velocity[2] + 0.166666698455811
-
         SetPlayerVelocity(velocity)
-
-    else 
-        print("Fly Mode disabled.")
     end
 end
 
@@ -117,10 +115,40 @@ end
 
 function Debug:UIDebug()
     local w, h, x, y;
-    w = 200;
-    h = 200;
-    x = 
-    UiTranslate(x, y)
-    UiColor(0, 0, 0)
-    UiRect(w, h)
+    w = 400;
+    h = 800;
+    x = 60;
+    y = 60;
+
+    -- Debug container rect
+    UiTranslate(x, y) -- Change the rect position
+    UiPush()
+        UiColor(0, 0, 0) -- Change the color of Rect
+        UiRect(w, h) -- Draw rect with given width and height
+    UiPop()
+
+    -- Debug container title
+    UiPush()
+        UiColor(1, 1, 1) -- Green
+        UiFont("regular.ttf", 36)
+        UiTranslate(x - 10, y)
+        UiText(MOD.NAME .. ": Debug Menu")
+    
+    -- Debug Mod title
+        UiResetColor()
+        if self.enableFlyMode then
+            UiColor(0, 1, 0) -- Green
+        else
+            UiColor(1, 0, 0) -- Red
+        end
+        UiTranslate(x - 10, y - 5)
+        UiText("FlyMode: " .. tostring(self.enableFlyMode))
+
+    -- Debug Player Transform
+        UiColor(1, 0, 1)
+        UiFont("regular.ttf", 24)
+        UiTranslate(0, y - 10)
+        UiText("Player Transform: " .. dump(GetPlayerTransform()))
+    UiPop()
+
 end

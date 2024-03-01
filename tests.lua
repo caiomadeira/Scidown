@@ -41,7 +41,7 @@ print(">>>" .. UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldRetu
 
 require('settings')
 
-if APP_TESTS then
+if MOD.TESTS then
     require('sources.prefab')
     require('sources.commons.constants')
     require('sources.utils')
