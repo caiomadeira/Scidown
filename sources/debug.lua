@@ -141,8 +141,8 @@ function Debug:UIDebug()
         else
             UiColor(1, 0, 0) -- Red
         end
-        UiTranslate(x - 10, y - 5)
-        UiText("FlyMode: " .. tostring(self.enableFlyMode))
+        UiTranslate(0, y - 5)
+        UiText("[Press F] FlyMode: " .. tostring(self.enableFlyMode))
 
     -- Debug Player Transform
         UiColor(1, 0, 1)

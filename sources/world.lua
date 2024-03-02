@@ -79,17 +79,16 @@ Create a custom celestial body with Random (or not) Properties
 
 
 function SetupCustomCelestialBody(properties, allowRandomSpawn)
-    -- Check type of param entered
-    --assert(type(object)=="table", print("[>] SetupCustomCelestialBody: Param is a table."))
+    local distanceDivider = 5.0;
 
     if (properties ~= nil) then
-        CreateCelestialBody(properties, allowRandomSpawn)
+        CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
     else
         print("[x] CreateCustomCelestialBody: OBJECT IS NIL")
     end
 end
 
-function CreateCelestialBody(properties, allowRandomSpawn) 
+function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider) 
     -- Table values
     -- This values are special beacause they need to be converted to a table
     local prefabProperties = properties.prefab; -- Separete prefab properties
@@ -102,7 +101,7 @@ function CreateCelestialBody(properties, allowRandomSpawn)
     print("prefab.properfties pos: ", prefabProperties.pos)
 
     if allowRandomSpawn == true then
-        randomSpawnPos = ConvertTableToStr(RandomizeObjectPosition(prefabProperties.pos))
+        randomSpawnPos = ConvertTableToStr(RandomizeObjectPosition(prefabProperties.pos, distanceDivider))
         print("[+] function() CreateCelestialBody() | prebProperties.pos: " .. dump(randomSpawnPos))
     else 
         print("[+] function() CreateCelestialBody() | Prefab Default spawn - Not randomized prefabProperties.pos.")

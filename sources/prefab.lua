@@ -241,7 +241,7 @@ function RandomPrefabProperty(property)
     return tostring(num);
 end
 
-function RandomizeObjectPosition(objectPos)
+function RandomizeObjectPosition(objectPos, distanceDivider)
     local worldWidth = CONSTANTS.WORLD.SIZE.WIDTH - 100; -- This magic numbers are safe offsets to spawn
     local worldHeight = CONSTANTS.WORLD.SIZE.HEIGHT - 40;
     local worldDepth = CONSTANTS.WORLD.SIZE.DEPTH - 100;
@@ -260,7 +260,7 @@ function RandomizeObjectPosition(objectPos)
     end
     --print("NEW RandomizeObjectPosition OBJECTPOS: " .. dump(objectPos))
 
-    randomObjectPos = CalcSpawnPosWithOffset(objectPos, { worldWidth, worldHeight, worldDepth })
+    randomObjectPos = CalcSpawnPosWithOffset(objectPos, { worldWidth, worldHeight, worldDepth }, distanceDivider)
     print("\n[+] function() RandomizeObjectPosition() | randomObjectPos = CalcSpawnPosWithOffset: " .. dump(randomObjectPos))
 
     -- Get player pos - Sum of Pos + Qeuler Y = 1 to point to center of player
@@ -284,11 +284,13 @@ This function may be have some problems:
 ]]--
 
 -- oriPos = original pos
-function CalcSpawnPosWithOffset(objectPos, wordLength, time)
+function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
+    distanceDivider = distanceDivider or 1.5; -- Provides a default value if user not privader
     local axisOffset; -- random multipliers
     local axes = {  }; -- Axes table contains X,Y,Z axis
     local newObjectSpawnPos = {  }
-    --print("CalcSpawnPosWithOffset objectPos param type: " .. type(objectPos))
+
+    print("CalcSpawnPosWithOffset() : distanceDivider: " .. distanceDivider)
 
     for i=1, #objectPos do
         --print(">>> objectPos[i] type: " .. type(objectPos[i]), objectPos[i])
@@ -297,7 +299,6 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
             print("CalcSpawnPosWithOffset() :" .. objectPos[i]  .. " is IN world axis range.")
             -- If the value is in world range, then, you need to
             -- calculate the multiplier
-            print("CalcSpawnPosWithOffset() | WorldLength[i]: ", wordLength[i])
 
             math.randomseed(math.random(1, wordLength[i]))
             --print(math.random())
@@ -306,19 +307,16 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
 
             -- Set custom behaviors for world measures (width, height, depth)
             local worldArea;
-            local divider = 1.5;
             if i == 1 then -- calculate base area
                 -- NOTE: YOU NEED TO DIVIDE BY 2 BEACOUSE DE (0, 0 ,0) STARS IN THE MIDDLE.
                 -- SEE DOCS FOLDER TO MORE INFO
-                worldArea = CalculateCubeBaseArea(wordLength[i]) / divider
+                worldArea = CalculateCubeBaseArea(wordLength[i]) / distanceDivider
             elseif i == 2 then -- calculate side(edge) area
-                worldArea = CalculateCubeLateralArea(wordLength[i]) / divider
+                worldArea = CalculateCubeLateralArea(wordLength[i]) / distanceDivider
             else -- calculate base area (?)
-                worldArea = CalculateCubeBaseArea(wordLength[i]) / divider
+                worldArea = CalculateCubeBaseArea(wordLength[i]) / distanceDivider
             end
-            print("CalcSpawnPosWithOffset() | World Area: ", worldArea)
             axisOffset = math.random(1, worldArea) -- o y deve ser o resultado da area da cena
-            print("CalcSpawnPosWithOffset() | axisOffset: " .. axisOffset)
             table.insert(axes, axisOffset)
         else
             print("CalcSpawnPosWithOffset() :" ..objectPos[i]  ..  " is out of world range")
@@ -347,7 +345,7 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, time)
                 --print("No, its is positive.")
                 -- Or, if the newAxisValue is positive, than just make the same 
                 -- but with positive numbers
-                math.randomseed(time)
+                -- math.randomseed(time)
                 axisOffset = math.random(1, 2) -- Reverse 
                 --print("axisOffset: " .. axisOffset)
                 table.insert(axes, axisOffset)
