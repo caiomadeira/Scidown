@@ -411,16 +411,15 @@ CreateXMLPrefab()
 ]]
 
 function CreateXMLPrefab(prefabProperties, pos)
-    local base;
+    local base; 
+    local scale = 1;
 
     -- CHECK IF PREFAB PROPERTIES IS MASSIVE_PLANET 
     -- MASSIVE_PLANET ONLY CAN BE OF <VOX/> TYPE 
-
     if (prefabProperties.brush == CONSTANTS.VOX.WORLD.PLANETS.MASSIVE_PLANET) then
         print("[!] function() CreateXMLPrefab() | IT'S A MASSIVE_PLANET")
         prefabProperties.type = 'vox'
-    else
-        print("[!] NOT a massive_planet")
+        scale = 4;
     end
 
     if (prefabProperties.type == 'voxbox') then
@@ -455,12 +454,10 @@ function CreateXMLPrefab(prefabProperties, pos)
         "blendtexture=" .. "'".. prefabProperties.blendtexture .. "'" .. " " ..
         "density=" .. "'".. prefabProperties.density .. "'" .. " " ..
         "strength=" .. "'".. prefabProperties.strength .. "'" .. " " ..
-        --"collide=" .. "'".. prefabProperties.collide .. "'" .. " " ..
-        --"prop=" .. "'".. prefabProperties.prop .. "'" .. " " ..
-        --"scale=" .. "'".. prefabProperties.size .. "'" .. " " ..
-        "collide=" .. "'true'" .. " " ..
-        "prop=" .. "'false'" .. " " ..
-        "scale=" .. "'1'" .. " " ..
+        "collide=" .. "'".. prefabProperties.collide .. "'" .. " " ..
+        "prop=" .. "'".. prefabProperties.prop .. "'" .. " " ..
+        "scale=" .. "'".. prefabProperties.size .. "'" .. " " ..
+        "scale=" .. "'".. scale .. "'" .. " " ..
         "file=" .. "'".. prefabProperties.brush .. "'" .. " " .. -- file == brush
         "pbr=" .. "'".. prefabProperties.pbr .. "'" .. " " ..
         "color=" .. "'" .. prefabProperties.color .. "'" ..

@@ -96,12 +96,14 @@ function PopulateSpace()
     --local bodyCount = math.random(minBodyCount, maxBodyCount);
     local bodyCount = 4
     local celestialBody;
+
+    --[[ implement spawn chances
     local spawnChances = {
         ["Rock"] = {min = 1, max = 5},
         ["Sand"] = {min = 4, max = 12},
         ["Glass"] = {min = 20, max = 45},
     }
-    
+    ]]--
 
     print("[>>>] World Celestial Body Count: ", bodyCount)
 
