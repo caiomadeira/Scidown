@@ -2,6 +2,7 @@
 
 Prefabs = {
     naturalSatellite = {
+        type = "voxbox",
         name = 'natural_satellite',
         tags = 'natural_satellite',
         pos = '5.0 15.0 5.9',
@@ -21,6 +22,7 @@ Prefabs = {
     },
     
     planet = {
+        type = "voxbox",
         name = 'planet',
         tags = 'planet',
         pos = '3.0 19.0 0.9',
@@ -40,6 +42,7 @@ Prefabs = {
     },
 
     star = {
+        type = "voxbox",
         name = 'star',
         tags = 'star',
         pos = '9.4 10.0 -6.4',
@@ -59,6 +62,7 @@ Prefabs = {
     },
 
     asteroid = {
+        type = "voxbox",
         name = 'asteroid',
         tags = 'asteroid',
         pos = '0.0 1.0 1.0',
@@ -78,6 +82,7 @@ Prefabs = {
     }, 
 
     blackHole = {
+        type = "voxbox",
         name = 'black_hole',
         tags = 'black_hole',
         pos = '1.0 5.0 1.0',
