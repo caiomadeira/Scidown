@@ -4,9 +4,6 @@ MOD CONFIG
 
 ]]
 
-
-APP_TESTS=true;
-
 MOD = {}
 
 MOD.VERSION = '0.1'

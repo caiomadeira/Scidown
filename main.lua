@@ -38,8 +38,9 @@ function init()
     -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
     -- SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
     -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
-    SetupCustomCelestialBody(CelestialBodies.STAR, true)
-    -- SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
+    -- PopulateSpace()
+    SpawnCelestialBody(CelestialBodies.PLANET, true)
+    -- SpawnCelestialBody(CelestialBodies.ASTEROID, true)
 end
 
 function tick()

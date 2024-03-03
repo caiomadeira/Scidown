@@ -177,5 +177,5 @@ end
 os.exit(luaunit.LuaUnit.run())
 else 
     os.execute("echo ::::::::: TESTS ENV DISABLED ::::::::::")
-    os.execute("echo You need to set APP_TESTS=true in 'config.lua' file.")
+    os.execute("echo You need to set MOD.UNIT_TESTS=true in 'config.lua' file.")
 end

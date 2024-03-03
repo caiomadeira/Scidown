@@ -11,17 +11,17 @@ Debug = {
 
 -- Derived Class method new
 
-function Debug:new(o) 
+function Debug:new(o, enableUILog) 
     o = o or { } -- Create an object if user does not provide one
     setmetatable(o, self)
     self.__index = self
     self.enableDebug = MOD.DEBUG
     self.enableFlyMode = self.enableDebug or false
-    self.enableUILog = self.enableDebug or false
+    self.enableUILog = enableUILog or self.enableDebug
     if self.enableDebug then
         print("Debug is Enabled.")
         print("FlyMode: ", self.enableFlyMode)
-        print("UILogs: ", self.enableUILogs)
+        print("UILogs: ", self.enableUILog)
     else
         print("Debug is Disabled.")
     end
@@ -119,36 +119,36 @@ function Debug:UIDebug()
     h = 800;
     x = 60;
     y = 60;
+    if self.enableUILog then
+        -- Debug container rect
+        UiTranslate(x, y) -- Change the rect position
+        UiPush()
+            UiColor(0, 0, 0) -- Change the color of Rect
+            UiRect(w, h) -- Draw rect with given width and height
+        UiPop()
 
-    -- Debug container rect
-    UiTranslate(x, y) -- Change the rect position
-    UiPush()
-        UiColor(0, 0, 0) -- Change the color of Rect
-        UiRect(w, h) -- Draw rect with given width and height
-    UiPop()
+        -- Debug container title
+        UiPush()
+            UiColor(1, 1, 1) -- Green
+            UiFont("regular.ttf", 36)
+            UiTranslate(x - 10, y)
+            UiText(MOD.NAME .. ": Debug Menu")
+        
+        -- Debug Mod title
+            UiResetColor()
+            if self.enableFlyMode then
+                UiColor(0, 1, 0) -- Green
+            else
+                UiColor(1, 0, 0) -- Red
+            end
+            UiTranslate(0, y - 5)
+            UiText("[Press F] FlyMode: " .. tostring(self.enableFlyMode))
 
-    -- Debug container title
-    UiPush()
-        UiColor(1, 1, 1) -- Green
-        UiFont("regular.ttf", 36)
-        UiTranslate(x - 10, y)
-        UiText(MOD.NAME .. ": Debug Menu")
-    
-    -- Debug Mod title
-        UiResetColor()
-        if self.enableFlyMode then
-            UiColor(0, 1, 0) -- Green
-        else
-            UiColor(1, 0, 0) -- Red
-        end
-        UiTranslate(0, y - 5)
-        UiText("[Press F] FlyMode: " .. tostring(self.enableFlyMode))
-
-    -- Debug Player Transform
-        UiColor(1, 0, 1)
-        UiFont("regular.ttf", 24)
-        UiTranslate(0, y - 10)
-        UiText("Player Transform: " .. dump(GetPlayerTransform()))
-    UiPop()
-
+        -- Debug Player Transform
+            UiColor(1, 0, 1)
+            UiFont("regular.ttf", 24)
+            UiTranslate(0, y - 10)
+            UiText("Player Transform: " .. dump(GetPlayerTransform()))
+        UiPop() 
+    end
 end

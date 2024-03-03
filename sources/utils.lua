@@ -183,3 +183,46 @@ function Round(num, dp)
     local mult = 10^(dp or 0)
     return math.floor(num * mult + 0.5)/mult
 end
+
+-- Get length of table (with key e value)
+function tlen(t)
+    local n = 0
+
+    for _ in pairs(t) do
+        n = n + 1
+    end
+    return n
+end
+
+function RandomStringRGB()
+
+    local rgbString;
+    local r = math.random() + math.random(0, 1)
+    local g = math.random() + math.random(0, 1)
+    local b = math.random() + math.random(0, 1)
+    
+    -- Truncate the values and rounding because there's no built-in function for that
+    r = Round(r, 1)
+    g = Round(g, 1)
+    b = Round(b, 1)
+
+    -- If some of RGB values are HIGHER than 1.0
+    if (r > 1.0) then r = 1.0 end
+    if (g > 1.0) then g = 1.0 end
+    if (b > 1.0) then b = 1.0 end
+
+    -- If some of RGB values are LOWER than 0.0
+    if (r < 0.0) then r = 0.0 end
+    if (g < 0.0) then g = 1.0 end
+    if (b < 0.0) then b = 1.0 end
+
+    print("random r g b: ", r, g, b)
+
+    -- prefabProperties.color = '0.5 0.5 0.5'
+
+    rgbString = tostring(r) .. 
+                             " " .. tostring(g) .. 
+                             " " .. tostring(b)
+
+    return rgbString;
+end
