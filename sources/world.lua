@@ -268,8 +268,8 @@ function _StarConfiguration(prefabProperties, properties)
     prefabProperties.blendtexture = RandomizePrefabProperty('blendtexture')
     prefabProperties.density = "100"
     prefabProperties.strength = "100"
-    prefabProperties.collide = "false" -- gravitty affects
-    prefabProperties.prop = "false"
+    --prefabProperties.collide = "false" -- gravitty affects
+    --prefabProperties.prop = "false"
     -- Change object vox size accordingly to the brush (.vox file)
     -- This logic is needed to change sometimes with some logic to 
     -- open and decrypt .vox files and get the size info
@@ -330,8 +330,8 @@ function _PlanetConfiguration(prefabProperties, properties)
         prefabProperties.desc = "A Gaseous Planet."
         prefabProperties.density = "100"
         prefabProperties.strength = "100"
-        prefabProperties.collide = "true"
-        prefabProperties.prop = "false"
+        --prefabProperties.collide = "true"
+        --prefabProperties.prop = "false"
         prefabProperties.size = "40 39 40"
     -- Change object vox size accordingly to the brush (.vox file)
     -- This logic is needed to change sometimes with some logic to 
