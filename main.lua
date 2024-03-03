@@ -3,7 +3,7 @@
 #include "sources/utils.lua"
 #include "sources/world.lua"
 #include "sources/prefab.lua"
-#include "sources/vehicle.lua"
+#include "sources/vehicle/vehicle.lua"
 #include "sources/registry.lua"
 #include "sources/particles.lua"
 #include "sources/debug.lua"
@@ -37,10 +37,9 @@ function init()
 
     -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
     -- SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
-    -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
+    SpawnSpaceShip(Vehicles.spaceship)
     -- SpawnCelestialBody(CelestialBodies.PLANET, true)
-    -- SpawnCelestialBody(CelestialBodies.ASTEROID, true)
-    PopulateSpace()
+    -- PopulateSpace()
 end
 
 function tick()

@@ -1,27 +1,16 @@
+#include "commons/constants.lua"
+
+
 Vehicles = {
-    vehicleInput = 'NONE',
-    SpaceshipSmall1 = {
+    spaceship = {
         name = 'spaceship_small1',
-        xmlPath = "MOD/assets/models/ships/spaceship_small1.xml",
-        voxPath = "MOD/assets/models/ships/spaceship_small1.vox",
+        inputType = 'FLY',
+        xmlPath = CONSTANTS.PREFAB.VEHICLES.SPACESHIP_SMALL1,
+        voxPath = CONSTANTS.VOX.VEHICLES.SPACESHIP_SMALL1,
         velocity = 50,
         tag='spaceship'
     },
-
-    suv1 = {
-        name = 'suv1',
-        xmlPath = "MOD/assets/models/suv/suv1.xml",
-        voxPath = "MOD/assets/models/suv/suv1.vox",
-        velocity = 50,
-        tag='car'
-    }
 }
-
--- Vehicle Debug
-function DebugVehicle(vehicle)
-    DebugPrint("HANDLE VEHICLE INPUT PROPERTY: " .. Vehicles.vehicleInput)
-    DebugPrint("Is car broken? " .. tostring(IsBodyBroken(vehicle)))
-end
 
 -- Call this in main tick()
 function VehicleTick() 
