@@ -1,6 +1,4 @@
 #include "sources/prefab.lua"
-#include "sources/commons/colors.lua"
-
 
 function AddParticleEffect() 
     local pos = Vec(0, 1, 0)

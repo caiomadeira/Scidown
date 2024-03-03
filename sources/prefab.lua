@@ -51,7 +51,7 @@ Prefabs = {
         strength = "100",
         collide = "false",
         prop = "false", -- allows to create a dynamic body
-        size = "40 39 40",
+        size = "40 40 40",
         brush ="MOD/assets/models/star.vox",
         material = "rock",
         pbr= "0 0 0 32",
@@ -228,16 +228,31 @@ function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlF
 
     DebugPrint("::::::::::::::::::::::::::")
 end
-
-function RandomPrefabProperty(property)
+-- tdPropertyPreset - teardown property presets defaults
+function RandomizePrefabProperty(property, tdPropertyPreset)
+    tdPropertyPreset = tdPropertyPreset or {  }
     local num, max;
     local min = 0;
     if (property == 'blendtexture') then -- Range of 0-15
         max = 15
+        num = math.random(min, max); 
+
     elseif (property == 'texture') then -- Range of 0-31
         max = 31
+        num = math.random(min, max); 
+
+    elseif (property == 'pbr') then
+        min = 10
+        max = 32
+        num = math.random(min, max)
+        num = "0 0 0 " .. num
+        print("> RandomizePrefabProperty() - pbr: ", num)
+
+    elseif (property == 'material' or property == 'brush') then
+        local randomIndex = math.random(1, #tdPropertyPreset)
+        num = tdPropertyPreset[randomIndex]
+        print("> RandomizePrefabProperty() - [" .. property .. "]: ", num)
     end
-    num = math.random(min, max); 
     return tostring(num);
 end
 
@@ -363,3 +378,8 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
     -- Need to return Vec(x, y, z)/{ x, y, z } (a table with 3 values)
     return axes;
 end
+
+--[[
+
+Get
+]]

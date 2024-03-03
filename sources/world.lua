@@ -1,8 +1,7 @@
 #include "sources/prefab.lua"
 #include "sources/utils.lua"
-#include "sources/commons/colors.lua"
 #include "sources/commons/constants.lua"
-
+#include "../settings.lua"
 
 CelestialBodies = {
     STAR = { -- DEFAULT CONFIGURATION
@@ -72,13 +71,33 @@ CelestialBodies = {
 }
 
 --[[
+**************************************************************
+SetupCustomCelestialBody(properties, allowRandomSpawn)
 
+--------------------------------------------------------------
 Create a custom celestial body with Random (or not) Properties
+**************************************************************
+]]--
+function PopulateWorld(min, max)
+ -- ...
+end
 
+--[[
+**************************************************************
+SetupCustomCelestialBody(properties, allowRandomSpawn)
+
+--------------------------------------------------------------
+Create a custom celestial body with Random (or not) Properties
+**************************************************************
 ]]--
 
-
 function SetupCustomCelestialBody(properties, allowRandomSpawn)
+    -- :::::::::::::::::::::::::
+    -- :::: distanceDividir ::::
+    -- :::::::::::::::::::::::::
+    -- Provides a magic number wich dividers and change the proximity with player
+    -- if the number is high, the proximity withc player is higher, otherwise,
+    -- if the number is LOW, the object is FAR from player
     local distanceDivider = 5.0;
 
     if (properties ~= nil) then
@@ -137,7 +156,7 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
             
         elseif (prefabProperties.name == string.lower('PLANET')) then
             --print("planet config")
-            -- _PlanetConfiguration(prefabProperties, properties)
+            _PlanetConfiguration(prefabProperties, properties)
             -- TODO: Need to check the moonCount to spawn in planets orbits
             --if (properties.moonCount > 0) then
                 --_NaturalSatelliteConfiguration(prefabProperties, properties)
@@ -164,8 +183,10 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
             "material=" .. "'".. prefabProperties.material .. "'" .. " " ..
             "pbr=" .. "'".. prefabProperties.pbr .. "'" .. " " ..
             "color=" .. "'" .. prefabProperties.color .. "'" ..
-            "/>"
+            " />"
     ------------------------------------------------------
+    -- ******** CREATE A BODY AND ATTACH TO SHAPE
+
 
 
     --------- SPAWN RULES -----------------------
@@ -184,10 +205,28 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
     end
     Spawn(base, spawnTransform)
     ---------------------------------------------
-
+    -- BODY AND SHAPE RULES
+    ---------------------------------------------
+    -- CREATE A BODY FOR SHAPE AND CHECK IF IS IsBodyActive
+    -- For performance reasons, bodies that don't move are taken out of the simulation. 
     local handleShape = FindShape(prefabProperties.tags, true)
-    -- local handleBody = FindBody(prefabProperties.tags, true) -- For some reason, the body is not created
+    local handleShapeBody = GetShapeBody(handleShape) -- For some reason, the body is not created
+    if handleShapeBody ~=0 then
+        print("body for " .. prefabProperties.tags .. " found with handle: ", handleShapeBody)
+        SetTag(handleShapeBody, prefabProperties.tags)
+        print("Tag setted? ", HasTag(handleShape, prefabProperties.tags))
+        if IsBodyActive(handleShapeBody) then
+            print("Body is active.")
+        else
+            print("Body is NOT active.")
+            SetBodyDynamic(handleShapeBody, false)
+            print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
+        end
 
+
+    else 
+        print("body for " .. prefabProperties.tags .. " not found. ", handleShapeBody)
+    end
     -- Do finals configurations (POS SPAWN) like:
     --  > INCREASE EMISSION LIGHT;
     --  > ADD PARTICLES EFFECT ATTACHED TO THE ENTITY;
@@ -197,8 +236,15 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
         
     -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
     if handleShape ~= 0 then
+        -- Print formated prefab xml properties 
         print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
-        print(base)
+        for p in base:gmatch("%S+") do
+            if string.find(p, "<") or string.find(p, "/>") then
+                print(p)
+            else
+                print("\t", p)
+            end
+        end
         print(":::::::::::::::::::::::::::::::::::::::::::::::::")
     else
         print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
@@ -212,50 +258,115 @@ end
 
 -- Pseudo private method to configure prefab properties and more options
 function _StarConfiguration(prefabProperties, properties)
+    local availableMaterials = {'rock', 'unphysical', 'plaster', 'heavymetal'}
+    local availableBrushes = {
+        CONSTANTS.VOX.WORLD.STARS.STAR1,
+        CONSTANTS.VOX.WORLD.STARS.STAR_REDGIANT
+    }
+
+    local brush = RandomizePrefabProperty('brush', availableBrushes)
+
     -- Configure object properties if a type is given (objects properties are optionals)
-    if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.STAR.RED_GIANT) then
-        prefabProperties.desc = "A Glorious Red Giant."
-        prefabProperties.tags = "star_red_giant" -- Tag must by one only and not have spaces to work properly
-        prefabProperties.brush = CONSTANTS.VOX.WORLD.STARS.STAR_REDGIANT
-        prefabProperties.size = "160 160 156"
-        if (properties.gravitStrength > 50) then
-            prefabProperties.density = "100"
-            prefabProperties.strength = "100"
-        else
-            prefabProperties.density = "10"
-            prefabProperties.strength = "10"
-        end
-        if (properties.emitsLight) then
-            prefabProperties.pbr = "0 0 0 20"
-        else
-            prefabProperties.pbr = "1 1 1 0"
-        end
-        prefabProperties.color = PREFAB_COLORS.RED
+    prefabProperties.tags = "star_red_giant" -- Tag must by one only and not have spaces to work properly
+    prefabProperties.desc = "A Glorious Red Giant."
+    prefabProperties.texture = RandomizePrefabProperty('texture')
+    prefabProperties.blendtexture = RandomizePrefabProperty('blendtexture')
+    prefabProperties.density = "100"
+    prefabProperties.strength = "100"
+    prefabProperties.collide = "false" -- gravitty affects
+    prefabProperties.prop = "false"
+
+    -- Change object vox size accordingly to the brush (.vox file)
+    -- This logic is needed to change sometimes with some logic to 
+    -- open and decrypt .vox files and get the size info
+    if brush == availableBrushes[1] then
+        prefabProperties.size = "40 40 40"
+    elseif brush == availableBrushes[2] then
+        prefabProperties.size = "160 160 160"
     end
-        return prefabProperties
+    prefabProperties.brush = brush
+    prefabProperties.material = RandomizePrefabProperty('material', availableMaterials)
+    prefabProperties.density = "100"
+    prefabProperties.strength = "100"
+    if (properties.emitsLight) then
+        prefabProperties.pbr = RandomizePrefabProperty('pbr')
+    else
+        prefabProperties.pbr = "1 1 1 0"
+    end
+
+    local r = math.random() + math.random(0, 1)
+    local g = math.random() + math.random(0, 1)
+    local b = math.random() + math.random(0, 1)
+    
+    -- Truncate the values and rounding because there's no built-in function for that
+    r = Round(r, 1)
+    g = Round(g, 1)
+    b = Round(b, 1)
+
+    -- If some of RGB values are HIGHER than 1.0
+    if (r > 1.0) then r = 1.0 end
+    if (g > 1.0) then g = 1.0 end
+    if (b > 1.0) then b = 1.0 end
+
+    -- If some of RGB values are LOWER than 0.0
+    if (r < 0.0) then r = 0.0 end
+    if (g < 0.0) then g = 1.0 end
+    if (b < 0.0) then b = 1.0 end
+
+    print("random r g b: ", r, g, b)
+
+    -- prefabProperties.color = '0.5 0.5 0.5'
+
+    prefabProperties.color = tostring(r) .. 
+                             " " .. tostring(g) .. 
+                             " " .. tostring(b)
+
+    print("prefabProperties.color generated: ", prefabProperties.color)
+                             
+    return prefabProperties
 end
 
 --
 function _AsteroidConfiguration(prefabProperties, properties)
     -- Configure object properties if a type is given (objects properties are optionals)
     if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.ASTEROID.RANDOM) then
-        prefabProperties.desc = "A normal and boring asteroid."
         prefabProperties.tags = "asteroid_default" -- Tag must by one only and not have spaces to work properly
+        prefabProperties.desc = "A normal and boring asteroid."
         prefabProperties.brush = CONSTANTS.VOX.WORLD.ASTEROIDS.ASTEROID1
         prefabProperties.size = "20 24 24"
-        prefabProperties.texture = RandomPrefabProperty('texture')
-        prefabProperties.blendtexture = RandomPrefabProperty('blendtexture')
-        prefabProperties.color = PREFAB_COLORS.RED
+        prefabProperties.texture = RandomizePrefabProperty('texture')
+        prefabProperties.blendtexture = RandomizePrefabProperty('blendtexture')
+        prefabProperties.color = CONSTANTS.COLORS.STR.RED
     end
         return prefabProperties
 end
 
 function _PlanetConfiguration(prefabProperties, properties)
+    local availableMaterials = {'rock', 'unphysical', 'dirt', 'foliage', 'plaster'}
+    local availableBrushes;
+
+    for k, v in pairs(CONSTANTS.VOX.WORLD.PLANETS) do
+        print("_PlanetConfiguration(): CONSTANTS.VOX.WORLD.PLANETS - " .. v)
+        table.insert(availableBrushes, v)
+    end
+    print("_PlanetConfiguration(): availableBrushes -" .. dump(availableBrushes))
+
     -- Configure object properties if a type is given (objects properties are optionals)
     if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.GASEOUS) then
         prefabProperties.desc = "A Gaseous Planet."
         prefabProperties.tags = "gaseous_planet"
-    
+        prefabProperties.density = "100"
+        prefabProperties.strength = "100"
+        prefabProperties.collide = "true"
+        prefabProperties.prop = "false"
+        prefabProperties.size = "40 39 40"
+        prefabProperties.brush = RandomizePrefabProperty('brush', availableBrushes)
+        prefabProperties.texture = RandomizePrefabProperty('texture')
+        prefabProperties.blendtexture = RandomizePrefabProperty('blendtexturetexture')
+        prefabProperties.pbr = RandomizePrefabProperty('pbr')
+        prefabProperties.material = RandomizePrefabProperty('material', availableMaterials)
+        prefabProperties.color = '0.72 0.12 0.32'
+
     elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.ROCKY) then
         prefabProperties.desc = "A Rocky Planet."
         prefabProperties.tags = "rocky_planet"

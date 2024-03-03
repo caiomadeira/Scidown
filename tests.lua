@@ -17,26 +17,26 @@ elaborate futhermore.
 *****************************************************************
 
 UnitTestsRegistry = { 
-    RandomPrefabPropertyTests = {
+    RandomizePrefabPropertyTests = {
         functable1_ShouldReturnStrType = { 
-            name = "test_RandomPrefabProperty_ShouldReturnStrType" 
+            name = "test_RandomizePrefabProperty_ShouldReturnStrType" 
         },
 
         metatable1_ShouldReturnStrType = { },
     }
  }
 
- UnitTestsRegistry.RandomPrefabPropertyTests.metatable1_ShouldReturnStrType.__call = function ()
+ UnitTestsRegistry.RandomizePrefabPropertyTests.metatable1_ShouldReturnStrType.__call = function ()
     print "test" 
 end
 
 setmetatable(
-    UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldReturnStrType,
-    UnitTestsRegistry.RandomPrefabPropertyTests.metatable1_ShouldReturnStrType
+    UnitTestsRegistry.RandomizePrefabPropertyTests.functable1_ShouldReturnStrType,
+    UnitTestsRegistry.RandomizePrefabPropertyTests.metatable1_ShouldReturnStrType
 )
 
-UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldReturnStrType()
-print(">>>" .. UnitTestsRegistry.RandomPrefabPropertyTests.functable1_ShouldReturnStrType.name)
+UnitTestsRegistry.RandomizePrefabPropertyTests.functable1_ShouldReturnStrType()
+print(">>>" .. UnitTestsRegistry.RandomizePrefabPropertyTests.functable1_ShouldReturnStrType.name)
 ]] -- 
 
 require('settings')
@@ -106,14 +106,14 @@ end
 
 --[[
 **********************************************
-RandomPrefabProperty()
+RandomizePrefabProperty()
 **********************************************
 ]]--
-function test_RandomPrefabProperty_ShouldReturnStrType()
+function test_RandomizePrefabProperty_ShouldReturnStrType()
     local dummyProperty = 'texture'
     local resultExpected = 'string'
     local onFailureMsg = "Type doesn't match."
-    local f = RandomPrefabProperty(dummyProperty)
+    local f = RandomizePrefabProperty(dummyProperty)
     luaunit.assertEquals(type(f), resultExpected, onFailureMsg)
     dummyProperty = 'blendtexture'
     luaunit.assertEquals(type(f), resultExpected, onFailureMsg)

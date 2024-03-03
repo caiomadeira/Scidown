@@ -94,5 +94,18 @@ CONSTANTS = {
         NATURAL_SATELLITE = { DEFAULT = "NATURAL_SATELLITE_DEFAULT", RANDOM = "RANDOM"},
         BLACK_HOLE = { MASSIVE = "MASSIVE", HYPERMASSIVE = "HYPERMASSIVE" },
         NEBULOSA = { RANDOM = "RANDOM" },
+    },
+
+    COLORS = {
+        STR = {
+            RED = "0.5 0.5 0.5",
+            BLUE = "0.0 1.0 0.93",
+            YELLOW = "0.92 0.6 0.09"
+        },
+
+        TABLE = {
+            VIBRANT_RED = {2.55, 0, 0},
+            VIBRANT_YELLOW = {2.55, 1.8, 0}
+        }
     }
 }

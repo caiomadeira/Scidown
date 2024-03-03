@@ -35,33 +35,31 @@ function init()
     -- SpawnSafeHouse()
 
 
-    --SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
-    --SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
+    -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
+    -- SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
     -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
     SetupCustomCelestialBody(CelestialBodies.STAR, true)
-    --SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
+    -- SetupCustomCelestialBody(CelestialBodies.ASTEROID, true)
 end
 
 function tick()
-    --local pos = "3.0 134.0 0.9"
-    --RandomSpawnPosition(pos)
-    --playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
-    --print("Player pos 1: " .. VecStr(playerPos))
+    -- local pos = "3.0 134.0 0.9"
+    -- RandomSpawnPosition(pos)
+    -- playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
+    -- print("Player pos 1: " .. VecStr(playerPos))
 
     PlayerTick()
     VehicleTick()
     -- PrintRegistryKeys("game.player.tool")
-    --AddParticleEffect() 
-    --SpaceShipCameraMovement()
+    -- AddParticleEffect() 
+    -- SpaceShipCameraMovement()
 end
 
 function update(dt)
    if dp ~= nil then
         dp:flyMode()
    end
-
-
-    --PlayerDebugInfo()
+    -- PlayerDebugInfo()
     PlayerUpdate(dt)
 end
 
