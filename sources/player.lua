@@ -2,6 +2,7 @@
 #include "registry.lua"
 
 Player = {
+    disableAllWeapons = false,
     canJump = false,
     jumpMaxVelocity= 10,
     jumpMinVelocity = 0,
@@ -20,8 +21,7 @@ Player = {
 
 -- Standard configuration for player
 function PlayerInit()
-    PlayerInventory()
-    --SetPlayerSpawnTool("gun")
+   --PlayerInventory()
     SetPlayerRegenerationState(false) -- disable regeneration for player
     -- Spawn Player in some point of World
     SpawnPlayer('safehouse')
@@ -47,7 +47,9 @@ function PlayerTick()
 end
 
 function PlayerUpdate(dt)
-    DisablePlayerDefaultTools() -- Need to be called in tick or update
+    if Player.disableAllWeapons then
+        DisablePlayerDefaultTools() -- Need to be called in tick or update
+    end
 
     if Player.canJump then
         PlayerJumpGravity(dt, Player.jumpMaxVelocity)
@@ -61,7 +63,7 @@ end
 -- ::::::::::::::::::::::::::::::::::::::
 
 function PlayerInventory()
-    --DisablePlayerDefaultTools()
+    
 end
 
 

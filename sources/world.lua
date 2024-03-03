@@ -110,14 +110,20 @@ function PopulateSpace()
     -- Random celestial bodies prefab to spawn
     -- Will be interesting implement some logic with the property 'spawnChance' later
     -- SpawnCelestialBody(CelestialBodies.STAR, true)
+    local bodiesGenerated = {  }
     local names = {  }
     local n = tlen(CelestialBodies)
     print("length func: ", n)
-    for k,v in pairs(CelestialBodies) do
+    for k, _ in pairs(CelestialBodies) do
         table.insert(names, CelestialBodies[k].name)
     end
-    local randomCelestialBName = names[math.random(#names)]
-    SpawnCelestialBody(CelestialBodies[randomCelestialBName], true)
+    -- Run loop to execute the function
+    for i=1, 5 do
+        local randomCelestialBName = names[math.random(#names)]
+        SpawnCelestialBody(CelestialBodies[randomCelestialBName], true)
+        table.insert(bodiesGenerated, CelestialBodies[randomCelestialBName].name)
+    end
+    print(">> BODIES GENERATED: ", dump(bodiesGenerated))
 end
 
 --[[
@@ -328,8 +334,8 @@ function _PlanetConfiguration(prefabProperties, properties)
     if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.GASEOUS) then
         prefabProperties.tags = "gaseous_planet"
         prefabProperties.desc = "A Gaseous Planet."
-        prefabProperties.density = "100"
-        prefabProperties.strength = "100"
+        prefabProperties.density = "1.0"
+        prefabProperties.strength = "1.0"
         --prefabProperties.collide = "true"
         --prefabProperties.prop = "false"
         prefabProperties.size = "40 39 40"

@@ -15,7 +15,7 @@ function DisablePlayerDefaultTools()
 		--DebugPrint(">> keys: " ..tostring(list[i]))
 		SetBool("game.tool."..list[i]..".enabled", false)
 	end
-	SetString("game.player.tool", "gun") -- Set initial tool to gun
+	SetString("game.player.tool", "") -- Set initial tool to gun
     --DebugPrint("::::::::::::::::::::::::::::::::::")
 end
 
