@@ -96,12 +96,14 @@ function PopulateSpace()
     --local bodyCount = math.random(minBodyCount, maxBodyCount);
     local bodyCount = 4
     local celestialBody;
+
+    --[[ implement spawn chances
     local spawnChances = {
         ["Rock"] = {min = 1, max = 5},
         ["Sand"] = {min = 4, max = 12},
         ["Glass"] = {min = 20, max = 45},
     }
-    
+    ]]--
 
     print("[>>>] World Celestial Body Count: ", bodyCount)
 
@@ -208,24 +210,7 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
     ------- OBJECT XML SCENE CREATION -----------------------
     -- TODO: Move to a function
     -- For now its only voxbox
-    local base = "<voxbox name=" .. "'".. prefabProperties.name .. "'" .. " " ..
-            "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
-            "pos=" .. "'".. randomSpawnPos .. "'" .. " " ..
-            "rot=" .. "'".. prefabProperties.rot .. "'" .. " " ..
-            "desc=" .. "'".. prefabProperties.desc .. "'" .. " " ..
-            "texture=" .. "'".. prefabProperties.texture .. "'" .. " " ..
-            "blendtexture=" .. "'".. prefabProperties.blendtexture .. "'" .. " " ..
-            "density=" .. "'".. prefabProperties.density .. "'" .. " " ..
-            "strength=" .. "'".. prefabProperties.strength .. "'" .. " " ..
-            "collide=" .. "'".. prefabProperties.collide .. "'" .. " " ..
-            "prop=" .. "'".. prefabProperties.prop .. "'" .. " " ..
-            "size=" .. "'".. prefabProperties.size .. "'" .. " " ..
-            "brush=" .. "'".. prefabProperties.brush .. "'" .. " " ..
-            "material=" .. "'".. prefabProperties.material .. "'" .. " " ..
-            "pbr=" .. "'".. prefabProperties.pbr .. "'" .. " " ..
-            "color=" .. "'" .. prefabProperties.color .. "'" ..
-            " />"
-
+    local prefabXml = CreateXMLPrefab(prefabProperties, randomSpawnPos)
     --------- SPAWN RULES -----------------------
     -- THE SPAWN TRANSFORM IS ANOTHER PARAM AND I DON'T KNOW WHY I NEED THIS beacause
     -- THE PREFAB ALREADY HAS.
@@ -240,50 +225,25 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
         print("default spawn")
         spawnTransform = Transform(ConvertStrToTable(prefabProperties.pos))
     end
-    Spawn(base, spawnTransform)
+    Spawn(prefabXml, spawnTransform, true)
     ---------------------------------------------
     -- BODY AND SHAPE RULES
     ---------------------------------------------
     -- CREATE A BODY FOR SHAPE AND CHECK IF IS IsBodyActive
     -- For performance reasons, bodies that don't move are taken out of the simulation. 
+    --local handleShape = CreateBodyForShape(prefabProperties)
     local handleShape = FindShape(prefabProperties.tags, true)
-    local handleShapeBody = GetShapeBody(handleShape) -- For some reason, the body is not created
-    if handleShapeBody ~=0 then
-        print("body for " .. prefabProperties.tags .. " found with handle: ", handleShapeBody)
-        SetTag(handleShapeBody, prefabProperties.tags)
-        print("Tag setted? ", HasTag(handleShape, prefabProperties.tags))
-        if IsBodyActive(handleShapeBody) then
-            print("Body is active.")
-        else
-            print("Body is NOT active.")
-            SetBodyDynamic(handleShapeBody, false)
-            print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
-        end
-    else 
-        print("body for " .. prefabProperties.tags .. " not found. ", handleShapeBody)
-    end
+    HasShapeCreated(handleShape, prefabProperties, prefabXml)
+
+    ------------------------------------------------------
+    -- ADDITIONAL CONFIGURATIONS FOR SHAPE
+    ------------------------------------------------------
     -- Do finals configurations (POS SPAWN) like:
     --  > INCREASE EMISSION LIGHT;
     --  > ADD PARTICLES EFFECT ATTACHED TO THE ENTITY;
     --  > ANIMATIONS LIKE ROTATIONS AND MOVEMENT;
-
     IncreaseEmissiveScale(prefabProperties.tags, properties.emitsLight)
-        
-    -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
-    if handleShape ~= 0 then
-        -- Print formated prefab xml properties 
-        print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
-        for p in base:gmatch("%S+") do
-            if string.find(p, "<") or string.find(p, "/>") then
-                print(p)
-            else
-                print("\t", p)
-            end
-        end
-        print(":::::::::::::::::::::::::::::::::::::::::::::::::")
-    else
-        print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
-    end
+------------------------------------------------------
 end
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -357,7 +317,7 @@ function _PlanetConfiguration(prefabProperties, properties)
     }
 
     local voxfile = RandomizePrefabProperty('brush', availableBrushes)
-
+    print(">>>> VOX FILE CHOSEN: ", tostring(voxfile), "<<<<<")
     for _, v in pairs(CONSTANTS.VOX.WORLD.PLANETS) do
         print("_PlanetConfiguration(): CONSTANTS.VOX.WORLD.PLANETS - " .. v)
         table.insert(availableBrushes, v)
@@ -370,7 +330,7 @@ function _PlanetConfiguration(prefabProperties, properties)
         prefabProperties.desc = "A Gaseous Planet."
         prefabProperties.density = "100"
         prefabProperties.strength = "100"
-        prefabProperties.collide = "false"
+        prefabProperties.collide = "true"
         prefabProperties.prop = "false"
         prefabProperties.size = "40 39 40"
     -- Change object vox size accordingly to the brush (.vox file)
