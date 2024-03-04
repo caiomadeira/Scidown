@@ -34,7 +34,7 @@ testEnviromentConfig = {
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ]]--
 
-function loadCustomEnvironment(configNumber, debug)
+function LoadCustomEnvironment(configNumber, debug)
     local enviromentsList = {
         [1] = spaceEnviromentConfig,
         [2] = testEnviromentConfig,
