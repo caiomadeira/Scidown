@@ -12,7 +12,7 @@ by Caio Madeira
 ]]--
 
 PATH = {
-    PREFAB = 'MOD/assets/models/prefabs/',
+    PREFAB = 'MOD/assets/prefabs/',
     PALLETE = 'MOD/assets/palletes/',
     SKYBOX = 'MOD/assets/skybox/',
     SPRITE = 'MOD/assets/sprites/',
@@ -30,8 +30,13 @@ CONSTANTS = {
     },
     
     PREFAB = {
-        SPACESHIP_SMALL1 = PATH.PREFAB .. 'vehicles/spaceship_small1.xml',
-        SAFEHOUSE = PATH.PREFAB .. 'world/safehouse.xml',
+        VEHICLES = {
+            SPACESHIP_SMALL1 = PATH.PREFAB .. 'vehicles/spaceship_small1.xml',
+        },
+
+        BUILDINGS = {
+            SAFEHOUSE = PATH.PREFAB .. 'world/building/safehouse.xml',
+        }
     },
     
     PALLETE = {
