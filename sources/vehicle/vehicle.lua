@@ -78,10 +78,6 @@ function SpaceshipControls(frame)
             direction[1] = 1
         end
 
-        direction = TransformToParentVec(GetCameraTransform(), Vec(direction[1], 0, direction[3]))
-        print("Direction Transform: ", dump(direction))
-        print("Vehicle Transform: ", dump(vehicleTransform))
-
         -- SPACE AND CTRL this two values need to be called after direction - TransformToParentVec(....)
         -- because we reset the direction[2]
         if(InputDown("space")) then
@@ -104,12 +100,14 @@ function SpaceshipControls(frame)
         else
             speed = 8
         end
-            --ApplyBodyImpulse(currentBodyVehicle, vehicleTransform.pos, direction)
-
         -- Normalize direction
         if(VecLength(direction) > 0) then
             direction = VecNormalize(direction)
         end
+
+        direction = TransformToParentVec(vehicleTransform, Vec(direction[1], direction[2], direction[3]))
+        print("Direction Transform: ", dump(direction))
+        print("Vehicle Transform: ", dump(vehicleTransform))
 
         -- Set velocity
         velocity = VecScale(direction, speed)
