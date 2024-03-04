@@ -3,13 +3,14 @@
 #include "sources/utils.lua"
 #include "sources/world.lua"
 #include "sources/prefab.lua"
-#include "sources/vehicle.lua"
+#include "sources/vehicle/vehicle.lua"
 #include "sources/registry.lua"
 #include "sources/particles.lua"
 #include "sources/debug.lua"
 #include "settings.lua"
 
 local dp;
+frame = 0
 
 if MOD.DEBUG then
     dp = Debug:new(nil)
@@ -25,7 +26,7 @@ function init()
     print("::::::::::::::::::::::::::::::::::::::::")
 
     --setUpTest()
-    loadCustomEnvironment(1, false)
+    LoadCustomEnvironment(1, false)
     PlayerInit()
     -- CreateDynamicPlanet()
     -- CreateXMLPrefab(Prefabs.moon2, true)
@@ -37,23 +38,22 @@ function init()
 
     -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
     -- SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
-    -- SpawnSpaceShip(Vehicles.SpaceshipSmall1)
+    SpawnVehicle(Vehicle.spaceship)
     -- SpawnCelestialBody(CelestialBodies.PLANET, true)
-    -- SpawnCelestialBody(CelestialBodies.ASTEROID, true)
-    PopulateSpace()
+    -- PopulateSpace()
 end
 
-function tick()
+function tick(dt)
     -- local pos = "3.0 134.0 0.9"
     -- RandomSpawnPosition(pos)
     -- playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
     -- print("Player pos 1: " .. VecStr(playerPos))
 
     PlayerTick()
-    VehicleTick()
+    frame = frame + 1
+    VehicleTick(frame)
     -- PrintRegistryKeys("game.player.tool")
     -- AddParticleEffect() 
-    -- SpaceShipCameraMovement()
 end
 
 function update(dt)
