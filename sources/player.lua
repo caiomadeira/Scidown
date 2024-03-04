@@ -2,6 +2,7 @@
 #include "registry.lua"
 
 Player = {
+    disableAllWeapons = false,
     canJump = false,
     jumpMaxVelocity= 10,
     jumpMinVelocity = 0,
@@ -20,14 +21,14 @@ Player = {
 
 -- Standard configuration for player
 function PlayerInit()
-    PlayerInventory()
-    --SetPlayerSpawnTool("gun")
+   --PlayerInventory()
     SetPlayerRegenerationState(false) -- disable regeneration for player
     -- Spawn Player in some point of World
     SpawnPlayer('safehouse')
 end
 
 function PlayerTick()
+    -- SetPlayerZoom(5, 0.2)-- makes a strange sound
     if InputPressed("jump") then
         --DebugPrint("[+] Jump Pressed")
         Player.canJump = true
@@ -46,6 +47,10 @@ function PlayerTick()
 end
 
 function PlayerUpdate(dt)
+    if Player.disableAllWeapons then
+        DisablePlayerDefaultTools() -- Need to be called in tick or update
+    end
+
     if Player.canJump then
         PlayerJumpGravity(dt, Player.jumpMaxVelocity)
     else
@@ -58,7 +63,7 @@ end
 -- ::::::::::::::::::::::::::::::::::::::
 
 function PlayerInventory()
-    --DisablePlayerDefaultTools()
+    
 end
 
 
@@ -104,7 +109,7 @@ function SpawnPlayer(where)
     end
 end
 
-function DebugPlayer()
+function PlayerDebugInfo()
     DebugPrint(":::::::: PLAYER DEBUG :::::::::")
     local playerTransform = GetPlayerTransform()
     local pVelocity = GetPlayerVelocity()

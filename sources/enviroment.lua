@@ -1,7 +1,9 @@
+#include "sources/commons/constants.lua"
+
 spaceEnviromentConfig = {
     template = "sunny",
     skybox = "MOD/assets/skybox/space.dds",
-    skyboxtint = {0.01, 0.01, 0.01},
+    skyboxtint = {0.01, 0.01, 0.01}, -- apply something like a filter
     skyboxbrightness = 10,
     ambient = 100,
     ambientexponent = 500000,
@@ -10,10 +12,10 @@ spaceEnviromentConfig = {
     sunBrightness = 10,
     sunColorTint = {1.0, 1.0, 1.0},
     sunFogScale = 0.05,
-    sunGlare = 0.7,
+    sunGlare = 0.3, -- sun strenght and scale
     brightness = 1,
     nightlight = false,
-    fogscale = 1.0
+    fogscale = 0.0
 }
 
 testEnviromentConfig = {
@@ -32,7 +34,7 @@ testEnviromentConfig = {
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ]]--
 
-function loadCustomEnvironment(configNumber, debug)
+function LoadCustomEnvironment(configNumber, debug)
     local enviromentsList = {
         [1] = spaceEnviromentConfig,
         [2] = testEnviromentConfig,

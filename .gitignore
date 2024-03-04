@@ -32,10 +32,15 @@ luac.out
 *.dylib
 
 # Executables
-*.exe
 *.out
 *.app
 *.i*86
 *.x86_64
 *.hex
 
+# Project Specific files and folders
+TODO.txt
+/docs/api/
+
+# C compiler files
+*.obj 
