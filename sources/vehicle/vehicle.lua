@@ -1,123 +1,138 @@
-#include "commons/constants.lua"
+#include "sources/commons/constants.lua"
+#include "sources/player.lua"
+#include "sources/utils.lua"
 
-
-Vehicles = {
+--[[ 
+Vehicle = {
     spaceship = {
         name = 'spaceship_small1',
-        inputType = 'FLY',
+        type = 'FLY',
         xmlPath = CONSTANTS.PREFAB.VEHICLES.SPACESHIP_SMALL1,
         voxPath = CONSTANTS.VOX.VEHICLES.SPACESHIP_SMALL1,
         velocity = 50,
         tag='spaceship'
     },
 }
+]]
+
+-- Meta Class
+
+Vehicle = {
+    spaceship = {
+        name = 'spaceship_small1',
+        type = 'FLY',
+        tag='spaceship',
+        xmlPath = CONSTANTS.PREFAB.VEHICLES.SPACESHIP_SMALL1,
+        voxPath = CONSTANTS.VOX.VEHICLES.SPACESHIP_SMALL1,
+        velocity = 50,
+    }
+}
+
 
 -- Call this in main tick()
-function VehicleTick() 
-    local multiplier = 50
-    local velocityImpulseLimit = 15000
-
-    -- PART OF VEHICLE CONTROLS LOGIC
-    IsPlayerInVehicle()
+function VehicleTick(frame) 
+    -- This functions of Player class controls the variable Player.isInVehicle
+    IsPlayerInVehicle() -- this functions should be called in any tick or update of player class not here makes it confusing
 
     if Player.isInVehicle then
-        -- DebugPrint("> Player is in vehicle")
-        local currentVehicle = FindBody("spaceship", true)
-        SetVehicleInput(currentVehicle)
-
-        -- SPACESHIP INPUT
-        if Vehicles.vehicleInput == 'SPACESHIP_INPUT' then
-            SpaceShipInput(multiplier, velocityImpulseLimit, currentVehicle)
+        print("> Player is in vehicle")
+        -- FLY INPUT
+        if Vehicle.spaceship.type == 'FLY' then
+            print("[+] VEHICLE HAS FLY INPUT")
+            if string.find(Vehicle.spaceship.name, 'spaceship') then
+                print("[+] The vehicle is a spaceship.")
+                SpaceshipControls(frame)
+            end
         end
     else
-        ---DebugPrint("x Player is NOT in vehicle")
+        print("x Player is NOT in vehicle")
     end
 end
 
-local cameraXPos = 0
-local cameraYPos = 0
-
-function SpaceShipCameraMovement()
-    DebugPrint(":::::::::: SPACESHIP MOVEMENT :::::::::::")
-    cameraXPos = cameraXPos + InputValue("camerax")
-    cameraYPos = cameraYPos + InputValue("cameray")
-    --DebugPrint("CameraX Pos: " ..tostring(cameraXPos))
-    DebugPrint("CameraY Pos: " ..tostring(cameraYPos))
-    DebugPrint(":::::::::::::::::::::::::::::::::::::::::")
-end
-
-function SpaceShipInput(multiplier, velocityImpulseLimit, currentVehicle)
-    -- SPACESHIP CONTROLS
-    local currentVehiclePos = GetBodyTransform(currentVehicle).pos
-    local pos = Vec(currentVehiclePos[1], currentVehiclePos[2], currentVehiclePos[3])
-    local impulse
-    -- DebugPrint("Position body : " .. VecStr(pos))
-
-    -- INCREASE Y/ FLY UP
-    if InputDown("space") then
-        frame = frame + 1 * multiplier
-        -- The impulse apply impulse based in world coordinates 
-        -- so, this works with Y 
-        impulse = Vec(0, 1 + frame, 0) -- Default 1.0 for y + frame count
-        -- DebugPrint("Impulse Applied in Y : " .. VecStr(impulse))
-
-        if impulse[2] < velocityImpulseLimit then -- Speed Control
-            ApplyBodyImpulse(currentVehicle, pos, impulse)
-        else 
-            -- TODO: MAKE THE BODY STATIC IN AIR LIKE SUSPESION SYSTEM
-            -- DebugPrint("Limit Reachd to Y")
-            frame = 0 
+function SpaceshipControls(frame)
+    local direction = Vec(0, 0, 0)
+    local velocity;
+    local speed = 8;
+    local customSpeed = 1
+    local lastScroll = -1
+    local scroll
+    --local currentVehicle = GetPlayerVehicle()
+    -- You need to get the BODY OF THE CURRENT VEHICLE
+    local currentBodyVehicle = FindBody(Vehicle.spaceship.tag, true)
+    local vehicleTransform = GetVehicleTransform(FindVehicle(Vehicle.spaceship.tag, true))
+    if currentBodyVehicle ~= 0 then
+        print("currentBodyVehicle: ", currentBodyVehicle)
+        if InputDown("up")  then
+            direction[3] = -1
         end
 
-    -- DECREASE Z/ FLY FOWARD
-    -- THIS IS DONT WORK THE IMPULSES MAKES THE DIRECTION BASED IN WORLD AND NOT VEHICLE POS
-    elseif InputDown('up') then
-       -- DebugPrint("GO FOWARD!!!!!!")
-        frame = frame + 1 * multiplier
-        impulse = Vec(0, 0, 1 - frame) -- decrease z making it move forward
-        -- DebugPrint("Impulse Applied in X : " .. VecStr(impulse))
-        -- velocityImpulseLimit = math.abs(0.52) * -1 -- Get absolute value of number (ignoring signal) and reverse it
-        ApplyBodyImpulse(currentVehicle, pos, impulse)
-    else
-        -- TODO: RESET THE VELOCITY
-        frame = 0
+        if InputDown("down") then
+            direction[3] = 1
+        end
+
+        if InputDown("left") then
+            direction[1] = -1
+        end
+
+        if InputDown("right") then
+            direction[1] = 1
+        end
+
+        direction = TransformToParentVec(GetCameraTransform(), Vec(direction[1], 0, direction[3]))
+        print("Direction Transform: ", dump(direction))
+        print("Vehicle Transform: ", dump(vehicleTransform))
+
+        -- SPACE AND CTRL this two values need to be called after direction - TransformToParentVec(....)
+        -- because we reset the direction[2]
+        if(InputDown("space")) then
+            direction[2] = 1
+        end
+
+        if(InputDown("ctrl")) then
+            direction[2] = -1
+        end
+
+        if(InputDown("shift")) then
+            scroll = InputValue("mousewheel")
+
+            if math.abs(scroll) > 0 then
+                lastScroll = GetTime()
+                customSpeed = math.clamp(customSpeed + scroll, 1, 10)
+            end
+            
+            speed = 15 + customSpeed * customSpeed
+        else
+            speed = 8
+        end
+            --ApplyBodyImpulse(currentBodyVehicle, vehicleTransform.pos, direction)
+
+        -- Normalize direction
+        if(VecLength(direction) > 0) then
+            direction = VecNormalize(direction)
+        end
+
+        -- Set velocity
+        velocity = VecScale(direction, speed)
+        velocity[2] = velocity[2] + 0.166666698455811
+        SetBodyVelocity(currentBodyVehicle, velocity)
+
     end
 end
 
-function SetVehicleInput(vehicle)
-    local hasSpaceshipTag = HasTag(vehicle, "spaceship")
-    local hasCarTag = HasTag(vehicle, "car")
-    if hasSpaceshipTag then
-        Vehicles.vehicleInput = 'SPACESHIP_INPUT'
-        -- DebugPrint("+ VEHICLE INPUT SET TO SPACESHIP")
-    elseif hasCarTag then
-        Vehicles.vehicleInput = 'CAR_INPUT'
-       -- DebugPrint("+ VEHICLE INPUT SET TO CAR")
-    else
-        Vehicles.vehicleInput = 'NONE'
-        -- DebugPrint("x VEHICLE INPUT SET TO NONE. PLAYER IS NOT IN VEHICLE")
-    end
-end
-
-
---[[
-::::::::::::::::::::::::::::::::::
-    SPECIFIC VEHICLES SPAWN
-::::::::::::::::::::::::::::::::::
-]]--
-
-function SpawnSpaceShip(vehicle)
-    -- SpawnObjectAccordingPlayerPos(Vehicles.SpaceshipSmall1.xmlPath, 50, 50, 50, true)
+function SpawnVehicle(vehicle)
     local playerPos = GetPlayerTransform().pos
-    Spawn(vehicle.xmlPath, 
-    Transform(Vec(playerPos[1], playerPos[2], playerPos[3])))
-
-    DebugPrint(":::::::::: VEHICLE SPAWNED ::::::::::::::::")
-    local vehicle = FindVehicle(vehicle.name)
-
-    DebugPrint("VEHICLE INSTANCE NUM >> " .. tostring(vehicle))
-    DebugPrint("VEHICLE TRANSFORM >> " .. TransformStr(GetVehicleTransform(vehicle)))
-    DebugPrint("PLAYER TRANSFORM >> " .. TransformStr(GetPlayerTransform()))
-
-    DebugPrint("::::::::::::::::::::::::::::::::::::::::::")
+    local spawnT = Transform(Vec(1.0, playerPos[2], 1.0))
+    Spawn(vehicle.xmlPath, spawnT)
+    
+    -- Check if the vehicle was created
+    local vehicle = FindVehicle(Vehicle.spaceship.name)
+    if vehicle ~= 0 then
+        DebugPrint(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
+        DebugPrint("VEHICLE INSTANCE NUM >> " .. tostring(vehicle))
+        DebugPrint("VEHICLE TRANSFORM >> " .. TransformStr(GetVehicleTransform(vehicle)))
+        DebugPrint("PLAYER TRANSFORM >> " .. TransformStr(GetPlayerTransform()))
+        DebugPrint("::::::::::::::::::::::::::::::::::::::::::")
+    else
+        DebugPrint(":::::::::::::::::RRROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
+    end
 end
