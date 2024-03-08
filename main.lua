@@ -7,6 +7,7 @@
 #include "sources/registry.lua"
 #include "sources/particles.lua"
 #include "sources/debug.lua"
+#include "sources/spawn.lua"
 #include "settings.lua"
 
 local dp;

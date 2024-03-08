@@ -201,7 +201,7 @@ function Debug:worldDebug()
         --local a = (y1 - y2) / (x1 - x2) -- calculate angular coefficient -- dont forget the parenthesis
         --print("[DEBUG CLASS] Angular coefficient (a):\n" .. y1 .. " - " .. y2 .. " / " .. x1 .. " - " .. x2 .. "= " .. a)
         
-        local groupTags = {'star', 'asteroid_default','random_planet', 'rocky_planet', 'gaseous_planet','star_red_giant', 'asteroid', 'planet', 'black_hole', 'natural_satellite'}
+        local groupTags = {'star', 'random_planet', 'asteroid_default','random_planet', 'rocky_planet', 'gaseous_planet','star_red_giant', 'asteroid', 'planet', 'black_hole', 'natural_satellite'}
 
 
         for i=1, #groupTags do

@@ -508,7 +508,7 @@ function CreateBodyForShape(tag)
     local handleShape = FindShape(tag, true)
     local handleShapeBody = GetShapeBody(handleShape) -- For some reason, the body is not created
     if handleShapeBody ~=0 then
-        print("body for " .. tag .. " found with handle: ", handleShapeBody)
+        -- print("body for " .. tag .. " found with handle: ", handleShapeBody)
         SetTag(handleShapeBody, tag)
         --print("Tag setted? ", HasTag(handleShape, tag))
         --if IsBodyActive(handleShapeBody) then
@@ -519,7 +519,7 @@ function CreateBodyForShape(tag)
             --print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
        -- end
     else 
-        print("body for " .. tag .. " not found. ", handleShapeBody)
+        -- print("body for " .. tag .. " not found. ", handleShapeBody)
     end
     return handleShape;
 end
