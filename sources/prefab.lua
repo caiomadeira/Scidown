@@ -462,10 +462,32 @@ function CreateXMLPrefab(prefabProperties, pos)
         "pbr=" .. "'".. prefabProperties.pbr .. "'" .. " " ..
         "color=" .. "'" .. prefabProperties.color .. "'" ..
         " />"
+
+    -- <environment template="sunset"/>
+    elseif (prefabProperties.type =='environment') then
+        base = "<" .. prefabProperties.type .. " " ..
+        "name=" .. "'".. prefabProperties.name .. "'" .. " " ..
+        "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
+        "template=" .. "'".. prefabProperties.template .. "'" .. " " ..
+        "skybox=" .. "'".. prefabProperties.skybox .. "'" .. " " ..
+        "skyboxtint=" .. "'".. prefabProperties.skyboxtint .. "'" .. " " ..
+        "skyboxbrightness=" .. "'".. prefabProperties.skyboxbrightness .. "'" .. " " ..
+        "ambient=" .. "'".. prefabProperties.ambient .. "'" .. " " ..
+        "ambientexponent=" .. "'".. prefabProperties.ambientexponent .. "'" .. " " ..
+        "fogcolor=" .. "'".. prefabProperties.fogcolor .. "'" .. " " ..
+        "fogParams=" .. "'".. prefabProperties.fogParams .. "'" .. " " ..
+        "sunBrightness=" .. "'".. prefabProperties.sunBrightness .. "'" .. " " ..
+        "sunColorTint=" .. "'".. prefabProperties.sunColorTint .. "'" .. " " ..
+        "sunFogScale=" .. "'".. prefabProperties.sunFogScale .. "'" .. " " ..
+        "sunGlare=" .. "'".. prefabProperties.sunGlare .. "'" .. " " ..
+        "brightness=" .. "'".. prefabProperties.brightness .. "'" .. " " .. -- file == brush
+        "nightlight=" .. "'".. prefabProperties.nightlight .. "'" .. " " ..
+        "fogscale=" .. "'" .. prefabProperties.fogscale .. "'" ..
+        " />"
     else 
         print("[x] function() CreateXMLPrefab() | ERROR: The type of vox is not provided. ")
     end
-
+    print("xml created: ", base)
     return base;
 end
 

@@ -1,4 +1,4 @@
-#include "sources/enviroment.lua"
+#include "sources/environment.lua"
 #include "sources/player.lua"
 #include "sources/utils.lua"
 #include "sources/world.lua"
@@ -10,7 +10,6 @@
 #include "settings.lua"
 
 local dp;
-frame = 0
 
 if MOD.DEBUG then
     dp = Debug:new(nil)
@@ -26,7 +25,7 @@ function init()
     print("::::::::::::::::::::::::::::::::::::::::")
 
     --setUpTest()
-    LoadCustomEnvironment(1, false)
+    -- CreateEnvironmentByPrefab(Environment.space1)
     PlayerInit()
     -- CreateDynamicPlanet()
     -- CreateXMLPrefab(Prefabs.moon2, true)
@@ -38,9 +37,9 @@ function init()
 
     -- SpawnObjectAccordingPlayerPos(Prefabs.moon2, 40, 70, 80)
     -- SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
-    SpawnVehicle(Vehicle.spaceship)
+    -- SpawnVehicle(Vehicle.spaceship)
     -- SpawnCelestialBody(CelestialBodies.PLANET, true)
-    -- PopulateSpace()
+    PopulateSpace()
 end
 
 function tick(dt)
@@ -50,8 +49,7 @@ function tick(dt)
     -- print("Player pos 1: " .. VecStr(playerPos))
 
     PlayerTick()
-    frame = frame + 1
-    VehicleTick(frame)
+    -- VehicleTick()
     -- PrintRegistryKeys("game.player.tool")
     -- AddParticleEffect() 
 end

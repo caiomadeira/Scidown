@@ -30,7 +30,7 @@ Vehicle = {
 
 
 -- Call this in main tick()
-function VehicleTick(frame) 
+function VehicleTick() 
     -- This functions of Player class controls the variable Player.isInVehicle
     IsPlayerInVehicle() -- this functions should be called in any tick or update of player class not here makes it confusing
 
@@ -41,7 +41,7 @@ function VehicleTick(frame)
             print("[+] VEHICLE HAS FLY INPUT")
             if string.find(Vehicle.spaceship.name, 'spaceship') then
                 print("[+] The vehicle is a spaceship.")
-                SpaceshipControls(frame)
+                SpaceshipControls()
             end
         end
     else
@@ -49,7 +49,7 @@ function VehicleTick(frame)
     end
 end
 
-function SpaceshipControls(frame)
+function SpaceshipControls()
     local direction = Vec(0, 0, 0)
     local velocity;
     local speed = 8;

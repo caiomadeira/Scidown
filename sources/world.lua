@@ -112,8 +112,8 @@ function PopulateSpace()
     -- SpawnCelestialBody(CelestialBodies.STAR, true)
     local bodiesGenerated = {  }
     local names = {  }
-    local n = tlen(CelestialBodies)
-    print("length func: ", n)
+    local tSize = tlen(CelestialBodies)
+    print("length func: ", tSize)
     for k, _ in pairs(CelestialBodies) do
         table.insert(names, CelestialBodies[k].name)
     end
@@ -135,14 +135,15 @@ Create a custom celestial body with Random (or not) Properties
 **************************************************************
 ]]--
 
-function SpawnCelestialBody(properties, allowRandomSpawn)
+function SpawnCelestialBody(properties, allowRandomSpawn, distance)
     -- :::::::::::::::::::::::::
     -- :::: distanceDivider ::::
     -- :::::::::::::::::::::::::
     -- Provides a magic number wich dividers and change the proximity with player
     -- if the number is high, the proximity withc player is higher, otherwise,
     -- if the number is LOW, the object is FAR from player
-    local distanceDivider = 50.0;
+    local distanceDivider = math.random(2, 8)
+    print("distance divider: ", distanceDivider)
 
     if (properties ~= nil) then
         CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)

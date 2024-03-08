@@ -47,7 +47,7 @@ CONSTANTS = {
     },
 
     SKYBOX = {
-        SPACE = 'space.dds',
+        SPACE = PATH.SKYBOX .. 'space.dds',
     },
     
     SPRITE = {
@@ -61,23 +61,23 @@ CONSTANTS = {
     
         WORLD = {
             ASTEROIDS = {
-                ASTEROID1 = PATH.VOX .. '/world/asteroids/asteroid1.vox',
+                ASTEROID1 = PATH.VOX .. 'world/asteroids/asteroid1.vox',
             },
             PLANETS = {
-                BIG_PLANET_DAMAGED = PATH.VOX .. '/world/planets/big_planet_damaged.vox',
-                BIG_PLANET = PATH.VOX .. '/world/planets/big_planet.vox',
-                DWARF_PLANET = PATH.VOX .. '/world/planets/dwarf_planet.vox',
-                MASSIVE_PLANET = PATH.VOX .. '/world/planets/massive_planet.vox',
+                BIG_PLANET_DAMAGED = PATH.VOX .. 'world/planets/big_planet_damaged.vox',
+                BIG_PLANET = PATH.VOX .. 'world/planets/big_planet.vox',
+                DWARF_PLANET = PATH.VOX .. 'world/planets/dwarf_planet.vox',
+                MASSIVE_PLANET = PATH.VOX .. 'world/planets/massive_planet.vox',
             },
 
             NATURAL_SATELLITES = {
-                MOON1 = PATH.VOX .. '/world/satellites/moon1.vox',
-                MOON2 = PATH.VOX .. '/world/satellites/moon2.vox',
+                MOON1 = PATH.VOX .. 'world/satellites/moon1.vox',
+                MOON2 = PATH.VOX .. 'world/satellites/moon2.vox',
             }, 
 
             STARS = {
-                STAR_REDGIANT = PATH.VOX .. '/world/stars/star_redgiant.vox',
-                STAR1 = PATH.VOX .. '/world/stars/star1.vox'
+                STAR_REDGIANT = PATH.VOX .. 'world/stars/star_redgiant.vox',
+                STAR1 = PATH.VOX .. 'world/stars/star1.vox'
             }
         }
     },

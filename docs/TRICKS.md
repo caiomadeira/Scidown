@@ -11,7 +11,7 @@ https://github.com/Autumnagnificent/Teardown-Totally-Documented/blob/main/Commun
 Custom skybox
 To create a custom skybox for Teardown download this tool (https://www.teardowngame.com/modding/downloadable/skybox-dds.zip) and follow the instructions in readme.txt."
 ```
-place in your mods folder and then in enviroment node (in editor) type: skybox=MOD/my_skybox.dds
+place in your mods folder and then in environment node (in editor) type: skybox=MOD/my_skybox.dds
 
 ---
 ### TICK() - Callback function
