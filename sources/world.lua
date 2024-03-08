@@ -238,8 +238,8 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
     ---------------------------------------------
     -- CREATE A BODY FOR SHAPE AND CHECK IF IS IsBodyActive
     -- For performance reasons, bodies that don't move are taken out of the simulation. 
-    --local handleShape = CreateBodyForShape(prefabProperties)
-    local handleShape = FindShape(prefabProperties.tags, true)
+    local handleShape = CreateBodyForShape(prefabProperties.tags)
+    --local handleShape = FindShape(prefabProperties.tags, true)
     HasShapeCreated(handleShape, prefabProperties, prefabXml)
 
     ------------------------------------------------------

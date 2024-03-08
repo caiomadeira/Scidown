@@ -42,7 +42,10 @@ function init()
     PopulateSpace()
 end
 
-function tick(dt)
+function tick()
+    if dp ~= nil then
+        dp:worldDebug()
+   end
     -- local pos = "3.0 134.0 0.9"
     -- RandomSpawnPosition(pos)
     -- playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))

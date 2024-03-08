@@ -502,24 +502,24 @@ for shape and activated if is dynamic (can movemment)
 
 ]]--
 
-function CreateBodyForShape(prefabProperties)
+function CreateBodyForShape(tag)
     -- CREATE A BODY FOR SHAPE AND CHECK IF IS IsBodyActive
     -- For performance reasons, bodies that don't move are taken out of the simulation. 
-    local handleShape = FindShape(prefabProperties.tags, true)
+    local handleShape = FindShape(tag, true)
     local handleShapeBody = GetShapeBody(handleShape) -- For some reason, the body is not created
     if handleShapeBody ~=0 then
-        print("body for " .. prefabProperties.tags .. " found with handle: ", handleShapeBody)
-        SetTag(handleShapeBody, prefabProperties.tags)
-        print("Tag setted? ", HasTag(handleShape, prefabProperties.tags))
-        if IsBodyActive(handleShapeBody) then
-            print("Body is active.")
-        else
-            print("Body is NOT active.")
-            SetBodyDynamic(handleShapeBody, false)
-            print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
-        end
+        print("body for " .. tag .. " found with handle: ", handleShapeBody)
+        SetTag(handleShapeBody, tag)
+        --print("Tag setted? ", HasTag(handleShape, tag))
+        --if IsBodyActive(handleShapeBody) then
+            --print("Body is active.")
+        --else
+            --print("Body is NOT active.")
+            --SetBodyDynamic(handleShapeBody, false)
+            --print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
+       -- end
     else 
-        print("body for " .. prefabProperties.tags .. " not found. ", handleShapeBody)
+        print("body for " .. tag .. " not found. ", handleShapeBody)
     end
     return handleShape;
 end
