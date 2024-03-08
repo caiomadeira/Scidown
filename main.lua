@@ -40,7 +40,7 @@ function init()
     -- SpawnObjectAccordingPlayerPos(Prefabs.planet1, 70, 20, 20)
     -- SpawnVehicle(Vehicle.spaceship)
     -- SpawnCelestialBody(CelestialBodies.PLANET, true)
-    PopulateSpace()
+    PopulateWorldWith(CelestialBodies)
 end
 
 function tick()

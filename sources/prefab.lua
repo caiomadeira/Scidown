@@ -410,7 +410,7 @@ CreateXMLPrefab()
 
 ]]
 
-function CreateXMLPrefab(prefabProperties, pos)
+function CreateXMLPrefab(prefabProperties)
     local base; 
     local scale = 1;
 
@@ -426,7 +426,7 @@ function CreateXMLPrefab(prefabProperties, pos)
         base = "<" .. prefabProperties.type .. " " ..
         "name=" .. "'".. prefabProperties.name .. "'" .. " " ..
         "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
-        "pos=" .. "'".. pos .. "'" .. " " ..
+        "pos=" .. "'".. prefabProperties.pos .. "'" .. " " ..
         "rot=" .. "'".. prefabProperties.rot .. "'" .. " " ..
         "desc=" .. "'".. prefabProperties.desc .. "'" .. " " ..
         "texture=" .. "'".. prefabProperties.texture .. "'" .. " " ..
@@ -447,7 +447,7 @@ function CreateXMLPrefab(prefabProperties, pos)
         base = "<" .. prefabProperties.type .. " " ..
         "name=" .. "'".. prefabProperties.name .. "'" .. " " ..
         "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
-        "pos=" .. "'".. pos .. "'" .. " " ..
+        "pos=" .. "'".. prefabProperties.pos .. "'" .. " " ..
         "rot=" .. "'".. prefabProperties.rot .. "'" .. " " ..
         "desc=" .. "'".. prefabProperties.desc .. "'" .. " " ..
         "texture=" .. "'".. prefabProperties.texture .. "'" .. " " ..

@@ -183,7 +183,8 @@ function Debug:worldDebug()
         -- World debug line
         --Draw white debug line
         --DebugLine(Vec(0, 0, 0), Vec(-10, 5, -10))
-
+        local celestialBodyShape;
+        local celestialShapeLocalTrans;
         --Draw red debug line
         local x1, y1, z1;
         local x2, y2, z2;
@@ -201,14 +202,16 @@ function Debug:worldDebug()
         --local a = (y1 - y2) / (x1 - x2) -- calculate angular coefficient -- dont forget the parenthesis
         --print("[DEBUG CLASS] Angular coefficient (a):\n" .. y1 .. " - " .. y2 .. " / " .. x1 .. " - " .. x2 .. "= " .. a)
         
-        local groupTags = {'star', 'random_planet', 'asteroid_default','random_planet', 'rocky_planet', 'gaseous_planet','star_red_giant', 'asteroid', 'planet', 'black_hole', 'natural_satellite'}
+        local groupTags = {'star', 'random_planet', 
+        'asteroid_default','random_planet', 'rocky_planet', 
+        'gaseous_planet','star_red_giant', 'asteroid', 'planet',
+         'black_hole', 'natural_satellite'}
 
 
         for i=1, #groupTags do
-            local celestialBodyShape = CreateBodyForShape(groupTags[i])
-            local celestialShapeLocalTrans = GetShapeLocalTransform(celestialBodyShape).pos
+            celestialBodyShape = CreateBodyForShape(groupTags[i])
+            celestialShapeLocalTrans = GetShapeLocalTransform(celestialBodyShape).pos
             --print("celestialShapeLocalTrans:", dump(celestialShapeLocalTrans))
-    
             DebugLine(p1, celestialShapeLocalTrans, math.random(0, 1), math.random(0, 1), math.random(0, 1))
         end
     end

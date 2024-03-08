@@ -80,44 +80,25 @@ CelestialBodies = {
     ]]--
 }
 
-function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider) 
-    print("[+] function() CreateCelestialBody() | properties @param: ", dump(properties))
-
+function CreateCelestialBody(properties, randomSpawn, rangeInterval) 
+    randomSpawn = randomSpawn or true -- set default param if user doesn't provide
     -- Table values
     -- This values are special beacause they need to be converted to a table
     local prefabProperties = properties.prefab; -- Separete prefab properties
-    local randomSpawnPos;
-    -- The object (prefab) position, rotiation, color and size as STRING
-    local prefabPositionStr, prefabRotationStr;
-    -- local  prefabColorStr, prefabSizeStr; 
-    local prefabPositionTable, prefabRotationTable;
-    -- local prefabColorTable, prefabSizeTable;
-        print("[+] function() CreateCelestialBody() | prefab: ", dump(prefabProperties))
-        print("[+] function() CreateCelestialBody() | prefab.properfties pos: ", prefabProperties.pos)
 
-    if allowRandomSpawn == true then
-        randomSpawnPos = ConvertTableToStr(RandomizeObjectPosition(prefabProperties.pos, distanceDivider))
-        print("[+] function() CreateCelestialBody() | prebProperties.pos: spawn RANDOM" .. dump(randomSpawnPos))
-    else 
-        print("[+] function() CreateCelestialBody() | Prefab Default spawn - Not randomized prefabProperties.pos.")
-        -- Its important to have disponible this values as vector or integer
-        -- because we gone use later in this function to pass in Spawn
-        -- prefabPositionTable = ConvertStrToTable(prefabProperties.pos)
-        -- prefabRotationTable = ConvertStrToTable(prefabProperties.rot)
-        -- prefabColorTable = GetTableValuesFromProperties(prefabProperties, 'color')
-        -- prefabSizeTable = GetTableValuesFromProperties(prefabProperties, 'size')
+    
+    --[[
+    ***********************************************
+        Prefab position 
+
+        - 1. Allows random position
+        - 2. Allows manual position
+    ***********************************************
+     ]]--
+    if randomSpawn == true then
+        prefabProperties.pos = ConvertTableToStr(RandomPosition(rangeInterval))
+        print("[+] CreateCelestialBody() | spawn RANDOM" .. prefabProperties.pos)
     end
-
-        -- We dont need to convert str to str its unnecessary
-        --prefabPositionStr = ConvertTableToStr(prefabPositionTable)
-        --print("pos str: ", prefabPositionStr)
-
-        --prefabRotationStr = ConvertTableToStr(prefabRotationTable)
-        --print("pos rot: ", prefabRotationStr)
-        --print("pass pos rot")
-
-    -- prefabColorStr = ConvertTableToStr(colorValues)  -- not used yet
-    -- prefabSizeStr = ConvertTableToStr(sizeValues) -- not used yet
 
     -- Configure object properties if a type is given (objects properties are optionals)
     -- Check if the prefab name matches with property name
@@ -129,16 +110,13 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
         elseif (prefabProperties.name == string.lower('ASTEROID')) then
             print(">>>>>>> Asteroid config")
             _AsteroidConfiguration(prefabProperties, properties)
+
         elseif (prefabProperties.name == string.lower('PLANET')) then
             print(">>>>>>> Planet config")
             _PlanetConfiguration(prefabProperties, properties)
-            --_StarConfiguration(prefabProperties, properties)
-            -- TODO: Need to check the moonCount to spawn in planets orbits
-            --if (properties.moonCount > 0) then
-                --_NaturalSatelliteConfiguration(prefabProperties, properties)
-            --end
+
         else    
-            print("[!] No prefab confiuration function. Setting as default prefab table config.")
+            print("[!] No prefab configuration for".. prefabProperties.name .. " Setting as default prefab table config.")
         end
     end
 
@@ -150,16 +128,7 @@ function CreateCelestialBody(properties, allowRandomSpawn, distanceDivider)
     -- THE SPAWN TRANSFORM IS ANOTHER PARAM AND I DON'T KNOW WHY I NEED THIS beacause
     -- THE PREFAB ALREADY HAS.
     --local spawnTransform = Transform(Vec(pos[1], pos[2], pos[3]))
-    local spawnTransform;
-    if allowRandomSpawn == true then
-        -- true = table setted based RANDOMIZED spawn
-        print("random spawn")
-        spawnTransform = Transform(randomSpawnPos)
-    else
-        -- false = prefab table setted spawn - DEFAULT
-        print("default spawn")
-        spawnTransform = Transform(ConvertStrToTable(prefabProperties.pos))
-    end
+    local spawnTransform = Transform(ConvertStrToTable(prefabProperties.pos))
     Spawn(prefabXml, spawnTransform, true)
     ---------------------------------------------
     -- BODY AND SHAPE RULES
