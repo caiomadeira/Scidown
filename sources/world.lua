@@ -260,7 +260,6 @@ function _PlanetConfiguration(prefabProperties, properties)
         prefabProperties.tags = "ocean_planet"
     
     elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.RANDOM) then
-        local rot = GetTableValuesFromProperties(prefabProperties, 'rot')
         prefabProperties.tags = "random_planet"
         prefabProperties.desc = "A Random Planet."
         prefabProperties.rot = '0.0 0.0 0.0'
