@@ -207,12 +207,11 @@ function Debug:worldDebug()
         'gaseous_planet','star_red_giant', 'asteroid', 'planet',
          'black_hole', 'natural_satellite'}
 
-
         for i=1, #groupTags do
             celestialBodyShape = CreateBodyForShape(groupTags[i])
             celestialShapeLocalTrans = GetShapeLocalTransform(celestialBodyShape).pos
             --print("celestialShapeLocalTrans:", dump(celestialShapeLocalTrans))
-            DebugLine(p1, celestialShapeLocalTrans, math.random(0, 1), math.random(0, 1), math.random(0, 1))
+            DebugLine(p1, celestialShapeLocalTrans, 1, 1, 0)
         end
     end
 end

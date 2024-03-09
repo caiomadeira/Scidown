@@ -35,8 +35,11 @@ function PopulateWorldWith(EntityGroup) -- EntityGroup as world properties prefa
 
         -- 2. Iterate over entity prefab buffer and select prefabs to spawn
         -- based in count
+        local rangeSpawnValues = { 'LOW', 'MEDIUM', 'HIGH'}
         for i=1, maxEntityAmount do
-            CreateCelestialBody(entityPrefabBuffer[i], true, 'LOW')
+            for j=1, #rangeSpawnValues do
+                CreateCelestialBody(entityPrefabBuffer[i], true, rangeSpawnValues[j])
+            end
         end
     end
 end
@@ -47,21 +50,21 @@ function RandomPosition(rangeInterval)
 
     -- World constants values
     if rangeInterval == 'HIGH' then
-        x = math.random(-300, 300) -- width min max
-        y = math.random(-150, 150) -- height min max
-        z = math.random(-300, 300) -- depth min max
+        x = math.random(-200, 240) -- width min max
+        y = math.random(-20, 130) -- height min max
+        z = math.random(-260, 260) -- depth min max
     elseif rangeInterval == 'MEDIUM' then
-        x = math.random(math.random(-240, -120), math.random(120, 240))
-        y = math.random(math.random(-120, -80), math.random(80, 150))
-        z = math.random(math.random(-240, -120), math.random(120, 240))
+        x = math.random(-120, 200)
+        y = math.random(-80, 110)
+        z = math.random(-120, 240)
     elseif rangeInterval == 'LOW' then
-        x = math.random((-300 / 3), (300 / 3))
-        y = math.random((-150 / 3), (150 / 3))
-        z = math.random((-300 / 3), (300 / 3))
-    else
         x = math.random(-300, 300)
-        y = math.random(-150, 150)
-        z = math.random(-300, 300)
+        y = math.random(-50, 100)
+        z = math.random(-300 / 3, 300)
+    else
+        x = math.random(-80, 80)
+        y = math.random(-20, 120)
+        z = math.random(-80, 80)
     end
 
     pos = Vec(x, y, z)
