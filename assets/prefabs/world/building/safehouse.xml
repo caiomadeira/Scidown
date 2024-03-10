@@ -1,8 +1,0 @@
-<prefab version="1.5.3">
-	<group name="safehouse" tags="safehouse" pos="0.0 0.0 0.0">
-		<group name="structure" pos="0.0 0.0 -6.9">
-			<voxbox name="ground" pos="-15.8 -1.0 -10.9" rot="0.0 0.0 0.0" size="250 10 250" material="metal" color="0.5 0.5 0.5"/>
-		</group>
-	</group>
-</prefab>
-
