@@ -117,13 +117,3 @@ function PlayerDebugInfo()
     DebugPrint("[>] Player Velocity: ".. VecStr(pVelocity))
     DebugPrint(":::::::: END PLAYER DEBUG :::::::::")
   end
-
-  function IsPlayerInVehicle()
-     local currentVehicle = GetPlayerVehicle()
-     if currentVehicle ~= 0 then -- Vehicle handle may be different of 0 // return 0 if the player is not in vehicle
-        Player.isInVehicle = true
-     else
-        Player.isInVehicle = false
-     end
-     return currentVehicle
-end

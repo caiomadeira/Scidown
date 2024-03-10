@@ -25,8 +25,7 @@ function init()
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     PlayerInit()
-    -- SpawnVehicle(Vehicle.spaceship)
-    -- SpawnCelestialBody(CelestialBodies.PLANET, true)
+    SpawnVehicle(Vehicle.spaceship)
     PopulateWorldWith(CelestialBodies)
 end
 
@@ -36,7 +35,7 @@ function tick()
    end
 
     PlayerTick()
-    -- VehicleTick()
+    VehicleTick()
     -- PrintRegistryKeys("game.player.tool")
     -- AddParticleEffect() 
 end

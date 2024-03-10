@@ -226,3 +226,10 @@ function RandomStringRGB()
 
     return rgbString;
 end
+
+-- function AorB(a, b, d) -  I change the name for DxorDy to be cmore specific and contextual
+-- Function from Vehicle Enhancement Mod (The propuse of this still a mystery)
+-- But it's like a VecSub() + math.random(x, y) (I think)
+function DxorDy(a, b, d)
+    return (a and d or 0) - (b and d or 0)
+end
