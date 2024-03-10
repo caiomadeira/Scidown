@@ -24,7 +24,6 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
-
     PlayerInit()
     -- SpawnVehicle(Vehicle.spaceship)
     -- SpawnCelestialBody(CelestialBodies.PLANET, true)

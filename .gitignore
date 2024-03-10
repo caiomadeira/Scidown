@@ -44,3 +44,5 @@ TODO.txt
 
 # C compiler files
 *.obj 
+
+/tdlogger/

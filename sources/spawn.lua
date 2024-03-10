@@ -33,13 +33,13 @@ function PopulateWorldWith(EntityGroup) -- EntityGroup as world properties prefa
             end
         end
 
+        -- Check if 
+
         -- 2. Iterate over entity prefab buffer and select prefabs to spawn
         -- based in count
         local rangeSpawnValues = { 'LOW', 'MEDIUM', 'HIGH'}
         for i=1, maxEntityAmount do
-            for j=1, #rangeSpawnValues do
-                CreateCelestialBody(entityPrefabBuffer[i], true, rangeSpawnValues[j])
-            end
+            CreateCelestialBody(entityPrefabBuffer[i], true, rangeSpawnValues[i])
         end
     end
 end
