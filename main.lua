@@ -1,0 +1,56 @@
+#include "sources/environment.lua"
+#include "sources/player.lua"
+#include "sources/utils.lua"
+#include "sources/world.lua"
+#include "sources/prefab.lua"
+#include "sources/vehicle/vehicle.lua"
+#include "sources/registry.lua"
+#include "sources/particles.lua"
+#include "sources/debug.lua"
+#include "sources/spawn.lua"
+#include "settings.lua"
+
+local dp;
+
+if MOD.DEBUG then
+    dp = Debug:new(nil)
+else
+    print("Debug is disabled. local dp is nil.")
+end
+
+function init()
+    print("::::::::::::::::::::::::::::::::::::::::")
+    print("::::::::::::::::::::::::::::::::::::::::")
+    print("::::::::::   INIT SCIDOWN MOD    :::::::")
+    print("::::::::::::::::::::::::::::::::::::::::")
+    print("::::::::::::::::::::::::::::::::::::::::")
+    PlayerInit()
+    -- SpawnVehicle(Vehicle.spaceship)
+    -- SpawnCelestialBody(CelestialBodies.PLANET, true)
+    PopulateWorldWith(CelestialBodies)
+end
+
+function tick()
+    if dp ~= nil then
+        dp:worldDebug()
+   end
+
+    PlayerTick()
+    -- VehicleTick()
+    -- PrintRegistryKeys("game.player.tool")
+    -- AddParticleEffect() 
+end
+
+function update(dt)
+   if dp ~= nil then
+        dp:flyMode()
+   end
+    -- PlayerDebugInfo()
+    PlayerUpdate(dt)
+end
+
+function draw(dt)
+    if dp ~= nil then
+        dp:UIDebug()
+    end
+end
