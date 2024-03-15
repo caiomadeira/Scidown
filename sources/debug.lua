@@ -5,7 +5,6 @@
 
 
  -- Meta Class
-
 Debug = { 
     enableDebug = MOD.DEBUG,
     enableFlyMode = false,
@@ -14,13 +13,12 @@ Debug = {
 }
 
 -- Derived Class method new
-
 function Debug:new(o, enableUILog) 
     o = o or { } -- Create an object if user does not provide one
     setmetatable(o, self)
     self.__index = self
     self.enableDebug = MOD.DEBUG
-    self.enableFlyMode = self.enableDebug or false
+    self.enableFlyMode = false
     self.enableUILog = enableUILog or self.enableDebug
     self.enableUIWorld = enableUILog or self.enableUIWorld
     if self.enableDebug then

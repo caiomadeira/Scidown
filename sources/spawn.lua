@@ -72,3 +72,30 @@ function RandomPosition(rangeInterval)
     print("[+] RandomPosition: RandomPosition: ", VecStr(pos))
     return pos;
 end
+
+function SpawnPlayer(where)
+    local t
+    if where == 'zero' then
+        t = Transform(Vec(Player.SpawnPoints.zero[1],
+                            Player.SpawnPoints.zero[2],
+                            Player.SpawnPoints.zero[3]), 
+                            QuatEuler(0, 0, 0))
+        SetPlayerSpawnTransform(t)
+
+    elseif where == 'safehouse' then
+        t = Transform(Vec(Player.SpawnPoints.safehouse[1],
+                            Player.SpawnPoints.safehouse[2],
+                            Player.SpawnPoints.safehouse[3]), 
+                            QuatEuler(180, 0, 0))
+        SetPlayerSpawnTransform(t)
+
+    elseif where == 'testLocation' then
+        t = Transform(Vec(Player.SpawnPoints.testLocation[1],
+                            Player.SpawnPoints.testLocation[2],
+                            Player.SpawnPoints.testLocation[3]), 
+                            QuatEuler(0, 0, 0))
+        SetPlayerSpawnTransform(t)
+    else
+        DebugPrint("Error: 'where' param passed is not allowed.")
+    end
+end

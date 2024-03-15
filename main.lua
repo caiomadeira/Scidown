@@ -11,6 +11,7 @@
 #include "settings.lua"
 
 local dp;
+local player;
 
 if MOD.DEBUG then
     dp = Debug:new(nil)
@@ -24,28 +25,30 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
-    PlayerInit()
+    player = Player:new(nil)
     SpawnVehicle(Vehicle.spaceship)
     PopulateWorldWith(CelestialBodies)
 end
 
-function tick()
+-- ************************************
+-- **** START LIFE CYCLE FUNCTIONS ****
+-- ************************************
+function tick(dt)
     if dp ~= nil then
         dp:worldDebug()
    end
 
-    PlayerTick()
+    player:tick(dt)
     VehicleTick()
-    -- PrintRegistryKeys("game.player.tool")
-    -- AddParticleEffect() 
 end
 
 function update(dt)
    if dp ~= nil then
         dp:flyMode()
    end
-    -- PlayerDebugInfo()
-    PlayerUpdate(dt)
+
+   player:update(dt)
+
 end
 
 function draw(dt)
@@ -53,3 +56,6 @@ function draw(dt)
         dp:UIDebug()
     end
 end
+-- ************************************
+-- **** END LIFE CYCLE FUNCTIONS ****
+-- ************************************
