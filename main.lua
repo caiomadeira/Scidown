@@ -26,6 +26,7 @@ function init()
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     player = Player:new(nil)
+    player:init()
     SpawnVehicle(Vehicle.spaceship)
     PopulateWorldWith(CelestialBodies)
 end

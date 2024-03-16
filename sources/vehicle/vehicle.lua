@@ -2,18 +2,6 @@
 #include "sources/player.lua"
 #include "sources/utils.lua"
 
---[[ 
-Vehicle = {
-    spaceship = {
-        name = 'spaceship_small1',
-        type = 'FLY',
-        xmlPath = CONSTANTS.PREFAB.VEHICLES.SPACESHIP_SMALL1,
-        voxPath = CONSTANTS.VOX.VEHICLES.SPACESHIP_SMALL1,
-        velocity = 50,
-        tag='spaceship'
-    },
-}
-]]
 
 chopperShootSound = LoadSound("chopper-shoot0.ogg")
 chopperRocketSound = LoadSound("tools/launcher0.ogg")
@@ -38,26 +26,23 @@ Vehicle = {
     }
 }
 
-
 -- Call this in main tick()
 function VehicleTick() 
-    -- This functions of Player class controls the variable Player.isInVehicle
-    IsPlayerInVehicle() -- this functions should be called in any tick or update of player class not here makes it confusing
-
-    if Player.isInVehicle then
-        -- print("> Player is in vehicle")
+    if Player.State.isInVehicle then
+        print("> Player is in vehicle")
         if Vehicle.spaceship.type == 'FLY' then
-            if string.find(Vehicle.spaceship.name, 'spaceship') then
-                -- SpaceshipControls()
-                if InputPressed("i") then machineGunMode = not machineGunMode end
-
-                VehicleCondition(Vehicle.spaceship.tag)
-                VehicleWeapon()
-                SpaceshipControls2()
-            end
+            SetupAircraftVehicle()
         end
     else
-        --print("x Player is NOT in vehicle")
+        print("x Player is NOT in vehicle")
+    end
+end
+
+function SetupAircraftVehicle()
+    if string.find(Vehicle.spaceship.name, 'spaceship') then
+        if InputPressed("i") then machineGunMode = not machineGunMode end
+        VehicleCondition(Vehicle.spaceship.tag)
+        AircraftControl()
     end
 end
 
@@ -67,9 +52,7 @@ function VehicleCondition(vehicleTag)
     print("Vehicle Health: ", health)
     if health == 0 then
         Vehicle.Status.isDead = true
-        print("Vehicle is dead")
     end
-    -- if health == 
 end
 
 -- Spaceship weaponsEnabled
@@ -114,7 +97,7 @@ function VehicleWeapon()
     end
 end
 
-function SpaceshipCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehicleVelocity)
+function AircraftCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehicleVelocity)
     local mouseDx = InputValue("mousedx");
     local mouseDy = InputValue("mousedy");
     local cameraDistance = 7; --magic number for camera distance 
@@ -149,7 +132,7 @@ function SpaceshipCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehic
     end
 end
 
-function SpaceshipControls2()
+function AircraftControl()
     local direction; -- target2
     local distance = InputDown('shift') and 6 or 2 -- dist
     local vehicleBody = GetVehicleBody(GetPlayerVehicle())
@@ -159,7 +142,7 @@ function SpaceshipControls2()
 
     if not Vehicle.Status.isDead then
         -- Camera 
-        SpaceshipCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehicleVelocity)
+        AircraftCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehicleVelocity)
         -- Weapon 
         VehicleWeapon()
 
@@ -193,14 +176,4 @@ function SpawnVehicle(vehicle)
     else
         DebugPrint(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
     end
-end
-
-function IsPlayerInVehicle()
-    local currentVehicle = GetPlayerVehicle()
-    if currentVehicle ~= 0 then -- Vehicle handle may be different of 0 // return 0 if the player is not in vehicle
-       Player.isInVehicle = true
-    else
-       Player.isInVehicle = false
-    end
-    return currentVehicle
 end

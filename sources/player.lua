@@ -37,6 +37,17 @@ function Player:new(o)
     return o;
 end
 
+function Player:IsInVehicle()
+    local currentVehicle = GetPlayerVehicle()
+    if currentVehicle ~= 0 then -- Vehicle handle may be different of 0 // return 0 if the player is not in vehicle
+       Player.State.isInVehicle = true
+    else
+        Player.State.isInVehicle = false
+    end
+    return Player.State.isInVehicle
+end
+
+
 -- ************************************
 -- **** START LIFE CYCLE FUNCTIONS ****
 -- ************************************
@@ -53,6 +64,7 @@ end
 
 -- Derived class method tick
 function Player:tick(dt)
+    self.IsInVehicle(nil)
     -- Gravity Jump
     if self.Movement.gravityAffects then
         if InputPressed("jump") then
@@ -95,3 +107,4 @@ function PlayerJumpGravity(dt)
         SetPlayerVelocity(VecAdd(pVelocity,  Vec(0, dt * 10, 0)))
     end
 end
+
