@@ -23,7 +23,7 @@ Player = {
 
     SpawnPoints = {
         zero = {0.0, 0.0, 0.0},
-        safehouse = { 8.0, 0.0, -14.0},
+        safehouse = { 1.0, 0.0, -14.0},
         testLocation = { 50.0, 25.0, 23.0 }
     }
 }
@@ -47,7 +47,7 @@ function Player:init()
     else
         SetPlayerRegenerationState(false)
     end
-    SpawnPlayer('safehouse')
+    --SpawnPlayer('safehouse')
 end
 
 
@@ -75,7 +75,6 @@ end
 
 -- Derived class method update
 function Player:update(dt)
-    print("dt", dt)
     if Player.Status.disableAllWeapons then
         DisablePlayerDefaultTools() -- Need to be called in tick or update
     end
@@ -85,7 +84,7 @@ end
 -- **** END LIFE CYCLE FUNCTIONS ****
 -- ************************************
 
--- Derived class method jump
+-- Global Function for Jump (put in class as local)
 function PlayerJumpGravity(dt)
     local playerY = GetPlayerTransform().pos[2]
     local pVelocity = GetPlayerVelocity()

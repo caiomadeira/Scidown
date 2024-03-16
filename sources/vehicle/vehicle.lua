@@ -15,7 +15,13 @@ Vehicle = {
 }
 ]]
 
--- Meta Class
+chopperShootSound = LoadSound("chopper-shoot0.ogg")
+chopperRocketSound = LoadSound("tools/launcher0.ogg")
+machineGunMode = true
+
+shootTimer = 0
+weaponsEnabled = true
+
 
 Vehicle = {
     spaceship = {
@@ -25,6 +31,10 @@ Vehicle = {
         xmlPath = CONSTANTS.PREFAB.VEHICLES.SPACESHIP_SMALL1,
         voxPath = CONSTANTS.VOX.VEHICLES.SPACESHIP_SMALL1,
         velocity = 50,
+    },
+
+    Status = {
+        isDead = false,
     }
 }
 
@@ -35,18 +45,72 @@ function VehicleTick()
     IsPlayerInVehicle() -- this functions should be called in any tick or update of player class not here makes it confusing
 
     if Player.isInVehicle then
-        print("> Player is in vehicle")
-        -- FLY INPUT
+        -- print("> Player is in vehicle")
         if Vehicle.spaceship.type == 'FLY' then
-            print("[+] VEHICLE HAS FLY INPUT")
             if string.find(Vehicle.spaceship.name, 'spaceship') then
-                print("[+] The vehicle is a spaceship.")
                 -- SpaceshipControls()
+                if InputPressed("i") then machineGunMode = not machineGunMode end
+
+                VehicleCondition(Vehicle.spaceship.tag)
+                VehicleWeapon()
                 SpaceshipControls2()
             end
         end
     else
-        print("x Player is NOT in vehicle")
+        --print("x Player is NOT in vehicle")
+    end
+end
+
+-- Vehicle Condition
+function VehicleCondition(vehicleTag)
+    local health = GetVehicleHealth(FindVehicle(vehicleTag))
+    print("Vehicle Health: ", health)
+    if health == 0 then
+        Vehicle.Status.isDead = true
+        print("Vehicle is dead")
+    end
+    -- if health == 
+end
+
+-- Spaceship weaponsEnabled
+function VehicleWeapon()
+    local vehicleBody = GetVehicleBody(GetPlayerVehicle())
+    local vehicleTransform = GetBodyTransform(vehicleBody)
+    local aimPosition;
+    local spread;
+
+    if not Vehicle.Status.isDead then
+        if weaponsEnabled and InputDown("lmb") and shootTimer == 0 then
+            if machineGunMode then
+                PlaySound(chopperShootSound, vehicleTransform.pos, 5, false)
+                aimPosition = TransformToParentPoint(vehicleTransform, Vec(0, 0, -1))
+                spread = 0.07
+            else
+                PlaySound(chopperRocketSound, vehicleTransform.pos, 5, false)
+                aimPosition = TransformToParentPoint(vehicleTransform, Vec(0, 0, -1))
+                spread = 0.01
+            end
+            local pos = vehicleTransform.pos
+            local dir = VecNormalize(VecSub(aimPosition, pos))
+            dir[1] = dir[1] + (math.random()-0.5)*2*spread
+            dir[2] = dir[2] + (math.random()-0.5)*2*spread
+            dir[3] = dir[3] + (math.random()-0.5)*2*spread
+            dir = VecNormalize(dir)
+            pos = VecAdd(pos, VecScale(dir, 5))
+            if machineGunMode then
+                Shoot(pos, dir, "bullet")
+                shootTimer = 0.1
+            else
+                Shoot(pos, dir, "rocket", 1)
+                shootTimer = 0.33
+            end
+        end
+
+        if shootTimer > 0 then
+            shootTimer = shootTimer - GetTimeStep()
+        else
+            shootTimer = 0
+        end
     end
 end
 
@@ -89,90 +153,30 @@ function SpaceshipControls2()
     local direction; -- target2
     local distance = InputDown('shift') and 6 or 2 -- dist
     local vehicleBody = GetVehicleBody(GetPlayerVehicle())
-    local vehicleTransform = GetBodyTransform(vehicleBody)
     local vehicleVelocity = GetBodyVelocity(vehicleBody)
+    local vehicleTransform = GetBodyTransform(vehicleBody)
     local currentVehiclePos = vehicleTransform.pos
 
-    -- Camera 
-    SpaceshipCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehicleVelocity)
+    if not Vehicle.Status.isDead then
+        -- Camera 
+        SpaceshipCamera(currentVehiclePos, vehicleBody, vehicleTransform, vehicleVelocity)
+        -- Weapon 
+        VehicleWeapon()
 
-    if vehicleBody ~= 0 then
-        if not direction or (VecLength(vehicleVelocity) > 1) then
-            direction = currentVehiclePos
-        end
-    
-        if InputDown('up') then
-            distance = InputDown('ctrl') and distance / 2 or distance
-            direction = VecAdd(direction, TransformToParentVec(vehicleTransform, Vec(0, 0, -distance)))
-            SetBodyVelocity(vehicleBody, VecScale(VecSub(direction, currentVehiclePos), 10))
-        end
-    end
-end
-
-
-
---[[
-function SpaceshipControls()
-    local direction = Vec(0, 0, 0)
-    local velocity;
-    local speed = 8;
-    local customSpeed = 1
-    local scroll
-    --local currentVehicle = GetPlayerVehicle()
-    -- You need to get the BODY OF THE CURRENT VEHICLE
-    local currentBodyVehicle = FindBody(Vehicle.spaceship.tag, true)
-    local vehicleTransform = GetVehicleTransform(FindVehicle(Vehicle.spaceship.tag, true))
-    if currentBodyVehicle ~= 0 then
-        print("currentBodyVehicle: ", currentBodyVehicle)
-        if InputDown("up")  then
-            direction[3] = -1
-        end
-
-        if InputDown("down") then
-            direction[3] = 1
-        end
-
-        if InputDown("left") then
-            direction[1] = -1
-        end
-
-        if InputDown("right") then
-            direction[1] = 1
-        end
-        direction = TransformToParentVec(vehicleTransform, Vec(direction[1], direction[2], direction[3]))
-
-        -- SPACE AND CTRL this two values need to be called after direction - TransformToParentVec(....)
-        -- because we reset the direction[2]
-        if(InputDown("space")) then
-            direction[2] = 1
-        end
-
-        if(InputDown("ctrl")) then
-            direction[2] = -1
-        end
-
-        if(InputDown("shift")) then
-            local impulse = Vec(direction[1], 0, 0)
-            if (GetBodyVelocity(currentBodyVehicle) == Vec(0, 0, 0)) then
-                ApplyBodyImpulse(currentBodyVehicle, 
-                GetBodyTransform(currentBodyVehicle), impulse)
+        if vehicleBody ~= 0 then
+            if not direction or (VecLength(vehicleVelocity) > 1) then
+                direction = currentVehiclePos
+            end
+        
+            if InputDown('up') then
+                distance = InputDown('ctrl') and distance / 2 or distance
+                direction = VecAdd(direction, TransformToParentVec(vehicleTransform, Vec(0, 0, -distance)))
+                SetBodyVelocity(vehicleBody, VecScale(VecSub(direction, currentVehiclePos), 10))
             end
         end
-        -- Normalize direction
-        if(VecLength(direction) > 0) then
-            direction = VecNormalize(direction)
-        end
-
-        print("Direction Transform: ", dump(direction))
-        print("Vehicle Transform: ", dump(vehicleTransform))
-
-        -- Set velocity
-        velocity = VecScale(direction, speed)
-        velocity[2] = velocity[2] + 0.166666698455811
-        SetBodyVelocity(currentBodyVehicle, velocity)
     end
 end
-]]--
+
 function SpawnVehicle(vehicle)
     local playerPos = GetPlayerTransform().pos
     local spawnT = Transform(Vec(1.0, playerPos[2], 1.0))
@@ -187,7 +191,7 @@ function SpawnVehicle(vehicle)
         DebugPrint("PLAYER TRANSFORM >> " .. TransformStr(GetPlayerTransform()))
         DebugPrint("::::::::::::::::::::::::::::::::::::::::::")
     else
-        DebugPrint(":::::::::::::::::RRROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
+        DebugPrint(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
     end
 end
 

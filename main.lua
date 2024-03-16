@@ -46,9 +46,7 @@ function update(dt)
    if dp ~= nil then
         dp:flyMode()
    end
-
    player:update(dt)
-
 end
 
 function draw(dt)
