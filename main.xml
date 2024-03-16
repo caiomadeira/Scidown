@@ -1,7 +1,6 @@
 <scene version="1.5.4" name="level1" tags="level1" shadowVolume="300 150 300">
 	<script file="main.lua" param0="disabletools=false"/>
 	<script pos="0.0 1.9 0.0" file="sandbox.lua"/>
-	<voxbox name="safehouse-base" pos="-5.2 0.0 -20.3" rot="0.0 0.0 0.0" size="200 10 350" color="0.5 0.5 0.5"/>
 	<environment name="space1" template="sunset" tags="space1" skybox="MOD/assets/skybox/space.dds" skyboxtint="0.01 0.01 0.01" skyboxbrightness="10" ambient="50" ambientexponent="500000" fogParams="0 0 0 0" sunBrightness="10" sunColorTint="1.0 1.0 1.0" sunFogScale="0.05" sunGlare="0.3" brightness="1" nightlight="false" fogscale="0.0"/>
 </scene>
 

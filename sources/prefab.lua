@@ -1,5 +1,72 @@
 #include "sources/commons/constants.lua"
 
+Building = {
+    safehouse = {
+        base = {
+            type = "voxbox",
+            name = "safehouse",
+            tags = "safehouse",
+            pos = "1.0 4.0 2.0",
+            rot = "0.0 0.0 0.0",
+            desc ="A safehouse",
+            texture = "",
+            blendtexture = "",
+            density = "100",
+            strength = "100",
+            size = "128 90 128",
+            collide = "true",
+            prop = "false",
+            brush = "MOD/assets/vox/world/safehouse/safehouse.vox",
+            material = "heavymetal",
+            pbr= "0 0 0 0",
+            color = "0.5 0.5 0.5"
+        },
+
+        ground = {
+            type = "voxbox",
+            name = "safehouse",
+            tags = "safehouse",
+            pos = "0.0 0.0 0.0",
+            rot = "0.0 0.0 0.0",
+            desc ="A safehouse",
+            texture = "",
+            blendtexture = "",
+            density = "100",
+            strength = "100",
+            size = "185 80 184",
+            collide = "true",
+            prop = "false",
+            brush = "MOD/assets/vox/world/safehouse/safehouse_ground.vox",
+            material = "heavymetal",
+            pbr= "0 0 0 0",
+            color = "0.5 0.5 0.5"
+        },
+
+        tube = {
+            type = "voxbox",
+            name = "safehouse",
+            tags = "safehouse",
+            pos = "-5.2 0.0 -20.3",
+            rot = "0.0 0.0 0.0",
+            desc ="A safehouse",
+            texture = "10",
+            blendtexture = "10",
+            density = "10",
+            strength = "10",
+            size = "128 90 128",
+            collide = "true",
+            prop = "false",
+            brush = "MOD/assets/vox/world/safehouse/safehouse_tubes.vox",
+            material = "heavymetal",
+            pbr= "1 1 1 32",
+            color = "0.5 0.5 0.5"
+        },
+
+    },
+
+
+}
+
 Prefabs = {
     naturalSatellite = {
         type = "voxbox",
@@ -100,7 +167,6 @@ Prefabs = {
         pbr= "0 0 0 10",
         color = '0.0 0.0 0.0'
     },
-
 
     Particles = {
         nebulosa = {

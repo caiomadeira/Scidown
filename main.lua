@@ -25,10 +25,12 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
+    SpawnPlayer('safehouse')
     player = Player:new(nil)
     player:init()
     SpawnVehicle(Vehicle.spaceship)
     PopulateWorldWith(CelestialBodies)
+    SpawnStructure('safehouse')
 end
 
 -- ************************************

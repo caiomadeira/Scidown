@@ -22,8 +22,8 @@ Player = {
     },
 
     SpawnPoints = {
-        zero = {0.0, 0.0, 0.0},
-        safehouse = { 1.0, 0.0, -14.0},
+        zero = { 0.0, 0.0, 0.0 },
+        safehouse = { 9.0, 8.0, 14.0 },
         testLocation = { 50.0, 25.0, 23.0 }
     }
 }

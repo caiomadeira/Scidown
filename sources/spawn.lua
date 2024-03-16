@@ -86,7 +86,7 @@ function SpawnPlayer(where)
         t = Transform(Vec(Player.SpawnPoints.safehouse[1],
                             Player.SpawnPoints.safehouse[2],
                             Player.SpawnPoints.safehouse[3]), 
-                            QuatEuler(180, 0, 0))
+                            QuatEuler(0, 0, 0))
         SetPlayerSpawnTransform(t)
 
     elseif where == 'testLocation' then
@@ -97,5 +97,36 @@ function SpawnPlayer(where)
         SetPlayerSpawnTransform(t)
     else
         DebugPrint("Error: 'where' param passed is not allowed.")
+    end
+end
+
+function SpawnStructure(structure)
+    local prefabXml;
+    local spawnTransform;
+
+    if structure == 'safehouse' then
+        prefabXml = CreateXMLPrefab(Building.safehouse.ground)
+        spawnTransform = Transform(ConvertStrToTable(Building.safehouse.ground.pos))
+        Spawn(prefabXml, spawnTransform, true)
+
+        prefabXml = CreateXMLPrefab(Building.safehouse.base)
+        spawnTransform = Transform(ConvertStrToTable(Building.safehouse.base.pos))
+        Spawn(prefabXml, spawnTransform, true)
+    end
+end
+
+function SpawnVehicle(vehicle)
+    Spawn(vehicle.xmlPath, Transform(Vec(11.0, 8.3, 5.7), Vec(0.0, 0.0, 0.0)))
+    
+    -- Check if the vehicle was created
+    local checkVehicle = FindVehicle(vehicle.tag)
+    if checkVehicle ~= 0 then
+        DebugPrint(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
+        DebugPrint("VEHICLE INSTANCE NUM >> " .. tostring(checkVehicle))
+        DebugPrint("VEHICLE TRANSFORM >> " .. TransformStr(GetVehicleTransform(checkVehicle)))
+        DebugPrint("PLAYER TRANSFORM >> " .. TransformStr(GetPlayerTransform()))
+        DebugPrint("::::::::::::::::::::::::::::::::::::::::::")
+    else
+        DebugPrint(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
     end
 end

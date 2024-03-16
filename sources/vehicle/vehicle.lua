@@ -29,12 +29,9 @@ Vehicle = {
 -- Call this in main tick()
 function VehicleTick() 
     if Player.State.isInVehicle then
-        print("> Player is in vehicle")
         if Vehicle.spaceship.type == 'FLY' then
             SetupAircraftVehicle()
         end
-    else
-        print("x Player is NOT in vehicle")
     end
 end
 
@@ -157,23 +154,5 @@ function AircraftControl()
                 SetBodyVelocity(vehicleBody, VecScale(VecSub(direction, currentVehiclePos), 10))
             end
         end
-    end
-end
-
-function SpawnVehicle(vehicle)
-    local playerPos = GetPlayerTransform().pos
-    local spawnT = Transform(Vec(1.0, playerPos[2], 1.0))
-    Spawn(vehicle.xmlPath, spawnT)
-    
-    -- Check if the vehicle was created
-    local vehicle = FindVehicle(Vehicle.spaceship.name)
-    if vehicle ~= 0 then
-        DebugPrint(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
-        DebugPrint("VEHICLE INSTANCE NUM >> " .. tostring(vehicle))
-        DebugPrint("VEHICLE TRANSFORM >> " .. TransformStr(GetVehicleTransform(vehicle)))
-        DebugPrint("PLAYER TRANSFORM >> " .. TransformStr(GetPlayerTransform()))
-        DebugPrint("::::::::::::::::::::::::::::::::::::::::::")
-    else
-        DebugPrint(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
     end
 end
