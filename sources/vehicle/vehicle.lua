@@ -46,7 +46,7 @@ end
 -- Vehicle Condition
 function VehicleCondition(vehicleTag)
     local health = GetVehicleHealth(FindVehicle(vehicleTag))
-    print("Vehicle Health: ", health)
+    -- print("Vehicle Health: ", health)
     if health == 0 then
         Vehicle.Status.isDead = true
     end

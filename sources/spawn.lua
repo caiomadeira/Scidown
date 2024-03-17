@@ -23,7 +23,7 @@ function PopulateWorldWith(EntityGroup) -- EntityGroup as world properties prefa
     local entityPrefabBuffer = {  }; -- Store all entities (remember to use gargagecollector() to remove this buffer from memory)
     local count = 0
     -- Check ifs EntityGroup table is not nill
-    for i=1, 3 do
+    for i=1, 6 do
         if (EntityGroup ~= nil) then 
                 count = count + i
                 for _, v in pairs(EntityGroup) do

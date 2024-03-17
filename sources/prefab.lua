@@ -167,88 +167,8 @@ Prefabs = {
         pbr= "0 0 0 10",
         color = '0.0 0.0 0.0'
     },
-
-    Particles = {
-        nebulosa = {
-            name = 'nebulosa',
-            pos = {0, 1, 0},
-            velocity = {1, 5, -1},
-            duration = 1.0, 
-            collide = 1, -- 0 or 1
-            emissive = 10,
-            alpha = {0.2, 0.2},
-            rotation = 4,
-            color1 = {1, 1, 0},
-            color2 = {1, 0, 0},
-            tile = 5 -- 5 fire or 0 smoke
-        },
-
-        giantStar = {
-            name = 'giantStar',
-            pos = {0, 1, 0},
-            velocity = {1, 5, -1},
-            duration = 1.0, 
-            collide = 1, -- 0 or 1
-            emissive = 10,
-            alpha = {0.2, 0.2},
-            rotation = 4,
-            color1 = {1, 1, 0},
-            color2 = {1, 0, 0},
-            tile = 5 -- 5 fire or 0 smoke
-        }
-    }
 }
---[[
--- TODO: Refactor this trash
-function CreateXMLPrefab(properties, debug)
-    local xmlTable = {  }
-    count = 0;
 
-    -- FOR VOX 
-    for key, value in pairs(properties) do
-        if (tostring(key) == 'type' and tostring(value) == 'vox') then
-            count = count + 1
-            if (tostring(key) == 'type') then
-                xmlTable[1] = '<' .. value .. ''
-            elseif (tostring(key) == 'name') then
-                xmlTable[2] = " " .. key .. '=' .. '"' .. value .. '" '
-            else
-                -- CHECK IF THE NEXT KEY IS EQUAL NIL (THE LAST IN ARRAY)
-                if next(properties, key) == nil then
-                    xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '"/>'
-                else
-                    xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '" '
-                end
-            end 
-        end
-    end
-
-    -- FOR VOXBOX 
-    for key, value in pairs(properties) do
-        if (tostring(key) == 'type' and tostring(value) == 'voxbox') then
-            xmlTable[1] = '<' .. value .. ''
-        elseif (tostring(key) == 'name') then
-            xmlTable[2] = " " .. key .. '=' .. '"' .. value .. '" '
-        else
-            count = count + 1
-            if next(properties, key) == nil then
-                xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '"/>'
-            else
-                xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '" '            
-            end
-        end
-    end
-
-    if debug then
-        print("::::::: XML STRUCTURE for " .. tostring(properties['name']) .. ":::::::\n")
-        print(dump(xmlTable))
-        print("XML created.")
-        print(":::::::::::::::::::::\n")
-    end
-    return xmlTable -- Return the table
-end
-]]--
--- tdPropertyPreset - teardown property presets defaults
 function RandomizePrefabProperty(property, tdPropertyPreset)
     tdPropertyPreset = tdPropertyPreset or {  }
     local num, max;

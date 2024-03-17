@@ -21,6 +21,12 @@ PATH = {
 
 CONSTANTS = {
 
+    TAGS = {
+        'star', 'random_planet', 'asteroid_default','random_planet', 
+        'rocky_planet', 'gaseous_planet','star_red_giant', 'asteroid', 'planet',
+    'black_hole', 'natural_satellite'
+    },
+
     WORLD = {
         SIZE = {
             WIDTH = 300, -- X
@@ -78,7 +84,11 @@ CONSTANTS = {
             STARS = {
                 STAR_REDGIANT = PATH.VOX .. 'world/stars/star_redgiant.vox',
                 STAR1 = PATH.VOX .. 'world/stars/star1.vox'
-            }
+            },
+
+            BLACK_HOLE = {
+                DEFAULT = PATH.VOX .. 'word/black_holes/big_blackhole.vox' 
+            },
         }
     },
     

@@ -49,6 +49,21 @@ function update(dt)
         dp:flyMode()
    end
    player:update(dt)
+   local dist = GetPlayerDistFromCelestialBody()
+   for i=1, #dist do
+        for k, v in pairs(dist[i]) do
+            if k == 1 and v > 0 and v < 9 then
+                print("value? ", v)
+                print(k, "CLOSE ", v)
+                DebugPrint("CLOSE")
+                
+            else
+                print(k, "FAR ", v)
+                DebugPrint("FAR")
+
+            end
+        end
+   end
 end
 
 function draw(dt)
@@ -59,3 +74,17 @@ end
 -- ************************************
 -- **** END LIFE CYCLE FUNCTIONS ****
 -- ************************************
+
+function GetPlayerDistFromCelestialBody()
+    local dist = { };
+    for i=1, #CONSTANTS.TAGS do
+        local celestialBodyShape = CreateBodyForShape(CONSTANTS.TAGS[i])
+        local celestialShapeLocalTrans = GetShapeLocalTransform(celestialBodyShape).pos
+        --print("celestialShapeLocalTrans:", dump(celestialShapeLocalTrans))
+        DebugLine(GetPlayerTransform().pos, celestialShapeLocalTrans, 1, 1, 1)
+        table.insert(dist, VecSub(GetPlayerTransform().pos, celestialShapeLocalTrans))
+        -- print("[+] dist " .. CONSTANTS.TAGS[i] .. "[" .. i.. "]: " .. VecStr(dist))
+    end
+    -- print("distance: ", dump(dist))
+    return dist;
+end

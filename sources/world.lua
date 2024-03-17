@@ -85,6 +85,13 @@ function CreateCelestialBody(properties, randomSpawn, rangeInterval)
 
         elseif (prefabProperties.name == string.lower('PLANET')) then
             _PlanetConfiguration(prefabProperties, properties)
+
+        elseif (prefabProperties.name == string.lower('NATURAL_SATELLITE')) then
+            _MoonConfiguration(prefabProperties, properties)
+
+        elseif (prefabProperties.name == string.lower('BLACK_HOLE')) then
+            _BlackHoleConfiguration(prefabProperties, properties)
+
         else    
             print("[!] No prefab configuration for".. prefabProperties.name .. " Setting as default prefab table config.")
         end
@@ -124,6 +131,23 @@ end
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+function _BlackHoleConfiguration(prefabProperties, properties)
+
+    prefabProperties.tags = "black_hole"
+    prefabProperties.desc = "Stay away from this."
+    prefabProperties.size = "256 256 256"
+    prefabProperties.density = "100"
+    prefabProperties.strength = "100"
+    prefabProperties.brush = CONSTANTS.VOX.WORLD.BLACK_HOLE.DEFAULT
+    prefabProperties.texture = '1'
+    prefabProperties.blendtexture = '1'
+    prefabProperties.material = 'unphysical'
+    prefabProperties.pbr = '0 0 0 0'
+    prefabProperties.color = '0 0 0 0'
+    return prefabProperties
+end
+
+
 -- Pseudo private method to configure prefab properties and more options
 function _MoonConfiguration(prefabProperties, properties)
     local availableBrushes = {
@@ -135,7 +159,7 @@ function _MoonConfiguration(prefabProperties, properties)
     prefabProperties.brush = voxfile
     prefabProperties.texture = '1'
     prefabProperties.blendtexture = '1'
-    prefabProperties.material = 'rock'
+    prefabProperties.material = 'rocky'
     prefabProperties.pbr = '0 0 0 0'
     prefabProperties.color = '0 0 0 0'
 
@@ -224,6 +248,8 @@ function _PlanetConfiguration(prefabProperties, properties)
         prefabProperties.size = "300 300 300"
     end
     prefabProperties.brush = voxfile
+    --prefabProperties.collide = "true"
+   -- prefabProperties.prop = "false"
 
     -- Configure object properties if a type is given (objects properties are optionals)
     if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.GASEOUS) then
@@ -231,8 +257,6 @@ function _PlanetConfiguration(prefabProperties, properties)
         prefabProperties.desc = "A Gaseous Planet."
         prefabProperties.density = "1.0"
         prefabProperties.strength = "1.0"
-        --prefabProperties.collide = "true"
-        --prefabProperties.prop = "false"
         prefabProperties.texture = RandomizePrefabProperty('texture')
         prefabProperties.blendtexture =  RandomizePrefabProperty('blendtexturetexture')
         prefabProperties.pbr = RandomizePrefabProperty('pbr')
