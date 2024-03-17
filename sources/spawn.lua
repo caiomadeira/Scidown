@@ -21,25 +21,26 @@ function PopulateWorldWith(EntityGroup) -- EntityGroup as world properties prefa
     local maxEntityAmount = 5;
     local minDistFromPlayer = 40;
     local entityPrefabBuffer = {  }; -- Store all entities (remember to use gargagecollector() to remove this buffer from memory)
-
+    local count = 0
     -- Check ifs EntityGroup table is not nill
-    if (EntityGroup ~= nil) then 
-        -- 1. Iterate over the entities, get the prefab and select someone to spawn
-        for _, v in pairs(EntityGroup) do
-            for k2, _ in pairs(v) do -- Iterate again over the properties
-                if k2 == 'prefab' then -- Check if the entity has a prefab key
-                    table.insert(entityPrefabBuffer, v) -- add to buffer
+    for i=1, 3 do
+        if (EntityGroup ~= nil) then 
+                count = count + i
+                for _, v in pairs(EntityGroup) do
+                    for k2, _ in pairs(v) do -- Iterate again over the properties
+                        if k2 == 'prefab' then -- Check if the entity has a prefab key
+                            table.insert(entityPrefabBuffer, v) -- add to buffer
+                        end
+                    end
                 end
+            -- Check if 
+
+            -- 2. Iterate over entity prefab buffer and select prefabs to spawn
+            -- based in count
+            local rangeSpawnValues = { 'LOW', 'MEDIUM', 'HIGH'}
+            for i=1, maxEntityAmount do
+                CreateCelestialBody(entityPrefabBuffer[i], true, rangeSpawnValues[i])
             end
-        end
-
-        -- Check if 
-
-        -- 2. Iterate over entity prefab buffer and select prefabs to spawn
-        -- based in count
-        local rangeSpawnValues = { 'LOW', 'MEDIUM', 'HIGH'}
-        for i=1, maxEntityAmount do
-            CreateCelestialBody(entityPrefabBuffer[i], true, rangeSpawnValues[i])
         end
     end
 end
@@ -96,7 +97,7 @@ function SpawnPlayer(where)
                             QuatEuler(0, 0, 0))
         SetPlayerSpawnTransform(t)
     else
-        DebugPrint("Error: 'where' param passed is not allowed.")
+        print("Error: 'where' param passed is not allowed.")
     end
 end
 
@@ -121,12 +122,14 @@ function SpawnVehicle(vehicle)
     -- Check if the vehicle was created
     local checkVehicle = FindVehicle(vehicle.tag)
     if checkVehicle ~= 0 then
-        DebugPrint(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
-        DebugPrint("VEHICLE INSTANCE NUM >> " .. tostring(checkVehicle))
-        DebugPrint("VEHICLE TRANSFORM >> " .. TransformStr(GetVehicleTransform(checkVehicle)))
-        DebugPrint("PLAYER TRANSFORM >> " .. TransformStr(GetPlayerTransform()))
-        DebugPrint("::::::::::::::::::::::::::::::::::::::::::")
+        print(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
     else
-        DebugPrint(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
+        print(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
     end
+end
+
+function SpawnObject(objProperties)
+    local prefabXml = CreateXMLPrefab(objProperties)
+    local spawnTransform = Transform(ConvertStrToTable(objProperties.pos))
+    Spawn(prefabXml, spawnTransform, true)
 end

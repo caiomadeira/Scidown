@@ -57,7 +57,7 @@ function CreateEnvironmentByPrefab(prefabProperties)
     -- SetEnvironmentProperty("template", "sunset")
     local avoid = { 'type', 'template'} -- keys to avoid due the update 1.5.4 of API
     if (prefabProperties) then
-        CreateXMLPrefab(prefabProperties, nil)
+        CreateXMLPrefab(prefabProperties)
         print("[+] Finishing prefab env.")
     else
         print("[x] Error: not a valid env.")

@@ -9,8 +9,8 @@ Building = {
             pos = "1.0 4.0 2.0",
             rot = "0.0 0.0 0.0",
             desc ="A safehouse",
-            texture = "",
-            blendtexture = "",
+            texture = "15",
+            blendtexture = "2",
             density = "100",
             strength = "100",
             size = "128 90 128",
@@ -29,8 +29,8 @@ Building = {
             pos = "0.0 0.0 0.0",
             rot = "0.0 0.0 0.0",
             desc ="A safehouse",
-            texture = "",
-            blendtexture = "",
+            texture = "5",
+            blendtexture = "10",
             density = "100",
             strength = "100",
             size = "185 80 184",
@@ -198,7 +198,7 @@ Prefabs = {
         }
     }
 }
-
+--[[
 -- TODO: Refactor this trash
 function CreateXMLPrefab(properties, debug)
     local xmlTable = {  }
@@ -240,14 +240,14 @@ function CreateXMLPrefab(properties, debug)
     end
 
     if debug then
-        DebugPrint("::::::: XML STRUCTURE for " .. tostring(properties['name']) .. ":::::::\n")
-        DebugPrint(dump(xmlTable))
-        DebugPrint("XML created.")
-        DebugPrint(":::::::::::::::::::::\n")
+        print("::::::: XML STRUCTURE for " .. tostring(properties['name']) .. ":::::::\n")
+        print(dump(xmlTable))
+        print("XML created.")
+        print(":::::::::::::::::::::\n")
     end
     return xmlTable -- Return the table
 end
-
+]]--
 -- tdPropertyPreset - teardown property presets defaults
 function RandomizePrefabProperty(property, tdPropertyPreset)
     tdPropertyPreset = tdPropertyPreset or {  }
@@ -399,12 +399,6 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
     return axes;
 end
 
---[[
-
-CreateXMLPrefab()
-
-]]
-
 function CreateXMLPrefab(prefabProperties)
     local base; 
     local scale = 1;
@@ -412,7 +406,7 @@ function CreateXMLPrefab(prefabProperties)
     -- CHECK IF PREFAB PROPERTIES IS MASSIVE_PLANET 
     -- MASSIVE_PLANET ONLY CAN BE OF <VOX/> TYPE 
     if (prefabProperties.brush == CONSTANTS.VOX.WORLD.PLANETS.MASSIVE_PLANET) then
-        print("[!] function() CreateXMLPrefab() | IT'S A MASSIVE_PLANET")
+        print("[!] function() Create XML Prefab | IT'S A MASSIVE_PLANET")
         prefabProperties.type = 'vox'
         scale = 4;
     end
@@ -532,7 +526,6 @@ function HasShapeCreated(handleShape, prefabProperties, prefabXml)
                 print("\t", p)
             end
         end
-        print(":::::::::::::::::::::::::::::::::::::::::::::::::")
     else
         print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
     end

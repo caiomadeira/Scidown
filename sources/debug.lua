@@ -20,7 +20,7 @@ function Debug:new(o, enableUILog)
     self.enableDebug = MOD.DEBUG
     self.enableFlyMode = false
     self.enableUILog = enableUILog or self.enableDebug
-    self.enableUIWorld = enableUILog or self.enableUIWorld
+    self.enableUIWorld = false
     if self.enableDebug then
         print("Debug is Enabled.")
         print("FlyMode: ", self.enableFlyMode)

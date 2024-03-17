@@ -25,12 +25,12 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
+    SpawnStructure('safehouse')
     SpawnPlayer('safehouse')
     player = Player:new(nil)
     player:init()
     SpawnVehicle(Vehicle.spaceship)
     PopulateWorldWith(CelestialBodies)
-    SpawnStructure('safehouse')
 end
 
 -- ************************************
@@ -40,7 +40,6 @@ function tick(dt)
     if dp ~= nil then
         dp:worldDebug()
    end
-
     player:tick(dt)
     VehicleTick()
 end
