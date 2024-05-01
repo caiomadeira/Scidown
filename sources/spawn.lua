@@ -123,8 +123,8 @@ function SpawnStructure(structure)
     end
 end
 
-function SpawnVehicle(vehicle)
-    Spawn(vehicle.xmlPath, Transform(Vec(11.0, 8.3, 5.7), Vec(0.0, 0.0, 0.0)))
+function SpawnVehicle(vehicle, transform)
+    Spawn(vehicle.xmlPath, transform)
     
     -- Check if the vehicle was created
     local checkVehicle = FindVehicle(vehicle.tag)

@@ -26,8 +26,33 @@ Vehicle = {
     }
 }
 
+function DamageSystem() 
+    if CheckTag("customhealth") == 1 then
+        local vehicle = GetPlayerVehicle()
+        if vehicle ~= nil then
+            local health = GetVehicleHealth(vehicle)
+            if health ~= nil then
+                print("CONDITION>>>>>>", health)
+            end
+        end
+    end
+end
+
+-- "customhealth"
+function CheckTag(tag)
+    local vehicle = GetPlayerVehicle()
+    if not HasTag(vehicle, tag) then
+        SetTag(vehicle, tag)
+        return CheckTag(tag)
+    else
+        print("Already had this tag.")
+        return 1
+    end
+end
+
 -- Call this in main tick()
 function VehicleTick() 
+    DamageSystem()
     if Player.State.isInVehicle then
         if Vehicle.spaceship.type == 'FLY' then
             SetupAircraftVehicle()

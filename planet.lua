@@ -10,6 +10,7 @@
 #include "sources/spawn.lua"
 #include "settings.lua"
 
+local player
 
 function init()
     print("::::::::::::::::::::::::::::::::::::::::")
@@ -19,21 +20,23 @@ function init()
     print("::::::::::::::::::::::::::::::::::::::::")
     SetString("level.name", 'planet1')
     if GetString("level.name") == 'planet1' then
+        player = Player:new(nil)
+        player:init()
         CreateBaseTerrain()
         SpawnPlayer('planet_sky')
-        Spawn(Vehicle.spaceship.xmlPath, Transform(Vec(50.0, 20.3, 25.7), Vec(0.0, 0.0, 0.0)))
-
+        SpawnVehicle(Vehicle.spaceship, Transform(Vec(5.0, 40.0, 10.0), Vec(0.0, 0.0, 0.0)))
         DriveSpaceship()
     end
     --RemoveEntitiesFromScene()
 end
 
 function tick(dt)
-
+    player:tick(dt)
+    VehicleTick()
 end
 
 function update(dt)
-
+    player:update(dt)
 end
 
 
@@ -60,5 +63,10 @@ end
 
 function DriveSpaceship()
     local v = FindVehicle(Vehicle.spaceship.tag, true)
-    --SetPlayerVehicle(v)
+    if v ~= nil then
+        SetPlayerVehicle(v)
+        return 1
+    else
+        return 0
+    end
 end

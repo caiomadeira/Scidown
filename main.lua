@@ -30,19 +30,17 @@ function init()
     print("::::::::::::::::::::::::::::::::::::::::")
     --SetLevelName('mainspace')
     print("LEVEL NAME: ", GetString("level.name"))
-
     player = Player:new(nil)
     player:init()
 
     if GetString("level.name") == 'planet1' then
         print("lvl name is planet1")
         isInPlanet = true
-
     else
         print("lvl name is NOT planet1")
         SpawnStructure('safehouse')
         SpawnPlayer('safehouse')
-        SpawnVehicle(Vehicle.spaceship)
+        SpawnVehicle(Vehicle.spaceship, Transform(Vec(11.0, 8.3, 5.7), Vec(0.0, 0.0, 0.0)))
         PopulateWorldWith(CelestialBodies) 
     end
 end
@@ -68,7 +66,6 @@ function update(dt)
         dp:flyMode()
    end
    player:update(dt)
-
 end
 
 function draw(dt)
