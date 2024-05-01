@@ -14,7 +14,7 @@ Populate scene with celestial bodies with random spawn
 
 
 function PopulateWorldWith(EntityGroup) -- EntityGroup as world properties prefab
-    print("[+] PopulateSpace() Called")
+    --print("[+] PopulateSpace() Called")
     -- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     -- LOCAL CONTROL VARIABLES FOR SPAWN RULES
     -- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -70,7 +70,7 @@ function RandomPosition(rangeInterval)
 
     pos = Vec(x, y, z)
 
-    print("[+] RandomPosition: RandomPosition: ", VecStr(pos))
+    --print("[+] RandomPosition: RandomPosition: ", VecStr(pos))
     return pos;
 end
 
@@ -96,8 +96,15 @@ function SpawnPlayer(where)
                             Player.SpawnPoints.testLocation[3]), 
                             QuatEuler(0, 0, 0))
         SetPlayerSpawnTransform(t)
+
+    elseif where == 'planet_sky' then
+        t = Transform(Vec(10.0,
+                            50.0,
+                            0.0), 
+                            QuatEuler(0, 0, 0))
+        SetPlayerSpawnTransform(t)
     else
-        print("Error: 'where' param passed is not allowed.")
+        --print("Error: 'where' param passed is not allowed.")
     end
 end
 
@@ -122,9 +129,9 @@ function SpawnVehicle(vehicle)
     -- Check if the vehicle was created
     local checkVehicle = FindVehicle(vehicle.tag)
     if checkVehicle ~= 0 then
-        print(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
+       -- print(":::::::::::::::::[" .. Vehicle.spaceship.name .. "] CREATED ::::::::::::::::::::::")
     else
-        print(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
+       -- print(":::::::::::::::::ERROR: [" .. Vehicle.spaceship.name .. "] NOT CREATED ::::::::::::::::::::::")
     end
 end
 

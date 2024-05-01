@@ -21,7 +21,28 @@ Environment = {
         brightness = '1',
         nightlight = 'false',
         fogscale = '0.0'
-    }
+    },
+
+    planet1 = {
+        type = 'environment',
+        name='planet1',
+        tags='planet1',
+        template = "sunset", -- not working aftyer 1.5.4 api updater
+        skybox = CONSTANTS.SKYBOX.PLANET1,
+        skyboxtint = '0.01 0.01 0.01', -- need to comment beacause this work with template
+        skyboxbrightness = '10',
+        ambient = '50',
+        ambientexponent = '500000',
+        fogcolor = '0.0 0.0 0.0',
+        fogParams = '0 0 0 0',
+        sunBrightness = '10',
+        sunColorTint = '1.0 1.0 1.0',
+        sunFogScale = '0.05',
+        sunGlare = '0.3', -- sun strenght and scale
+        brightness = '1',
+        nightlight = 'false',
+        fogscale = '0.0'
+    },
 }
 
 --[[ 
@@ -41,16 +62,16 @@ function CreateEnvironmentDirectly(environment)
     if (environment) then
         SetEnvironmentDefault()
         for key, value in pairs(environment) do
-            print(key, value)
+            --print(key, value)
             if avoid[1] ~= 'type' or avoid[2] ~= 'template' then
                 SetEnvironmentProperty(key, value)
-                print("Environment: ".. tostring(key) .. "=" .. tostring(value)) 
+                --print("Environment: ".. tostring(key) .. "=" .. tostring(value)) 
             end
         end
     else
-        print("[x] Error: not a valid env.")
+        --print("[x] Error: not a valid env.")
     end
-    print("[+] Finishing setting env.")
+    --print("[+] Finishing setting env.")
 end
 
 function CreateEnvironmentByPrefab(prefabProperties)
@@ -58,8 +79,8 @@ function CreateEnvironmentByPrefab(prefabProperties)
     local avoid = { 'type', 'template'} -- keys to avoid due the update 1.5.4 of API
     if (prefabProperties) then
         CreateXMLPrefab(prefabProperties)
-        print("[+] Finishing prefab env.")
+        --print("[+] Finishing prefab env.")
     else
-        print("[x] Error: not a valid env.")
+        --print("[x] Error: not a valid env.")
     end
 end

@@ -54,6 +54,7 @@ CONSTANTS = {
 
     SKYBOX = {
         SPACE = PATH.SKYBOX .. 'space.dds',
+        PLANET1 = PATH.SKYBOX .. 'desert2_aftermoon.dds',
     },
     
     SPRITE = {
@@ -87,7 +88,7 @@ CONSTANTS = {
             },
 
             BLACK_HOLE = {
-                DEFAULT = PATH.VOX .. 'word/black_holes/big_blackhole.vox' 
+                DEFAULT = PATH.VOX .. 'world/black_holes/big_blackhole.vox' 
             },
         }
     },

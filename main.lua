@@ -13,6 +13,9 @@
 local dp;
 local player;
 
+isInPlanet = false
+
+
 if MOD.DEBUG then
     dp = Debug:new(nil)
 else
@@ -25,12 +28,23 @@ function init()
     print("::::::::::   INIT SCIDOWN MOD    :::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::")
-    SpawnStructure('safehouse')
-    SpawnPlayer('safehouse')
+    --SetLevelName('mainspace')
+    print("LEVEL NAME: ", GetString("level.name"))
+
     player = Player:new(nil)
     player:init()
-    SpawnVehicle(Vehicle.spaceship)
-    PopulateWorldWith(CelestialBodies)
+
+    if GetString("level.name") == 'planet1' then
+        print("lvl name is planet1")
+        isInPlanet = true
+
+    else
+        print("lvl name is NOT planet1")
+        SpawnStructure('safehouse')
+        SpawnPlayer('safehouse')
+        SpawnVehicle(Vehicle.spaceship)
+        PopulateWorldWith(CelestialBodies) 
+    end
 end
 
 -- ************************************
@@ -45,25 +59,16 @@ function tick(dt)
 end
 
 function update(dt)
+
+    if GetString("level.name") ~= 'planet1' then
+        CheckPlanetProximity()
+    end
+
    if dp ~= nil then
         dp:flyMode()
    end
    player:update(dt)
-   local dist = GetPlayerDistFromCelestialBody()
-   for i=1, #dist do
-        for k, v in pairs(dist[i]) do
-            if k == 1 and v > 0 and v < 9 then
-                print("value? ", v)
-                print(k, "CLOSE ", v)
-                DebugPrint("CLOSE")
-                
-            else
-                print(k, "FAR ", v)
-                DebugPrint("FAR")
 
-            end
-        end
-   end
 end
 
 function draw(dt)
@@ -78,7 +83,7 @@ end
 function GetPlayerDistFromCelestialBody()
     local dist = { };
     for i=1, #CONSTANTS.TAGS do
-        local celestialBodyShape = CreateBodyForShape(CONSTANTS.TAGS[i])
+        local celestialBodyShape = CreateBodyForShape("planet")
         local celestialShapeLocalTrans = GetShapeLocalTransform(celestialBodyShape).pos
         --print("celestialShapeLocalTrans:", dump(celestialShapeLocalTrans))
         DebugLine(GetPlayerTransform().pos, celestialShapeLocalTrans, 1, 1, 1)
@@ -87,4 +92,19 @@ function GetPlayerDistFromCelestialBody()
     end
     -- print("distance: ", dump(dist))
     return dist;
+end
+
+-- ************************************
+-- **** LOAD LEVEL ****
+-- ************************************
+
+function CheckPlanetProximity()
+    local dist = GetPlayerDistFromCelestialBody()
+    for i=1, #dist do
+         local planetVec = dist[i]
+         if planetVec[1] < 10 and planetVec[1] > 0 and isInPlanet == false then
+             print("close: ", planetVec[1])
+             StartLevel(Level.planet.name, Level.planet.prefab)
+         end
+    end
 end

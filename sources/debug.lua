@@ -104,10 +104,10 @@ function Debug:BodiesSceneCount()
     bodies = FindBodies(nil, true)
     count = count + 1
     for i in pairs(bodies) do
-        print("body [ " .. count .. " ] in scene: ", bodies[i])
+        --print("body [ " .. count .. " ] in scene: ", bodies[i])
         table.insert(totalBodyCount, bodies[i])
     end
-    print("Total Body count in scene: ", #totalBodyCount)
+    --print("Total Body count in scene: ", #totalBodyCount)
 end
 
 

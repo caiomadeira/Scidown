@@ -71,7 +71,7 @@ function CreateCelestialBody(properties, randomSpawn, rangeInterval)
      ]]--
     if randomSpawn == true then
         prefabProperties.pos = ConvertTableToStr(RandomPosition(rangeInterval))
-        print("[+] CreateCelestialBody() | spawn RANDOM" .. prefabProperties.pos)
+        --print("[+] CreateCelestialBody() | spawn RANDOM" .. prefabProperties.pos)
     end
 
     -- Configure object properties if a type is given (objects properties are optionals)
@@ -93,7 +93,7 @@ function CreateCelestialBody(properties, randomSpawn, rangeInterval)
             _BlackHoleConfiguration(prefabProperties, properties)
 
         else    
-            print("[!] No prefab configuration for".. prefabProperties.name .. " Setting as default prefab table config.")
+            --print("[!] No prefab configuration for".. prefabProperties.name .. " Setting as default prefab table config.")
         end
     end
 
@@ -253,7 +253,7 @@ function _PlanetConfiguration(prefabProperties, properties)
 
     -- Configure object properties if a type is given (objects properties are optionals)
     if (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.GASEOUS) then
-        prefabProperties.tags = "gaseous_planet"
+        prefabProperties.tags = "planet"
         prefabProperties.desc = "A Gaseous Planet."
         prefabProperties.density = "1.0"
         prefabProperties.strength = "1.0"
@@ -265,7 +265,7 @@ function _PlanetConfiguration(prefabProperties, properties)
 
     elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.ROCKY) then
         prefabProperties.desc = "A Rocky Planet."
-        prefabProperties.tags = "rocky_planet"
+        prefabProperties.tags = "planet"
         prefabProperties.rot = '0.0 0.0 0.0'
         prefabProperties.color = RandomStringRGB()
         prefabProperties.pbr = "0 0 0 0"
@@ -273,15 +273,15 @@ function _PlanetConfiguration(prefabProperties, properties)
 
     elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.OCEAN) then
         prefabProperties.desc = "A Ocean Planet."
-        prefabProperties.tags = "ocean_planet"
+        prefabProperties.tags = "planet"
         prefabProperties.rot = '0.0 0.0 0.0'
         prefabProperties.color = "0.0 0.97 1.0" -- BLUE COLOR
         prefabProperties.pbr = "0 0 0 " .. math.random(1, 32)
         prefabProperties.material = "glass"
     
     elseif (properties.type == CONSTANTS.CELESTIALBODY_TYPE.PLANET.RANDOM) then
-        prefabProperties.tags = "random_planet"
         prefabProperties.desc = "A Random Planet."
+        prefabProperties.tags = "planet"
         prefabProperties.rot = '0.0 0.0 0.0'
         prefabProperties.color = RandomStringRGB()
         prefabProperties.pbr = "0 0 0 " .. math.random(1, 32)
@@ -310,6 +310,6 @@ function IncreaseEmissiveScale(tag, emitsLight)
             SetShapeEmissiveScale(shape, scale)
         end
     else 
-        print("[X] Error: The shape doesn't exists.")
+        --print("[X] Error: The shape doesn't exists.")
     end
 end

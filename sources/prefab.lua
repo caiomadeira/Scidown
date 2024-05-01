@@ -1,6 +1,38 @@
 #include "sources/commons/constants.lua"
 
+
+Level = {
+    planet = {
+        name = "planet1",
+        prefab = "MOD/planet1.xml"
+    }
+}
+
+
 Building = {
+
+    planet = {
+        ground = {
+            type = "voxbox",
+            name = "planet_ground",
+            tags = "planet_ground",
+            pos = "0.0 0.0 0.0",
+            rot = "0.0 0.0 0.0",
+            desc ="",
+            texture = "15",
+            blendtexture = "2",
+            density = "100",
+            strength = "100",
+            size = "2000 5 2000",
+            collide = "true",
+            prop = "false",
+            brush = "",
+            material = "dirt",
+            pbr= "0 0 0 0",
+            color = "0.91 0.52 0.14"
+        }
+    },
+
     safehouse = {
         base = {
             type = "voxbox",
@@ -186,12 +218,12 @@ function RandomizePrefabProperty(property, tdPropertyPreset)
         max = 32
         num = math.random(min, max)
         num = "0 0 0 " .. num
-        print("> RandomizePrefabProperty() - pbr: ", num)
+        --print("> RandomizePrefabProperty() - pbr: ", num)
 
     elseif (property == 'material' or property == 'brush') then
         local randomIndex = math.random(1, #tdPropertyPreset)
         num = tdPropertyPreset[randomIndex]
-        print("> RandomizePrefabProperty() - [" .. property .. "]: ", num)
+        --print("> RandomizePrefabProperty() - [" .. property .. "]: ", num)
     end
     return tostring(num);
 end
@@ -205,24 +237,24 @@ function RandomizeObjectPosition(objectPos, distanceDivider)
 
     -- If the objectPos passed as param is a string prefab we need to convert them.
     if type(objectPos) == 'string' then
-        print("\n[+] function() RandomizeObjectPosition() | ObjectPos is a 'string': " .. objectPos)
+        --print("\n[+] function() RandomizeObjectPosition() | ObjectPos is a 'string': " .. objectPos)
         objectPos = ConvertStrToTable(objectPos) -- Return pos as integers
-        print("\n[+] function() RandomizeObjectPosition() | ObjectPos Converted to Table: " .. dump(objectPos))
+        --print("\n[+] function() RandomizeObjectPosition() | ObjectPos Converted to Table: " .. dump(objectPos))
     elseif type(objectPos) == 'table' then
-        print("\nobjectPos is a table. No convertion needed.")
+        --print("\nobjectPos is a table. No convertion needed.")
     else
         --print("RandomizeObjectPosition Error: the object pos is not an string or table.")
     end
     --print("NEW RandomizeObjectPosition OBJECTPOS: " .. dump(objectPos))
 
     randomObjectPos = CalcSpawnPosWithOffset(objectPos, { worldWidth, worldHeight, worldDepth }, distanceDivider)
-    print("\n[+] function() RandomizeObjectPosition() | randomObjectPos = CalcSpawnPosWithOffset: " .. dump(randomObjectPos))
+    --print("\n[+] function() RandomizeObjectPosition() | randomObjectPos = CalcSpawnPosWithOffset: " .. dump(randomObjectPos))
 
     -- Get player pos - Sum of Pos + Qeuler Y = 1 to point to center of player
     playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
 
     -- return the sun of two vectors = vector/table with 3 of size
-    print("\n[+] function() RandomizeObjectPosition() | Return value " .. dump(VecAdd(playerPos, randomObjectPos)))
+    --print("\n[+] function() RandomizeObjectPosition() | Return value " .. dump(VecAdd(playerPos, randomObjectPos)))
     return VecAdd(playerPos, randomObjectPos);
 end
 
@@ -245,13 +277,13 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
     local axes = {  }; -- Axes table contains X,Y,Z axis
     local newObjectSpawnPos = {  }
 
-    print("CalcSpawnPosWithOffset() : distanceDivider: " .. distanceDivider)
+    --print("CalcSpawnPosWithOffset() : distanceDivider: " .. distanceDivider)
 
     for i=1, #objectPos do
         --print(">>> objectPos[i] type: " .. type(objectPos[i]), objectPos[i])
         -- if the axis value is in world range (width, height or depth)
         if (objectPos[i] >= (math.abs(wordLength[i])*-1) and objectPos[i] <= wordLength[i]) then
-            print("CalcSpawnPosWithOffset() :" .. objectPos[i]  .. " is IN world axis range.")
+            --print("CalcSpawnPosWithOffset() :" .. objectPos[i]  .. " is IN world axis range.")
             -- If the value is in world range, then, you need to
             -- calculate the multiplier
 
@@ -274,7 +306,7 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
             axisOffset = math.random(1, worldArea) -- o y deve ser o resultado da area da cena
             table.insert(axes, axisOffset)
         else
-            print("CalcSpawnPosWithOffset() :" ..objectPos[i]  ..  " is out of world range")
+           -- print("CalcSpawnPosWithOffset() :" ..objectPos[i]  ..  " is out of world range")
             -- If the value is out of range, then you must be recalculate this. May i be use recursion?
             local newAxisValue = math.random(math.abs(wordLength[i])*-1, wordLength[i])
             --print("newAxisValue: " ..newAxisValue)
@@ -326,7 +358,7 @@ function CreateXMLPrefab(prefabProperties)
     -- CHECK IF PREFAB PROPERTIES IS MASSIVE_PLANET 
     -- MASSIVE_PLANET ONLY CAN BE OF <VOX/> TYPE 
     if (prefabProperties.brush == CONSTANTS.VOX.WORLD.PLANETS.MASSIVE_PLANET) then
-        print("[!] function() Create XML Prefab | IT'S A MASSIVE_PLANET")
+        --print("[!] function() Create XML Prefab | IT'S A MASSIVE_PLANET")
         prefabProperties.type = 'vox'
         scale = 4;
     end
@@ -394,9 +426,9 @@ function CreateXMLPrefab(prefabProperties)
         "fogscale=" .. "'" .. prefabProperties.fogscale .. "'" ..
         " />"
     else 
-        print("[x] function() CreateXMLPrefab() | ERROR: The type of vox is not provided. ")
+        --print("[x] function() CreateXMLPrefab() | ERROR: The type of vox is not provided. ")
     end
-    print("xml created: ", base)
+    --print("xml created: ", base)
     return base;
 end
 
@@ -438,15 +470,15 @@ function HasShapeCreated(handleShape, prefabProperties, prefabXml)
    -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
    if handleShape ~= 0 then
         -- Print formated prefab xml properties 
-        print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
+        --print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
         for p in prefabXml:gmatch("%S+") do
             if string.find(p, "<") or string.find(p, "/>") then
-                print(p)
+                --print(p)
             else
-                print("\t", p)
+                --print("\t", p)
             end
         end
     else
-        print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
+        --print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
     end
 end

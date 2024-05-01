@@ -22,7 +22,11 @@ function PrintRegistryKeys(registryNode)
 	local list = ListKeys(registryNode)
 	for i=1, #list do 
 		if registryNode == "game.player.tool" then
-			print("Tool>: " .. GetString(registryNode))
+			--print("Tool>: " .. GetString(registryNode))
 		end
 	end
+end
+
+function SetLevelName(name)
+    SetString("level.name", name)
 end
