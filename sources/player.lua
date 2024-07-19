@@ -1,129 +1,111 @@
 #include "utils.lua"
 #include "registry.lua"
+#include "spawn.lua"
 
+-- Meta Class 
 Player = {
-    disableAllWeapons = false,
-    canJump = false,
-    jumpMaxVelocity= 10,
-    jumpMinVelocity = 0,
-    maxJumpHeight = 4,
-    isInVehicle = false,
+    State = {
+        isInVehicle = false,
+    },
+
+    Status = {
+        disableAllWeapons = false,
+        canRegenerate = false,
+    },
+
+    Movement = {
+        canJump = false,
+        gravityAffects = false,
+        jumpMaxVelocity= 10,
+        jumpMinVelocity = 0,
+        maxJumpHeight = 4,
+    },
+
     SpawnPoints = {
-        zero = {0.0, 0.0, 0.0},
-        safehouse = { 8.0, 0.0, -14.0},
-        testLocation = { 50.0, 25.0, 23.0 }
+        zero = { 0.0, 0.0, 0.0 },
+        safehouse = { 9.0, 8.0, 14.0 },
+        testLocation = { 50.0, 25.0, 23.0 },
+        planet_sky = { 9.0, 20.0, 14.0 } 
     }
 }
 
--- ::::::::::::::::::::::::::::::::::::::
---  LIFE CYCLE FUNCTIONS
--- ::::::::::::::::::::::::::::::::::::::
-
--- Standard configuration for player
-function PlayerInit()
-   --PlayerInventory()
-    SetPlayerRegenerationState(false) -- disable regeneration for player
-    -- Spawn Player in some point of World
-    SpawnPlayer('safehouse')
+-- Derived class method new
+function Player:new(o)
+    o = o or {  }
+    setmetatable(o, self)
+    self.__index = self
+    self.canJump = not self.gravityAffects
+    return o;
 end
 
-function PlayerTick()
-    -- SetPlayerZoom(5, 0.2)-- makes a strange sound
-    if InputPressed("jump") then
-        --DebugPrint("[+] Jump Pressed")
-        Player.canJump = true
-    elseif InputReleased("jump") then
-        --DebugPrint("[+] Jump Released")
-        Player.canJump = false
+function Player:IsInVehicle()
+    local currentVehicle = GetPlayerVehicle()
+    if currentVehicle ~= 0 then -- Vehicle handle may be different of 0 // return 0 if the player is not in vehicle
+       Player.State.isInVehicle = true
+    else
+        Player.State.isInVehicle = false
     end
+    return Player.State.isInVehicle
+end
 
-     -- Walking speed
+
+-- ************************************
+-- **** START LIFE CYCLE FUNCTIONS ****
+-- ************************************
+-- Derived class method init
+function Player:init()
+    if self.canRegenerate then
+        SetPlayerRegenerationState(true)
+    else
+        SetPlayerRegenerationState(false)
+    end
+    --SpawnPlayer('safehouse')
+end
+
+
+-- Derived class method tick
+function Player:tick(dt)
+    self.IsInVehicle(nil)
+    -- Gravity Jump
+    if self.Movement.gravityAffects then
+        if InputPressed("jump") then
+            Player.Movement.canJump = true
+        elseif InputReleased("jump") then
+            Player.Movement.canJump = false
+        end
+    else
+        -- Make gravity floating logic here
+    end
+    PlayerJumpGravity(dt)
+
+    -- Run Speed
     if InputDown("shift") then
-		SetPlayerWalkingSpeed(8.0)
-	else
-		SetPlayerWalkingSpeed(4.0)
+        SetPlayerWalkingSpeed(8.0)
+    else
+        SetPlayerWalkingSpeed(4.0)
     end
-    -- DebugPrint(GetPlayerWalkingSpeed())
 end
 
-function PlayerUpdate(dt)
-    if Player.disableAllWeapons then
+-- Derived class method update
+function Player:update(dt)
+    if Player.Status.disableAllWeapons then
         DisablePlayerDefaultTools() -- Need to be called in tick or update
     end
-
-    if Player.canJump then
-        PlayerJumpGravity(dt, Player.jumpMaxVelocity)
-    else
-        PlayerJumpGravity(dt, Player.jumpMinVelocity)
-    end
 end
 
--- ::::::::::::::::::::::::::::::::::::::
---  PLAYER MODULE FUNCTIONS
--- ::::::::::::::::::::::::::::::::::::::
+-- ************************************
+-- **** END LIFE CYCLE FUNCTIONS ****
+-- ************************************
 
-function PlayerInventory()
-    
-end
-
-
-function PlayerJumpGravity(dt, jumpVelocityMultiplier)
+-- Global Function for Jump (put in class as local)
+function PlayerJumpGravity(dt)
     local playerY = GetPlayerTransform().pos[2]
-    -- DebugPrint("Player Pos Y: " .. tostring(playerY))
-    local y = dt * jumpVelocityMultiplier
     local pVelocity = GetPlayerVelocity()
-    local sumVec = VecAdd(pVelocity,  Vec(0, y, 0))
 
-    if playerY > Player.maxJumpHeight then
-        -- DebugPrint("Player height has reached maximum height.")
+    if playerY > Player.Movement.maxJumpHeight then
         SetPlayerVelocity(VecAdd(pVelocity,  Vec(0, 0, 0)))
     else
-        SetPlayerVelocity(sumVec)
+        SetPlayerVelocity(VecAdd(pVelocity,  Vec(0, dt * 10, 0)))
     end
 end
 
-function SpawnPlayer(where)
-    local t
-    if where == 'zero' then
-        t = Transform(Vec(Player.SpawnPoints.zero[1],
-                            Player.SpawnPoints.zero[2],
-                            Player.SpawnPoints.zero[3]), 
-                            QuatEuler(0, 0, 0))
-        SetPlayerSpawnTransform(t)
-
-    elseif where == 'safehouse' then
-        t = Transform(Vec(Player.SpawnPoints.safehouse[1],
-                            Player.SpawnPoints.safehouse[2],
-                            Player.SpawnPoints.safehouse[3]), 
-                            QuatEuler(180, 0, 0))
-        SetPlayerSpawnTransform(t)
-
-    elseif where == 'testLocation' then
-        t = Transform(Vec(Player.SpawnPoints.testLocation[1],
-                            Player.SpawnPoints.testLocation[2],
-                            Player.SpawnPoints.testLocation[3]), 
-                            QuatEuler(0, 0, 0))
-        SetPlayerSpawnTransform(t)
-    else
-        DebugPrint("Error: 'where' param passed is not allowed.")
-    end
-end
-
-function PlayerDebugInfo()
-    DebugPrint(":::::::: PLAYER DEBUG :::::::::")
-    local playerTransform = GetPlayerTransform()
-    local pVelocity = GetPlayerVelocity()
-    DebugPrint("[>] Player Transform: " .. TransformStr(playerTransform))
-    DebugPrint("[>] Player Velocity: ".. VecStr(pVelocity))
-    DebugPrint(":::::::: END PLAYER DEBUG :::::::::")
-  end
-
-  function IsPlayerInVehicle()
-     local currentVehicle = GetPlayerVehicle()
-     if currentVehicle ~= 0 then -- Vehicle handle may be different of 0 // return 0 if the player is not in vehicle
-        Player.isInVehicle = true
-     else
-        Player.isInVehicle = false
-     end
-     return currentVehicle
-end

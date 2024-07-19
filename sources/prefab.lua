@@ -1,5 +1,104 @@
 #include "sources/commons/constants.lua"
 
+
+Level = {
+    planet = {
+        name = "planet1",
+        prefab = "MOD/planet1.xml"
+    }
+}
+
+
+Building = {
+
+    planet = {
+        ground = {
+            type = "voxbox",
+            name = "planet_ground",
+            tags = "planet_ground",
+            pos = "0.0 0.0 -500.0",
+            rot = "0.0 0.0 0.0",
+            desc ="",
+            texture = "15",
+            blendtexture = "2",
+            density = "100",
+            strength = "100",
+            size = "1000 5 1000",
+            collide = "true",
+            prop = "true",
+            brush = "",
+            material = "dirt",
+            pbr= "0 0 0 0",
+            color = "0.91 0.52 0.14"
+        }
+    },
+
+    safehouse = {
+        base = {
+            type = "voxbox",
+            name = "safehouse",
+            tags = "safehouse",
+            pos = "1.0 4.0 2.0",
+            rot = "0.0 0.0 0.0",
+            desc ="A safehouse",
+            texture = "15",
+            blendtexture = "2",
+            density = "100",
+            strength = "100",
+            size = "128 90 128",
+            collide = "true",
+            prop = "false",
+            brush = "MOD/assets/vox/world/safehouse/safehouse.vox",
+            material = "heavymetal",
+            pbr= "0 0 0 0",
+            color = "0.5 0.5 0.5"
+        },
+
+        ground = {
+            type = "voxbox",
+            name = "safehouse",
+            tags = "safehouse",
+            pos = "0.0 0.0 0.0",
+            rot = "0.0 0.0 0.0",
+            desc ="A safehouse",
+            texture = "5",
+            blendtexture = "10",
+            density = "100",
+            strength = "100",
+            size = "185 80 184",
+            collide = "true",
+            prop = "false",
+            brush = "MOD/assets/vox/world/safehouse/safehouse_ground.vox",
+            material = "heavymetal",
+            pbr= "0 0 0 0",
+            color = "0.5 0.5 0.5"
+        },
+
+        tube = {
+            type = "voxbox",
+            name = "safehouse",
+            tags = "safehouse",
+            pos = "-5.2 0.0 -20.3",
+            rot = "0.0 0.0 0.0",
+            desc ="A safehouse",
+            texture = "10",
+            blendtexture = "10",
+            density = "10",
+            strength = "10",
+            size = "128 90 128",
+            collide = "true",
+            prop = "false",
+            brush = "MOD/assets/vox/world/safehouse/safehouse_tubes.vox",
+            material = "heavymetal",
+            pbr= "1 1 1 32",
+            color = "0.5 0.5 0.5"
+        },
+
+    },
+
+
+}
+
 Prefabs = {
     naturalSatellite = {
         type = "voxbox",
@@ -100,160 +199,8 @@ Prefabs = {
         pbr= "0 0 0 10",
         color = '0.0 0.0 0.0'
     },
-
-
-    Particles = {
-        nebulosa = {
-            name = 'nebulosa',
-            pos = {0, 1, 0},
-            velocity = {1, 5, -1},
-            duration = 1.0, 
-            collide = 1, -- 0 or 1
-            emissive = 10,
-            alpha = {0.2, 0.2},
-            rotation = 4,
-            color1 = {1, 1, 0},
-            color2 = {1, 0, 0},
-            tile = 5 -- 5 fire or 0 smoke
-        },
-
-        giantStar = {
-            name = 'giantStar',
-            pos = {0, 1, 0},
-            velocity = {1, 5, -1},
-            duration = 1.0, 
-            collide = 1, -- 0 or 1
-            emissive = 10,
-            alpha = {0.2, 0.2},
-            rotation = 4,
-            color1 = {1, 1, 0},
-            color2 = {1, 0, 0},
-            tile = 5 -- 5 fire or 0 smoke
-        }
-    }
 }
 
--- TODO: Refactor this trash
-function CreateXMLPrefab(properties, debug)
-    local xmlTable = {  }
-    count = 0;
-
-    -- FOR VOX 
-    for key, value in pairs(properties) do
-        if (tostring(key) == 'type' and tostring(value) == 'vox') then
-            count = count + 1
-            if (tostring(key) == 'type') then
-                xmlTable[1] = '<' .. value .. ''
-            elseif (tostring(key) == 'name') then
-                xmlTable[2] = " " .. key .. '=' .. '"' .. value .. '" '
-            else
-                -- CHECK IF THE NEXT KEY IS EQUAL NIL (THE LAST IN ARRAY)
-                if next(properties, key) == nil then
-                    xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '"/>'
-                else
-                    xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '" '
-                end
-            end 
-        end
-    end
-
-    -- FOR VOXBOX 
-    for key, value in pairs(properties) do
-        if (tostring(key) == 'type' and tostring(value) == 'voxbox') then
-            xmlTable[1] = '<' .. value .. ''
-        elseif (tostring(key) == 'name') then
-            xmlTable[2] = " " .. key .. '=' .. '"' .. value .. '" '
-        else
-            count = count + 1
-            if next(properties, key) == nil then
-                xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '"/>'
-            else
-                xmlTable[count] = " " .. key .. '=' .. '"' .. value .. '" '            
-            end
-        end
-    end
-
-    if debug then
-        DebugPrint("::::::: XML STRUCTURE for " .. tostring(properties['name']) .. ":::::::\n")
-        DebugPrint(dump(xmlTable))
-        DebugPrint("XML created.")
-        DebugPrint(":::::::::::::::::::::\n")
-    end
-    return xmlTable -- Return the table
-end
-
-function SpawnPrefab(properties, debug)
-    local xmlProperties = CreateXMLPrefab(properties)
-    local xmlCombined = table.concat(xmlProperties, "") -- Convert into a string
-
-    local prefabCoord = GetTableValuesFromProperties(properties, 'pos')
-    Spawn(xmlCombined, Transform(Vec(prefabCoord[1], prefabCoord[2] , prefabCoord[3])), true, true)
-	 --Spawn(xmlCombined, Transform(Vec(-9.4, 0.0 , -9.4)))
-    if debug then
-        DebugPrint("::::::: PREFAB COORD :::::::\n")
-        DebugPrint(dump(prefabCoord))
-        DebugPrint(":::::::::::::::::::::\n")
-        DebugPrint("::::::: FEEDBACK :::::::\n")
-        DebugPrint("XML full string: " .. xmlCombined)
-        DebugPrint("Prefab [" .. string.upper(properties.name)  .. "] spawned.")
-    end
-end
-
---[[ 
--- Get Spawn Coordinates from prefab table (DEPRECATED)
-function GetTableValuesFromProperties(properties, key)
-    local values = {  }
-    -- DebugPrint("[+] GetTableValuesFromProperties: " ..dump(properties))
-    for k, v in pairs(properties) do
-        if k == key then
-            for num in v:gmatch("%S+") do -- Use gmatch "%S+" regex pattern to separate float numbers
-                table.insert(values, num)
-            end
-        end
-    end
-    return values
-end
-]]--
-
--- Spawn object according to the player's position (DEPRECATED) SEE CalcSpawnPosWithOffset
--- TODO: Refactor this trash
-function SpawnObjectAccordingPlayerPos(object, xOffset, yOffset, zOffset, isXmlFile)
-    DebugPrint(":::::::: SpawnObjectAccordingPlayerPos :::::::::")
-    local pPos = GetPlayerTransform().pos
-    local newPosX, newPosY, newPosZ
-
-    -- POS X
-    if pPos[1] >= 2 then
-        newPosX = pPos[1] * xOffset
-    else -- minor than zero
-        newPosX = pPos[1] + xOffset
-    end
-
-    -- POS Y
-    if pPos[2] >= 2 then
-        newPosY = pPos[2] * yOffset
-    else -- minor than zero
-        newPosY = pPos[2] + yOffset
-    end
-
-    -- POS Z
-    if pPos[3] >= 2 then
-        newPosZ = pPos[3] * zOffset
-    else -- minor than zero
-        newPosZ = pPos[3] + zOffset
-    end
-    
-    if isXmlFile then
-        Spawn(object, Transform(Vec(newPosX, newPosY , newPosZ)), true, true)
-    else
-        object.pos = tostring(newPosX) .. " " .. tostring(newPosY) .. " " .. tostring(newPosZ) .. " " 
-        DebugPrint(">> SPAWNED PREFAB " .. object.name .. " POS: " ..  object.pos)
-        SpawnPrefab(object)
-    end
-
-    DebugPrint("::::::::::::::::::::::::::")
-end
--- tdPropertyPreset - teardown property presets defaults
 function RandomizePrefabProperty(property, tdPropertyPreset)
     tdPropertyPreset = tdPropertyPreset or {  }
     local num, max;
@@ -271,12 +218,12 @@ function RandomizePrefabProperty(property, tdPropertyPreset)
         max = 32
         num = math.random(min, max)
         num = "0 0 0 " .. num
-        print("> RandomizePrefabProperty() - pbr: ", num)
+        --print("> RandomizePrefabProperty() - pbr: ", num)
 
     elseif (property == 'material' or property == 'brush') then
         local randomIndex = math.random(1, #tdPropertyPreset)
         num = tdPropertyPreset[randomIndex]
-        print("> RandomizePrefabProperty() - [" .. property .. "]: ", num)
+        --print("> RandomizePrefabProperty() - [" .. property .. "]: ", num)
     end
     return tostring(num);
 end
@@ -290,24 +237,24 @@ function RandomizeObjectPosition(objectPos, distanceDivider)
 
     -- If the objectPos passed as param is a string prefab we need to convert them.
     if type(objectPos) == 'string' then
-        print("\n[+] function() RandomizeObjectPosition() | ObjectPos is a 'string': " .. objectPos)
+        --print("\n[+] function() RandomizeObjectPosition() | ObjectPos is a 'string': " .. objectPos)
         objectPos = ConvertStrToTable(objectPos) -- Return pos as integers
-        print("\n[+] function() RandomizeObjectPosition() | ObjectPos Converted to Table: " .. dump(objectPos))
+        --print("\n[+] function() RandomizeObjectPosition() | ObjectPos Converted to Table: " .. dump(objectPos))
     elseif type(objectPos) == 'table' then
-        print("\nobjectPos is a table. No convertion needed.")
+        --print("\nobjectPos is a table. No convertion needed.")
     else
         --print("RandomizeObjectPosition Error: the object pos is not an string or table.")
     end
     --print("NEW RandomizeObjectPosition OBJECTPOS: " .. dump(objectPos))
 
     randomObjectPos = CalcSpawnPosWithOffset(objectPos, { worldWidth, worldHeight, worldDepth }, distanceDivider)
-    print("\n[+] function() RandomizeObjectPosition() | randomObjectPos = CalcSpawnPosWithOffset: " .. dump(randomObjectPos))
+    --print("\n[+] function() RandomizeObjectPosition() | randomObjectPos = CalcSpawnPosWithOffset: " .. dump(randomObjectPos))
 
     -- Get player pos - Sum of Pos + Qeuler Y = 1 to point to center of player
     playerPos = VecAdd(GetPlayerTransform().pos, Vec(0, 1, 0))
 
     -- return the sun of two vectors = vector/table with 3 of size
-    print("\n[+] function() RandomizeObjectPosition() | Return value " .. dump(VecAdd(playerPos, randomObjectPos)))
+    --print("\n[+] function() RandomizeObjectPosition() | Return value " .. dump(VecAdd(playerPos, randomObjectPos)))
     return VecAdd(playerPos, randomObjectPos);
 end
 
@@ -330,13 +277,13 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
     local axes = {  }; -- Axes table contains X,Y,Z axis
     local newObjectSpawnPos = {  }
 
-    print("CalcSpawnPosWithOffset() : distanceDivider: " .. distanceDivider)
+    --print("CalcSpawnPosWithOffset() : distanceDivider: " .. distanceDivider)
 
     for i=1, #objectPos do
         --print(">>> objectPos[i] type: " .. type(objectPos[i]), objectPos[i])
         -- if the axis value is in world range (width, height or depth)
         if (objectPos[i] >= (math.abs(wordLength[i])*-1) and objectPos[i] <= wordLength[i]) then
-            print("CalcSpawnPosWithOffset() :" .. objectPos[i]  .. " is IN world axis range.")
+            --print("CalcSpawnPosWithOffset() :" .. objectPos[i]  .. " is IN world axis range.")
             -- If the value is in world range, then, you need to
             -- calculate the multiplier
 
@@ -359,7 +306,7 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
             axisOffset = math.random(1, worldArea) -- o y deve ser o resultado da area da cena
             table.insert(axes, axisOffset)
         else
-            print("CalcSpawnPosWithOffset() :" ..objectPos[i]  ..  " is out of world range")
+           -- print("CalcSpawnPosWithOffset() :" ..objectPos[i]  ..  " is out of world range")
             -- If the value is out of range, then you must be recalculate this. May i be use recursion?
             local newAxisValue = math.random(math.abs(wordLength[i])*-1, wordLength[i])
             --print("newAxisValue: " ..newAxisValue)
@@ -404,20 +351,14 @@ function CalcSpawnPosWithOffset(objectPos, wordLength, distanceDivider)
     return axes;
 end
 
---[[
-
-CreateXMLPrefab()
-
-]]
-
-function CreateXMLPrefab(prefabProperties, pos)
+function CreateXMLPrefab(prefabProperties)
     local base; 
     local scale = 1;
 
     -- CHECK IF PREFAB PROPERTIES IS MASSIVE_PLANET 
     -- MASSIVE_PLANET ONLY CAN BE OF <VOX/> TYPE 
     if (prefabProperties.brush == CONSTANTS.VOX.WORLD.PLANETS.MASSIVE_PLANET) then
-        print("[!] function() CreateXMLPrefab() | IT'S A MASSIVE_PLANET")
+        --print("[!] function() Create XML Prefab | IT'S A MASSIVE_PLANET")
         prefabProperties.type = 'vox'
         scale = 4;
     end
@@ -426,7 +367,7 @@ function CreateXMLPrefab(prefabProperties, pos)
         base = "<" .. prefabProperties.type .. " " ..
         "name=" .. "'".. prefabProperties.name .. "'" .. " " ..
         "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
-        "pos=" .. "'".. pos .. "'" .. " " ..
+        "pos=" .. "'".. prefabProperties.pos .. "'" .. " " ..
         "rot=" .. "'".. prefabProperties.rot .. "'" .. " " ..
         "desc=" .. "'".. prefabProperties.desc .. "'" .. " " ..
         "texture=" .. "'".. prefabProperties.texture .. "'" .. " " ..
@@ -447,7 +388,7 @@ function CreateXMLPrefab(prefabProperties, pos)
         base = "<" .. prefabProperties.type .. " " ..
         "name=" .. "'".. prefabProperties.name .. "'" .. " " ..
         "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
-        "pos=" .. "'".. pos .. "'" .. " " ..
+        "pos=" .. "'".. prefabProperties.pos .. "'" .. " " ..
         "rot=" .. "'".. prefabProperties.rot .. "'" .. " " ..
         "desc=" .. "'".. prefabProperties.desc .. "'" .. " " ..
         "texture=" .. "'".. prefabProperties.texture .. "'" .. " " ..
@@ -462,10 +403,32 @@ function CreateXMLPrefab(prefabProperties, pos)
         "pbr=" .. "'".. prefabProperties.pbr .. "'" .. " " ..
         "color=" .. "'" .. prefabProperties.color .. "'" ..
         " />"
-    else 
-        print("[x] function() CreateXMLPrefab() | ERROR: The type of vox is not provided. ")
-    end
 
+    -- <environment template="sunset"/>
+    elseif (prefabProperties.type =='environment') then
+        base = "<" .. prefabProperties.type .. " " ..
+        "name=" .. "'".. prefabProperties.name .. "'" .. " " ..
+        "tags=" .. "'".. prefabProperties.tags .. "'" .. " " ..
+        "template=" .. "'".. prefabProperties.template .. "'" .. " " ..
+        "skybox=" .. "'".. prefabProperties.skybox .. "'" .. " " ..
+        "skyboxtint=" .. "'".. prefabProperties.skyboxtint .. "'" .. " " ..
+        "skyboxbrightness=" .. "'".. prefabProperties.skyboxbrightness .. "'" .. " " ..
+        "ambient=" .. "'".. prefabProperties.ambient .. "'" .. " " ..
+        "ambientexponent=" .. "'".. prefabProperties.ambientexponent .. "'" .. " " ..
+        "fogcolor=" .. "'".. prefabProperties.fogcolor .. "'" .. " " ..
+        "fogParams=" .. "'".. prefabProperties.fogParams .. "'" .. " " ..
+        "sunBrightness=" .. "'".. prefabProperties.sunBrightness .. "'" .. " " ..
+        "sunColorTint=" .. "'".. prefabProperties.sunColorTint .. "'" .. " " ..
+        "sunFogScale=" .. "'".. prefabProperties.sunFogScale .. "'" .. " " ..
+        "sunGlare=" .. "'".. prefabProperties.sunGlare .. "'" .. " " ..
+        "brightness=" .. "'".. prefabProperties.brightness .. "'" .. " " .. -- file == brush
+        "nightlight=" .. "'".. prefabProperties.nightlight .. "'" .. " " ..
+        "fogscale=" .. "'" .. prefabProperties.fogscale .. "'" ..
+        " />"
+    else 
+        --print("[x] function() CreateXMLPrefab() | ERROR: The type of vox is not provided. ")
+    end
+    --print("xml created: ", base)
     return base;
 end
 
@@ -480,24 +443,24 @@ for shape and activated if is dynamic (can movemment)
 
 ]]--
 
-function CreateBodyForShape(prefabProperties)
+function CreateBodyForShape(tag)
     -- CREATE A BODY FOR SHAPE AND CHECK IF IS IsBodyActive
     -- For performance reasons, bodies that don't move are taken out of the simulation. 
-    local handleShape = FindShape(prefabProperties.tags, true)
+    local handleShape = FindShape(tag, true)
     local handleShapeBody = GetShapeBody(handleShape) -- For some reason, the body is not created
     if handleShapeBody ~=0 then
-        print("body for " .. prefabProperties.tags .. " found with handle: ", handleShapeBody)
-        SetTag(handleShapeBody, prefabProperties.tags)
-        print("Tag setted? ", HasTag(handleShape, prefabProperties.tags))
-        if IsBodyActive(handleShapeBody) then
-            print("Body is active.")
-        else
-            print("Body is NOT active.")
-            SetBodyDynamic(handleShapeBody, false)
-            print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
-        end
+        -- print("body for " .. tag .. " found with handle: ", handleShapeBody)
+        SetTag(handleShapeBody, tag)
+        --print("Tag setted? ", HasTag(handleShape, tag))
+        --if IsBodyActive(handleShapeBody) then
+            --print("Body is active.")
+        --else
+            --print("Body is NOT active.")
+            --SetBodyDynamic(handleShapeBody, false)
+            --print("Now, is body dinamic? ", IsBodyActive(handleShapeBody))
+       -- end
     else 
-        print("body for " .. prefabProperties.tags .. " not found. ", handleShapeBody)
+        -- print("body for " .. tag .. " not found. ", handleShapeBody)
     end
     return handleShape;
 end
@@ -507,16 +470,15 @@ function HasShapeCreated(handleShape, prefabProperties, prefabXml)
    -- Check if the object has CREATED (shape and body) and gives a feedback if debug is active
    if handleShape ~= 0 then
         -- Print formated prefab xml properties 
-        print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
+        --print(":::::::::::::: PREFAB [" .. string.upper(prefabProperties.name)  .. "] CREATED :::::::::::::::::::")
         for p in prefabXml:gmatch("%S+") do
             if string.find(p, "<") or string.find(p, "/>") then
-                print(p)
+                --print(p)
             else
-                print("\t", p)
+                --print("\t", p)
             end
         end
-        print(":::::::::::::::::::::::::::::::::::::::::::::::::")
     else
-        print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
+        --print("XXXXXXXXXXXXX PREFAB [" .. string.upper(prefabProperties.name)  .. "] NOT CREATED XXXXXXXXXXXXX")
     end
 end

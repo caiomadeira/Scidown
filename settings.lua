@@ -13,4 +13,4 @@ MOD.AUTHOR = "Caio Madeira (github.com/caiomadeira)"
 
 MOD._LUAVERSION = _VERSION
 MOD.UNIT_TESTS = true
-MOD.DEBUG = false
+MOD.DEBUG = true

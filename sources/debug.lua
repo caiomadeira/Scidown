@@ -1,27 +1,31 @@
 #include "sources/utils.lua"
 #include "../settings.lua"
+#include "sources/commons/constants.lua"
+#include "sources/prefab.lua"
+
 
  -- Meta Class
-
 Debug = { 
     enableDebug = MOD.DEBUG,
     enableFlyMode = false,
-    enableUILog = false
+    enableUILog = false,
+    enableUIWorld = true
 }
 
 -- Derived Class method new
-
 function Debug:new(o, enableUILog) 
     o = o or { } -- Create an object if user does not provide one
     setmetatable(o, self)
     self.__index = self
     self.enableDebug = MOD.DEBUG
-    self.enableFlyMode = self.enableDebug or false
+    self.enableFlyMode = false
     self.enableUILog = enableUILog or self.enableDebug
+    self.enableUIWorld = false
     if self.enableDebug then
         print("Debug is Enabled.")
         print("FlyMode: ", self.enableFlyMode)
         print("UILogs: ", self.enableUILog)
+        print("UIWord: ", self.enableUIWorld)
     else
         print("Debug is Disabled.")
     end
@@ -75,7 +79,7 @@ function Debug:flyMode()
 
             if math.abs(scroll) > 0 then
                 lastScroll = GetTime()
-                customSpeed = math.clamp(customSpeed + scroll, 1, 10)
+                customSpeed = math.clamp(customSpeed + scroll, 1, 100)
             end
             
             speed = 15 + customSpeed * customSpeed
@@ -100,10 +104,10 @@ function Debug:BodiesSceneCount()
     bodies = FindBodies(nil, true)
     count = count + 1
     for i in pairs(bodies) do
-        print("body [ " .. count .. " ] in scene: ", bodies[i])
+        --print("body [ " .. count .. " ] in scene: ", bodies[i])
         table.insert(totalBodyCount, bodies[i])
     end
-    print("Total Body count in scene: ", #totalBodyCount)
+    --print("Total Body count in scene: ", #totalBodyCount)
 end
 
 
@@ -127,14 +131,24 @@ function Debug:UIDebug()
             UiRect(w, h) -- Draw rect with given width and height
         UiPop()
 
-        -- Debug container title
+        -- Debug Mod title
         UiPush()
             UiColor(1, 1, 1) -- Green
             UiFont("regular.ttf", 36)
             UiTranslate(x - 10, y)
             UiText(MOD.NAME .. ": Debug Menu")
         
-        -- Debug Mod title
+        -- Debug UI World Debug
+            UiResetColor()
+            if self.enableUIWorld then
+                UiColor(0, 1, 0) -- Green
+            else
+                UiColor(1, 0, 0) -- Red
+            end
+            UiTranslate(0, y - 5)
+            UiText("[Press T] UI World Debug: " .. tostring(self.enableUIWorld))
+
+        -- Debug Fly mode
             UiResetColor()
             if self.enableFlyMode then
                 UiColor(0, 1, 0) -- Green
@@ -152,3 +166,57 @@ function Debug:UIDebug()
         UiPop() 
     end
 end
+
+-- World Debug Drawing
+function Debug:worldDebug()
+    if InputPressed("t") then
+        self.enableUIWorld = not self.enableUIWorld
+    end
+
+    if self.enableUIWorld then
+        local worldWidth = CONSTANTS.WORLD.SIZE.WIDTH
+        local worldHeight = CONSTANTS.WORLD.SIZE.HEIGHT
+        local worldDepth = CONSTANTS.WORLD.SIZE.DEPTH
+
+        -- World debug line
+        --Draw white debug line
+        --DebugLine(Vec(0, 0, 0), Vec(-10, 5, -10))
+        local celestialBodyShape;
+        local celestialShapeLocalTrans;
+        --Draw red debug line
+        local x1, y1, z1;
+        local x2, y2, z2;
+        x1 = 1;
+        y1 = 1;
+        z1 = 1;
+
+        x2 = worldWidth;
+        y2 = worldHeight;
+        z2 = 0;
+
+        local p1 = Vec(x1, y1, 0) -- (x1, y1, z1) 
+        local p2 = Vec(x2, y2, 0) -- (x2, y2, z2)
+
+        --local a = (y1 - y2) / (x1 - x2) -- calculate angular coefficient -- dont forget the parenthesis
+        --print("[DEBUG CLASS] Angular coefficient (a):\n" .. y1 .. " - " .. y2 .. " / " .. x1 .. " - " .. x2 .. "= " .. a)
+        
+        local groupTags = {'star', 'random_planet', 
+        'asteroid_default','random_planet', 'rocky_planet', 
+        'gaseous_planet','star_red_giant', 'asteroid', 'planet',
+         'black_hole', 'natural_satellite'}
+
+        for i=1, 15 do
+            celestialBodyShape = CreateBodyForShape(groupTags[i])
+            celestialShapeLocalTrans = GetShapeLocalTransform(celestialBodyShape).pos
+            --print("celestialShapeLocalTrans:", dump(celestialShapeLocalTrans))
+            DebugLine(GetPlayerTransform().pos, celestialShapeLocalTrans, 1, 1, 0)
+            DebugLine(p1, celestialShapeLocalTrans, 1, 0, 0)
+        end
+    end
+end
+
+function calcAngularCoefficient(x1, x2, y1, y2)
+    local a = (y1 - y2) / (x1 - x2) -- calculate angular coefficient
+end
+
+--- Help functions 

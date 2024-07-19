@@ -24,7 +24,7 @@ function GetSizeOfTable(table)
   for k, v in pairs(table) do
       size = size + 1
   end
-  print("Array length: " .. tostring(size))
+  --print("Array length: " .. tostring(size))
   return size
 end
 
@@ -81,7 +81,7 @@ function ConvertStrToTable(str)
         --print("Final ConvertStrToTable TABLE: " .. dump(values))
         return values
     else
-        print("[x] ConvertStrToTable: table length is not 3.")
+        --print("[x] ConvertStrToTable: table length is not 3.")
     end
 end
 
@@ -216,7 +216,7 @@ function RandomStringRGB()
     if (g < 0.0) then g = 1.0 end
     if (b < 0.0) then b = 1.0 end
 
-    print("random r g b: ", r, g, b)
+    --print("random r g b: ", r, g, b)
 
     -- prefabProperties.color = '0.5 0.5 0.5'
 
@@ -225,4 +225,11 @@ function RandomStringRGB()
                              " " .. tostring(b)
 
     return rgbString;
+end
+
+-- function AorB(a, b, d) -  I change the name for DxorDy to be cmore specific and contextual
+-- Function from Vehicle Enhancement Mod (The propuse of this still a mystery)
+-- But it's like a VecSub() + math.random(x, y) (I think)
+function DxorDy(a, b, d)
+    return (a and d or 0) - (b and d or 0)
 end
