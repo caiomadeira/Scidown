@@ -26,15 +26,34 @@ Vehicle = {
     }
 }
 
+function SetCurrentVehicleParams()
+    local vehicle = GetPlayerVehicle()
+    if vehicle ~= nil then
+        if HasTag(vehicle, "spaceship") then
+            SetVehicleParam(vehicle, "strength", 200)
+            SetVehicleParam(vehicle, "spring", 200)
+            SetVehicleParam(vehicle, "damping", 200)
+        end
+    end
+end
+
 function DamageSystem() 
-    if CheckTag("customhealth") == 1 then
-        local vehicle = GetPlayerVehicle()
+    SetCurrentVehicleParams()
+    local vehicle = GetPlayerVehicle()
+
+    if HasTag(vehicle, "customhealth") then
         if vehicle ~= nil then
             local health = GetVehicleHealth(vehicle)
             if health ~= nil then
                 print("CONDITION>>>>>>", health)
+                local broken = IsBodyBroken(vehicle)
+                if health < 1 or broken == true then
+                    SetVehicleHealth(vehicle, 1.0)
+                end
             end
         end
+    else
+        print("no custom health found")
     end
 end
 
@@ -43,15 +62,14 @@ function CheckTag(tag)
     local vehicle = GetPlayerVehicle()
     if not HasTag(vehicle, tag) then
         SetTag(vehicle, tag)
-        return CheckTag(tag)
     else
         print("Already had this tag.")
-        return 1
     end
 end
 
 -- Call this in main tick()
 function VehicleTick() 
+    CheckTag("customhealth")
     DamageSystem()
     if Player.State.isInVehicle then
         if Vehicle.spaceship.type == 'FLY' then

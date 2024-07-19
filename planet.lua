@@ -22,15 +22,18 @@ function init()
     if GetString("level.name") == 'planet1' then
         player = Player:new(nil)
         player:init()
-        CreateBaseTerrain()
+        CheckTag("customhealth")
+        CustomBaseTerrain()
         SpawnPlayer('planet_sky')
-        SpawnVehicle(Vehicle.spaceship, Transform(Vec(5.0, 40.0, 10.0), Vec(0.0, 0.0, 0.0)))
+        SpawnVehicle(Vehicle.spaceship, Transform(Vec(0.0, 100.0, 0.0), Vec(0.0, 10.0, 5.0)))
         DriveSpaceship()
     end
     --RemoveEntitiesFromScene()
 end
 
 function tick(dt)
+    print("In boundaries", IsPointInBoundaries(Building.planet.ground.pos))
+
     player:tick(dt)
     VehicleTick()
 end
@@ -54,11 +57,16 @@ function RemoveEntitiesFromScene()
     end
 end
 
-function CreateBaseTerrain()
+function CustomBaseTerrain()
     print("BASE TERRAIN")
-    local prefabXml = CreateXMLPrefab(Building.planet.ground)
-    local spawnTransform = Transform(ConvertStrToTable(Building.planet.ground.pos))
-    Spawn(prefabXml, spawnTransform, true)
+    local ground = FindBody("planet1ground", true)
+    if ground ~= nil then
+        print("ground found ", ground)
+        SetProperty(ground, "color", Vec(45, 5, 23))
+        print("setted")
+    else
+        print("no ground found ", ground)
+    end
 end
 
 function DriveSpaceship()

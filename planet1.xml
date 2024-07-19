@@ -1,7 +1,12 @@
-<scene version="1.5.4" name="planet1" tags="planet1" shadowVolume="100 100 100">
+<scene version="1.5.4" name="planet1" tags="planet1" shadowVolume="200 100 200">
 	<script tags="planet" file="MOD/planet.lua" param0="disabletools=false"/>
-	<!-- 
-	<voxbox pos="-51.0 0.0 -50.7" texture="23" blendtexture="5" size="1000 15 1000" material="dirt" color="0.91 0.52 0.14"/>
-	-->
 	<environment name="planet1" template="sunset" tags="planet1" skybox="MOD/assets/skybox/desert2_aftermoon.dds" skyboxtint="0.01 0.01 0.01" skyboxbrightness="10" fogParams="0 0 0 0" sunBrightness="10" sunColorTint="1.0 1.0 1.0" sunFogScale="0.05" sunGlare="0.3" brightness="1" nightlight="false" fogscale="0.0"/>
+	<boundary>
+		<vertex pos="-48.0 -48.6"/>
+		<vertex pos="47.5 -47.0"/>
+		<vertex pos="47.9 46.9"/>
+		<vertex pos="-44.8 46.8"/>
+	</boundary>
+	<voxbox name="ground" pos="-99.5 0.0 -100.4" size="2000 5 2000"/>
 </scene>
+

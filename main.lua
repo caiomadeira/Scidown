@@ -32,7 +32,6 @@ function init()
     print("LEVEL NAME: ", GetString("level.name"))
     player = Player:new(nil)
     player:init()
-
     if GetString("level.name") == 'planet1' then
         print("lvl name is planet1")
         isInPlanet = true
@@ -66,6 +65,7 @@ function update(dt)
         dp:flyMode()
    end
    player:update(dt)
+
 end
 
 function draw(dt)
